@@ -13,8 +13,8 @@ async def test_legacy_memory_migration_is_idempotent(fresh_container):
         "history_queries": ["敏感原始问题"], "feedback_history": [{"signal": "down"}],
     })
     await c.store.upsert("dept_memory", {
-        "_id": "dept_jwc", "dept_id": "dept_jwc",
-        "faqs": [{"_id": "faq1", "question": "退课？", "answer": "第八周"}],
+        "_id": "dept_city_management", "dept_id": "dept_city_management",
+        "faqs": [{"_id": "faq1", "question": "住房补贴？", "answer": "第八周"}],
     })
     first = await migrate(c)
     second = await migrate(c)

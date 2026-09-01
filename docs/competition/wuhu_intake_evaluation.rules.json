@@ -1,0 +1,282 @@
+{
+  "mode": "rules",
+  "dataset": "backend\\evaluation\\intake_cases.official.deidentified.json",
+  "cases": 18,
+  "metrics": {
+    "field_accuracy": 1.0,
+    "information_completeness": 1.0,
+    "fact_fidelity": 1.0
+  },
+  "details": [
+    {
+      "id": "official-transport-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback"
+    },
+    {
+      "id": "official-public-safety-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback"
+    },
+    {
+      "id": "official-public-service-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback"
+    },
+    {
+      "id": "official-agriculture-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback"
+    },
+    {
+      "id": "official-agriculture-002",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback"
+    },
+    {
+      "id": "official-labor-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback"
+    },
+    {
+      "id": "official-labor-002",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback"
+    },
+    {
+      "id": "official-health-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback"
+    },
+    {
+      "id": "official-health-002",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback"
+    },
+    {
+      "id": "official-construction-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback"
+    },
+    {
+      "id": "official-city-management-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback"
+    },
+    {
+      "id": "official-market-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback"
+    },
+    {
+      "id": "official-market-002",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback"
+    },
+    {
+      "id": "official-ecology-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback"
+    },
+    {
+      "id": "official-ecology-002",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback"
+    },
+    {
+      "id": "official-education-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback"
+    },
+    {
+      "id": "official-education-002",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback"
+    },
+    {
+      "id": "official-economy-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback"
+    }
+  ]
+}

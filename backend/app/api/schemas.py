@@ -54,8 +54,14 @@ class GlossaryCreate(BaseModel):
 
 
 class LoginRequest(BaseModel):
-    username: str
-    password: str
+    username: str = Field(..., min_length=3, max_length=32, pattern=r"^[A-Za-z0-9_]+$")
+    password: str = Field(..., min_length=8, max_length=128)
+
+
+class RegisterRequest(BaseModel):
+    username: str = Field(..., min_length=3, max_length=32, pattern=r"^[A-Za-z0-9_]+$")
+    password: str = Field(..., min_length=8, max_length=128)
+    name: str = Field(..., min_length=2, max_length=30)
 
 
 class ReviewVerdict(BaseModel):
@@ -92,6 +98,6 @@ class OrganizationMemoryCreate(BaseModel):
     title: str
     content: str
     source_refs: list[SourceRef] = Field(default_factory=list)
-    access_scope: list[str] = Field(default_factory=lambda: ["student", "teacher", "admin"])
+    access_scope: list[str] = Field(default_factory=lambda: ["operator", "department_admin", "system_admin"])
     effective_from: Optional[str] = None
     effective_to: Optional[str] = None

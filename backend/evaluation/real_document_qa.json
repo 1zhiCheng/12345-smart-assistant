@@ -1,72 +1,14 @@
 [
-  {
-    "id": "zf-open-proposal-word-count",
-    "dept_id": "dept_zfxy",
-    "query": "双学位硕士研究生的开题报告字数要求是多少？",
-    "relevant_files": ["研究生开题报告通知-中法未来.docx"],
-    "expected_terms": ["不少于5000字"]
-  },
-  {
-    "id": "zf-literature-count",
-    "dept_id": "dept_zfxy",
-    "query": "开题文献综述需要阅读多少篇文献，其中外文多少篇？",
-    "relevant_files": ["研究生开题报告通知-中法未来.docx"],
-    "expected_terms": ["不少于30篇", "不少于15篇"]
-  },
-  {
-    "id": "zf-proposal-deadline",
-    "dept_id": "dept_zfxy",
-    "query": "研究生最晚什么时候要在系统录入开题信息？",
-    "relevant_files": ["研究生开题报告通知-中法未来.docx"],
-    "expected_terms": ["2026年7月10日前"]
-  },
-  {
-    "id": "zf-defense-location",
-    "dept_id": "dept_zfxy",
-    "query": "中法未来科技学院研究生开题答辩地点在哪里？",
-    "relevant_files": ["开题答辩分组安排.docx"],
-    "expected_terms": ["教学一号楼2001"]
-  },
-  {
-    "id": "zf-luggage-valuables",
-    "dept_id": "dept_zfxy",
-    "query": "宿舍寄存行李中能否存放电子产品和学位证书？",
-    "relevant_files": ["中法宿舍行李寄存承诺书.docx"],
-    "expected_terms": ["不包含", "电子产品", "学位证书"]
-  },
-  {
-    "id": "zf-assessment-count",
-    "dept_id": "dept_zfxy",
-    "query": "心理测评登录后需要完成几个测评？",
-    "relevant_files": ["心理测评操作说明.pdf"],
-    "expected_terms": ["3个测评"]
-  },
-  {
-    "id": "hq-emergency-phone",
-    "dept_id": "dept_hqaq",
-    "query": "校园24小时应急电话是多少？",
-    "relevant_files": ["关于校园防汛应急响应措施的通知.docx", "暴雨天气致全体师生的温馨提醒.docx"],
-    "expected_terms": ["0571-28881110"]
-  },
-  {
-    "id": "hq-venue-close-time",
-    "dept_id": "dept_hqaq",
-    "query": "防汛响应期间文体场馆和图书馆从什么时候暂停开放？",
-    "relevant_files": ["关于校园防汛应急响应措施的通知.docx"],
-    "expected_terms": ["8月15日8:00起"]
-  },
-  {
-    "id": "hq-gate-control",
-    "dept_id": "dept_hqaq",
-    "query": "防汛期间车辆可以从哪些校门通行？",
-    "relevant_files": ["关于校园防汛应急响应措施的通知.docx"],
-    "expected_terms": ["西门", "东门"]
-  },
-  {
-    "id": "hq-typhoon-outdoor",
-    "dept_id": "dept_hqaq",
-    "query": "台风影响期间可以外出围观风雨或涉水拍照吗？",
-    "relevant_files": ["关于防御第9号超强台风“巴威”的安全提示(1)(1).pdf"],
-    "expected_terms": ["非必要不外出", "杜绝围观风雨", "涉水拍照"]
-  }
+  {"id":"city-garbage","dept_id":"dept_city_management","query":"小区不按规定分类投放生活垃圾应如何处理？","relevant_titles":["芜湖市生活垃圾分类管理条例"],"retrieval_only":true},
+  {"id":"housing-subsidy","dept_id":"dept_housing_construction","query":"芜湖住房保障租赁补贴如何申请？","relevant_titles":["《关于进一步完善住房保障租赁补贴工作的通知》跟踪解读"],"retrieval_only":true},
+  {"id":"passport","dept_id":"dept_public_security","query":"办理电子普通护照需要哪些材料？","relevant_titles":["电子普通护照申领须知"],"retrieval_only":true},
+  {"id":"dibao","dept_id":"dept_public_services","query":"城乡居民最低生活保障的申请条件是什么？","relevant_titles":["社会救助政策——城乡居民最低生活保障"],"retrieval_only":true},
+  {"id":"ride-hailing","dept_id":"dept_transportation","query":"业余兼职跑网约车或顺风车有什么规定？","relevant_titles":["关于兼职跑滴滴或者顺风车相关问题咨询"],"retrieval_only":true},
+  {"id":"gas-price","dept_id":"dept_economy_trade","query":"市区居民管道天然气价格调整的政策依据是什么？","relevant_titles":["市发改委副主任徐虎解读《关于调整市区居民用管道天然气价格的通知》"],"retrieval_only":true},
+  {"id":"school-enrollment","dept_id":"dept_education_science_culture_sports","query":"2026年芜湖市区义务教育阶段如何招生？","relevant_titles":["关于印发《2026年芜湖市市区义务教育阶段招生工作意见》的通知"],"retrieval_only":true},
+  {"id":"social-insurance","dept_id":"dept_labor_social_security","query":"社会保险经办有哪些常见问题？","relevant_titles":["《社会保险经办条例》问答"],"retrieval_only":true},
+  {"id":"water-duty","dept_id":"dept_agriculture_forestry_water","query":"城市供水单位应当履行哪些职责？","relevant_titles":["供水单位有哪些职责？"],"retrieval_only":true},
+  {"id":"construction-noise","dept_id":"dept_ecology_environment","query":"开发商施工噪声严重扰民应向哪里反映？","relevant_titles":["开发商噪音污染，严重影响周边居民"],"retrieval_only":true},
+  {"id":"consumer-12315","dept_id":"dept_market_regulation","query":"12315投诉举报由什么机构处置？","relevant_titles":["12315投诉举报处置指挥中心"],"retrieval_only":true},
+  {"id":"birth-policy","dept_id":"dept_health","query":"芜湖市生育补贴和计划生育有哪些相关政策？","relevant_titles":["芜湖市人口与计划生育相关政策宣传"],"retrieval_only":true}
 ]

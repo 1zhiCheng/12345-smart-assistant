@@ -66,18 +66,18 @@ MemoryContextBuilder
 
 - **Python 后端**：确定性逻辑 —— 文档解析/切片/向量化、混合检索、存储、对外 API、冲突检测、鉴权、人工审核 Loop。
 - **pi-agent**：概率性推理执行 —— Agent loop、模型调用、结构化输出和白名单 tool calling。
-- **web**：展示与交互（登录 / 学生问答 / 管理后台），仅通过 REST 与后端通信。
+- **web**：展示与交互（登录 / 营业员受理工作台 / 部门与系统管理后台），仅通过 REST 与后端通信。
 
 ## 7. 鉴权与人工审核
 
-- `backend/app/auth.py`：账号 + HMAC Token，角色 `student`/`admin`（可绑定 `dept_id` 做部门管理员）。
+- `backend/app/auth.py`：账号 + HMAC Token，角色 `operator`/`department_admin`/`system_admin`。
 - `backend/app/review/review_engine.py`：新文档自动出题 → 系统作答 → 审核单 → 累计正确率 → 部门渐进退出（人在环中→环外）。
 - `backend/app/api/deps.py`：`require_user` / `require_admin` / `scope_dept` 鉴权依赖；管理端接口均要求管理员角色，
   部门管理员（`dept_id` 非空）数据隔离，系统管理员（`dept_id` 空）看全部。
 
 ## 8. 自动部门路由（DeptRouter）
 
-- `backend/app/harness/agents/dept_router.py`：学生问题 → 最匹配部门。
+- `backend/app/harness/agents/dept_router.py`：12345 群众诉求 → 最匹配承办部门。
   策略：关键词精确匹配（`DEPT_KEYWORDS`，可解释）→ LLM 语义路由 → 全部部门兜底。
   返回 `{dept_ids, dept_names, matched_by, confidence, reasons}`。
 - `Orchestrator.answer()` 在用户未指定 `dept_ids` 时先调用 `DeptRouter.route()`，将路由结果透传给 Python DAG，

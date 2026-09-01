@@ -1,8 +1,12 @@
-# 文枢 · 跨部门文档处理与问答助手
+# 芜湖政务 Agent · 12345热线工单智能生成与转派辅助系统
 
-面向学校多部门（教务处、学生处、财务处、人事处、后勤处、研究生院等）的官方制度文档智能处理与问答系统。
+面向芜湖市12345热线受理、审核与转派人员的政务智能体比赛项目。在原“文枢”跨部门知识处理能力基础上，改造为 **诉求受理 → 要素提取 → 标准工单 → 事项分类 → 部门转派 → 回复辅助 → 人工确认** 的完整闭环。
 
-打通 **「文档入库 → 智能问答 → 自我进化」** 全链路：文档自动解析入库、多智能体协同精准问答（可溯源）、Loop Engineering 自我进化（自动沉淀 Skills/Hooks/Rules）、K8s 按部门弹性伸缩。
+当前第一迭代聚焦成员 A 子系统：文本/录音转写输入、敏感信息脱敏、诉求要素提取、缺失信息追问、标准工单生成与人工确认。成员 A 的输出通过统一 `StandardWorkOrder` 契约交给成员 B 的分类转派与回复子系统。
+
+工单生成支持 **大模型主链路、规则降级**：经人工校对的诉求先脱敏，再交给大模型输出结构化工单和逐字段原文证据；证据不足、格式异常、服务超时或未配置密钥时自动使用规则基线，并在审核界面明确标注。出于政务数据保护考虑，外部模型调用默认关闭；确认模型服务的数据合规要求后，配置 `DEEPSEEK_API_KEY` 并显式设置 `INTAKE_LLM_ENABLED=true`。原始录音与未经整理的原始转写不会发送给模型。两种结果都必须人工确认。
+
+> 比赛参考 HTML 与官方示例音频/Excel 仅保留在本地，默认不进入公开 Git 历史。项目数据使用必须遵守比赛授权和个人信息保护要求。
 
 > 详细技术方案见 [`design_files/文枢-跨部门自进化文档处理与问答助手技术方案.md`](design_files/文枢-跨部门自进化文档处理与问答助手技术方案.md)
 
@@ -45,7 +49,7 @@ program/
 ├── web/                      # Next.js 前端（见 web/README.md）
 ├── deploy/                   # K8s / Helm 部署（见 deploy/README.md）
 ├── design_files/             # 设计输入
-└── department_files/         # 示例部门文档
+└── wuhu_knowledge_base/      # 芜湖官方政务文档与来源清单
 ```
 
 ## 🚀 安装 Docker Desktop 后怎么跑（推荐）
@@ -76,24 +80,25 @@ docker compose logs -f
 | pi 智能体服务 | http://localhost:8100/health |
 | MongoDB | `localhost:27017`（账号密码见 `.env`） |
 
-### 首次导入示例部门文档
+### 首次建立芜湖政务知识库
 
 ```bash
-# 种子数据（部门/术语/校历/默认规则）
+# 种子数据（12 类部门/12345 术语/默认规则）
 docker compose exec backend python -m scripts.seed_data
 
-# 导入 department_files 下的 PDF/Word（脚本会自动探测 /app/department_files，也可显式指定）
-docker compose exec backend python -m scripts.ingest_department_files --base /app/department_files
+# 导入已质检的芜湖官方语料，首次建库跳过逐文档 LLM 分析
+docker compose exec backend python -m scripts.ingest_department_files \
+  --base /app/wuhu_knowledge_base --skip-conflicts --skip-metadata-llm
 ```
 
-`seed_data` 与后端启动过程会幂等初始化 3 个可执行基线 Skill（极端天气安全响应、校园事项步骤导航、学术节点与截止日期核验）。它们会真实参与查询匹配、检索扩展、回答模板和策略执行记录，不是只用于页面展示。
+`seed_data` 与后端启动过程会幂等初始化“工单要素完整性核验”“政策依据与回复生成”“紧急事项风险提示”三个比赛基线 Skill。
 
 管理端“进化 Loop”采用异步作业跟踪：触发后页面自动轮询 `queued → running → completed`，展示 Observe / Reflect / Adapt / Deploy 阶段、反馈信号、根因、候选、发布结果和策略资产前后变化。
 
 ### 模型连通性自检（doctor）
 
 ```bash
-# 验证 DeepSeek + 中转站（bge 重排/Embedding）能否调用
+# 验证 DeepSeek 与本地中文 Embedding 能否使用
 docker compose exec backend python -m scripts.doctor
 
 # 验证 pi 框架 + DeepSeek 是否正常
@@ -148,6 +153,8 @@ BACKEND_URL=http://localhost:8000 npm run dev   # :3000
 | `INTERNAL_API_TOKEN` | 内部接口 `/internal/*` 共享令牌（backend 与 pi-agent 一致） | 空（未配置则内部接口不可用） |
 | `SEED_DEMO_USERS` | 是否创建演示账号（生产设 `false`） | `true` |
 | `MAX_UPLOAD_MB` | 文档上传大小上限 | `20` |
+| `ASR_PROVIDER` | 录音转写适配器：`openai_compatible` 或 `faster_whisper` | `disabled` |
+| `ASR_API_KEY` / `ASR_BASE_URL` / `ASR_MODEL` | OpenAI 兼容语音转写服务配置 | 空 / OpenAI / `whisper-1` |
 | `LOGIN_MAX_ATTEMPTS` / `LOGIN_WINDOW_SECONDS` | 登录失败限流 | `5` / `300` |
 | `MEMORY_SESSION_TTL_SECONDS` | Redis 工作记忆 TTL | `1800` |
 | `MEMORY_EVENT_RETENTION_DAYS` / `MEMORY_SUMMARY_RETENTION_DAYS` | 情景事件/摘要保留期 | `90` / `180` |
@@ -157,6 +164,42 @@ BACKEND_URL=http://localhost:8000 npm run dev   # :3000
 > 已通过 `scripts/doctor.py` 实测：DeepSeek `deepseek-v4-flash` ✅、中转站 `gpt-5.5` ✅、
 > `text-embedding-3-large` ✅、bge 重排 `BAAI/bge-reranker-v2-m3` ✅。
 > 注意：该中转站**不提供** `bge-m3` embedding 与 `gpt-5.5-pro`（这两个名字无效）。
+
+### 启用录音自动转写
+
+本地 `faster-whisper`（推荐用于比赛和脱敏录音）：
+
+```env
+ASR_PROVIDER=faster_whisper
+ASR_LOCAL_MODEL_PATH=../models/faster-whisper-turbo
+ASR_LOCAL_DEVICE=auto
+ASR_LOCAL_COMPUTE_TYPE=auto
+ASR_SPEAKER_MODEL_PATH=models/speaker-diarization/campplus.onnx
+```
+
+模型目录默认不进入 Git。`faster-whisper` 负责带时间戳转写，CAM++ 负责在本机提取声纹并区分接线员/群众；两者都不会把原始录音上传到外部服务。RTX 显卡优先采用 CUDA FP16；运行库不可用时自动回退 CPU INT8。若 CAM++ 文件缺失，系统会退回文本规则并在界面明确提示。
+
+CAM++ 模型应放在 `models/speaker-diarization/campplus.onnx`。可用下面的命令下载公开模型文件：
+
+```powershell
+New-Item -ItemType Directory -Force models\speaker-diarization
+Invoke-WebRequest -Uri "https://huggingface.co/model-scope/CosyVoice-300M/resolve/main/campplus.onnx" -OutFile "models\speaker-diarization\campplus.onnx"
+```
+
+真实 12345 电话通常是 8 kHz 单声道，自动区分仍可能出现边界偏差。界面会显示声纹聚类置信度；低置信度结果必须结合音频播放和“角色格式化转写”文本人工校对。
+
+云端 OpenAI 兼容服务：
+
+在项目根目录创建 `.env`（不要提交到 Git），至少填写：
+
+```env
+ASR_PROVIDER=openai_compatible
+ASR_API_KEY=替换为语音服务密钥
+ASR_BASE_URL=https://api.openai.com/v1
+ASR_MODEL=whisper-1
+```
+
+重启后端后，在受理工作台选择录音，系统会调用 `/api/v1/intake/transcribe`，把转写结果自动填入文本框。所有结果必须人工校对；真实群众录音应先取得授权并遵守数据最小化要求，不要使用公开测试环境处理含个人信息的音频。
 
 ## 各模块 README
 

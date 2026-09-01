@@ -28,14 +28,14 @@ async def test_mongo_increment_omits_conflicting_parent_default() -> None:
     store = MongoStore(mongo)  # type: ignore[arg-type]
 
     await store.increment(
-        "user_profiles", "student", "prefs.intent_counts.process_guide", 1,
-        {"user_id": "student", "role": "student", "prefs": {}, "feedback_counts": {}},
+        "user_profiles", "operator", "prefs.intent_counts.process_guide", 1,
+        {"user_id": "operator", "role": "operator", "prefs": {}, "feedback_counts": {}},
     )
 
     assert mongo.target.update == {
         "$inc": {"prefs.intent_counts.process_guide": 1},
         "$setOnInsert": {
-            "user_id": "student", "role": "student", "feedback_counts": {},
+            "user_id": "operator", "role": "operator", "feedback_counts": {},
         },
     }
 
@@ -45,7 +45,7 @@ async def test_mongo_increment_keeps_non_overlapping_defaults() -> None:
     mongo = _Mongo()
     store = MongoStore(mongo)  # type: ignore[arg-type]
 
-    await store.increment("user_profiles", "student", "query_count", 1, {"prefs": {}})
+    await store.increment("user_profiles", "operator", "query_count", 1, {"prefs": {}})
 
     assert mongo.target.update == {
         "$inc": {"query_count": 1},

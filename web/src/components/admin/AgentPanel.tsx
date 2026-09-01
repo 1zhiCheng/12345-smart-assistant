@@ -20,7 +20,7 @@ export default function AgentPanel({ data }: { data: import("@/lib/api").Dashboa
         <span className={styles.muted}>（每个部门独立 Agent 栈：Intent + Retrieval + Answer + Verifier）</span>
       </h2>
       <div className={styles.muted} style={{ marginBottom: 16 }}>
-        K8s 按部门粒度部署独立 Deployment + HPA，冷门部门 1 副本、热门部门（教务处/学生处）峰值弹性至 20 副本。
+        K8s 按部门粒度部署独立 Deployment + HPA，低并发部门 1 副本，城市管理、公安和市场监管等高并发部门峰值弹性至 20 副本。
       </div>
       {err && <div className={styles.error} style={{ marginBottom: 12 }}>{err}</div>}
 

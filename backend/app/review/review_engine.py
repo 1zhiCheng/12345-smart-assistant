@@ -27,7 +27,7 @@ from app.utils.logging import get_logger
 
 logger = get_logger(__name__)
 
-QUESTION_PROMPT = """你是学校制度文档测试题生成助手。请基于给定文档内容，生成 {n} 道能考察该文档核心条款的问答题。
+QUESTION_PROMPT = """你是芜湖市12345官方政务文档测试题生成助手。请基于给定文档内容，生成 {n} 道能考察该文档核心政策与办理要求的问答题。
 
 仅输出 JSON 数组（不要输出任何其它文字）：
 [
@@ -44,7 +44,7 @@ QUESTION_PROMPT = """你是学校制度文档测试题生成助手。请基于�
 {content}
 """
 
-SELF_ANSWER_SYSTEM = "你是学校制度咨询助手，回答严谨、有据可依。"
+SELF_ANSWER_SYSTEM = "你是芜湖市12345政务知识辅助智能体，回答严谨、有据可依。"
 
 
 def _now() -> str:

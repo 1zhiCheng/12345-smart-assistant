@@ -1,4 +1,4 @@
-"""全局记忆：跨部门共享知识（全局 Skills/Rules、学期日历、全校术语）。"""
+"""全局记忆：跨部门共享的 Rules、Skills、政务服务时间与术语。"""
 from __future__ import annotations
 
 from datetime import datetime, timezone
@@ -27,10 +27,10 @@ class GlobalMemory:
         await self.store.upsert("global_memory", mem)
         await self.store.upsert("org_memory_items", {
             "_id": "orgmem_global_calendar", "scope": "global", "dept_id": "",
-            "type": "calendar", "title": "当前校历", "content": str(calendar),
+            "type": "calendar", "title": "政务服务时间配置", "content": str(calendar),
             "source_refs": [], "source_doc_ids": [], "authority": "admin_approved",
             "confidence": 1.0, "review_status": "approved", "status": "active",
-            "access_scope": ["student", "teacher", "admin"], "revision": 1,
+            "access_scope": ["operator", "department_admin", "system_admin"], "revision": 1,
             "updated_at": datetime.now(timezone.utc),
         })
 

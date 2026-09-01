@@ -152,7 +152,7 @@ class LoopEngine:
     @staticmethod
     def _next_action(observed: int, adaptations: list[dict[str, Any]]) -> str:
         if observed == 0:
-            return "先在学生端完成几次问答并提交有帮助/需改进反馈，再触发 Loop 查看行为变化。"
+            return "先在营业员工作台完成几次工单辅助或政策检索并提交反馈，再触发 Loop 查看行为变化。"
         if adaptations:
             return "检查下方新生成的 Skill/Rule/Hook；人在环中阶段需要管理员审核后才会生效。"
         return "当前反馈尚未形成稳定策略候选；继续积累相似问题和纠错样本。"

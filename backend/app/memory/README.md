@@ -8,7 +8,7 @@
 | 会话工作记忆 | `working.py` | Redis | 最近消息、摘要、实体、部门和 chunk ID，TTL 默认 30 分钟 |
 | 情景记忆 | `episodic.py` | `conversation_events/conversation_summaries` | append-only 消息事件、会话恢复与滚动摘要 |
 | 用户语义记忆 | `user_semantic.py` | `user_memory_items/memory_candidates` | 用户明确偏好和已验证资料；敏感项拒绝，推断项待审核 |
-| 组织知识记忆 | `organization.py` | `org_memory_items/memory_topics` | FAQ、流程提示、校历和协调结果；FAQ 必须绑定官方来源 |
+| 组织知识记忆 | `organization.py` | `org_memory_items/memory_topics` | FAQ、办事流程、政务服务时间和部门协同结果；FAQ 必须绑定官方来源 |
 | 程序性/学习记忆 | `learning.py` + `app/loop/` | Skills/Hooks/Rules/实验集合 | 改变下一轮执行方式，支持灰度、回放和回滚 |
 
 ## 统一上下文

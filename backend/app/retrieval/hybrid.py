@@ -38,17 +38,20 @@ class HybridRetriever:
         vector_hits = await self.vector_store.search(query_vec, top_k=self.vector_top, dept_id=dept_id)
         fused: dict[str, dict[str, Any]] = {}
 
-        def _add(hit: dict[str, Any], rank: int) -> None:
+        def _add(hit: dict[str, Any], rank: int, branch: str) -> None:
             id_ = hit["id"]
             if id_ not in fused:
                 fused[id_] = dict(hit)
                 fused[id_]["_rrf"] = 0.0
+                fused[id_]["retrieval_branches"] = []
             fused[id_]["_rrf"] += 1.0 / (RRF_K + rank + 1)
+            fused[id_][f"{branch}_score"] = float(hit.get("score", 0.0))
+            fused[id_]["retrieval_branches"].append(branch)
 
         for rank, h in enumerate(bm25_hits):
-            _add(h, rank)
+            _add(h, rank, "bm25")
         for rank, h in enumerate(vector_hits):
-            _add(h, rank)
+            _add(h, rank, "vector")
 
         candidates = list(fused.values())
         candidates.sort(key=lambda x: x["_rrf"], reverse=True)

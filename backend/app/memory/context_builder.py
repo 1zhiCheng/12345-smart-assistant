@@ -60,7 +60,7 @@ class MemoryContextBuilder:
 
     async def build(
         self, session_id: str, user_id: str, query: str, dept_ids: list[str] | None = None,
-        role: str = "student", include_organization: bool = True,
+        role: str = "operator", include_organization: bool = True,
     ) -> MemoryContext:
         state = await self.working.get_context(session_id)
         summary = await self.episodic.get_summary(session_id, user_id)

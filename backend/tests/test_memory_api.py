@@ -13,7 +13,7 @@ def _login(client: TestClient, username: str, password: str) -> str:
 
 def test_user_memory_api_ownership_and_sensitive_rejection():
     with TestClient(app) as client:
-        token = _login(client, "student", "student123")
+        token = _login(client, "operator", "operator123")
         headers = {"Authorization": f"Bearer {token}"}
         created = client.post(
             "/api/v1/memory/me", headers=headers,
@@ -32,13 +32,13 @@ def test_user_memory_api_ownership_and_sensitive_rejection():
         assert client.get("/api/v1/memory/me", headers=headers).json()["data"] == []
 
 
-def test_student_cannot_publish_organization_memory():
+def test_operator_cannot_publish_organization_memory():
     with TestClient(app) as client:
-        token = _login(client, "student", "student123")
+        token = _login(client, "operator", "operator123")
         response = client.post(
             "/api/v1/memory/organization",
             headers={"Authorization": f"Bearer {token}"},
-            json={"scope": "department", "dept_id": "dept_jwc", "title": "FAQ", "content": "内容"},
+            json={"scope": "department", "dept_id": "dept_city_management", "title": "FAQ", "content": "内容"},
         )
         assert response.status_code == 403
 
@@ -46,7 +46,7 @@ def test_student_cannot_publish_organization_memory():
 def test_admin_system_insights_and_department_scope():
     with TestClient(app) as client:
         admin = _login(client, "admin", "admin123")
-        dept_admin = _login(client, "jwc_admin", "admin123")
+        dept_admin = _login(client, "cgj_admin", "admin123")
 
         insights = client.get(
             "/api/v1/admin/system-insights",

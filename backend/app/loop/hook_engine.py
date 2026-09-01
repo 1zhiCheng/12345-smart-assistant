@@ -10,16 +10,16 @@ from app.utils.logging import get_logger
 
 logger = get_logger(__name__)
 
-# 内置跨部门 Hook：选课 + 缴费 → 同时检索教务处 + 财务处
+# 内置跨部门 Hook：比赛常见的复合诉求扩展检索范围。
 DEFAULT_HOOKS = [
     {
-        "_id": "hook_cross_dept",
-        "name": "cross_dept_hook",
+        "_id": "hook_wuhu_cross_dept",
+        "name": "wuhu_cross_dept_hook",
         "dept_id": "",
         "scope": "global",
         "trigger": {
-            "intent_patterns": ["选课", "缴费", "退费", "休学"],
-            "keyword_any": ["选课", "缴费", "退费", "休学"],
+            "intent_patterns": ["施工噪声", "占道经营", "污水直排", "欠薪", "食品安全"],
+            "keyword_any": ["噪声", "施工", "占道", "污水", "欠薪", "食品"],
             "min_depts": 1,
         },
         "action": {"type": "cross_dept_retrieval", "expand_depts": True},
@@ -63,10 +63,10 @@ class HookEngine:
         query = intent.raw.get("query", "")
         # 触发关键词到部门的静态映射（跨部门协同示例）
         kw_dept = {
-            "选课": "dept_jwc",
-            "缴费": "dept_cwc",
-            "退费": "dept_cwc",
-            "休学": "dept_jwc",
+            "施工": "dept_housing_construction", "噪声": "dept_ecology_environment",
+            "占道": "dept_city_management", "道路": "dept_transportation",
+            "污水": "dept_ecology_environment", "供水": "dept_agriculture_forestry_water",
+            "欠薪": "dept_labor_social_security", "食品": "dept_market_regulation",
         }
         for hook in hooks:
             action = hook.get("action", {})

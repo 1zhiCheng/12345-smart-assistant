@@ -27,5 +27,5 @@ Python Orchestrator → MemoryContext → pi Intent → pi Rewrite → Python Re
 - 无来源 FAQ 不允许直答；组织记忆命中后必须回查 active 文档版本并经过 Verifier。
 - Intent/Rewrite/Answer/Verifier 统一交给 pi Runtime 执行；Python 原实现作为故障降级。
 - Python 显式传入白名单 `allowed_tools`，pi 不能扩大工具权限或绕过事实检索。
-- `SkillExecutor` 在 Retrieval 前执行命中 workflow，可扩展 query/top-k、加入输出模板或校历约束；
+- `SkillExecutor` 在 Retrieval 前执行命中 workflow，可扩展 query/top-k、加入政策依据回复模板或紧急升级约束；
   `default_skills.py` 的基线 Skill 与 Loop 自动挖掘 Skill 走同一条执行路径。

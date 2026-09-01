@@ -1,4 +1,4 @@
-"""种子数据：部门 / 术语表 / FAQ / 校历 / 默认 Rules&Hooks。
+"""种子数据：芜湖 12345 部门 / 术语表 / 默认 Rules&Hooks。
 
 用法：python -m scripts.seed_data
 """
@@ -10,31 +10,15 @@ from datetime import datetime, timezone
 from app.config import get_settings
 from app.deps import build_container
 from app.loop.default_skills import seed_default_skills
-
-DEPARTMENTS = [
-    {"_id": "dept_jwc", "name": "教务处", "name_en": "Academic Affairs", "category": "academic"},
-    {"_id": "dept_xsc", "name": "学生处", "name_en": "Student Affairs", "category": "student"},
-    {"_id": "dept_cwc", "name": "财务处", "name_en": "Finance", "category": "finance"},
-    {"_id": "dept_rsc", "name": "人事处", "name_en": "Human Resources", "category": "admin"},
-    {"_id": "dept_yjsy", "name": "研究生院", "name_en": "Graduate School", "category": "academic"},
-    {"_id": "dept_zfxy", "name": "中法学院", "name_en": "Sino-French Institute", "category": "academic"},
-    {"_id": "dept_hqaq", "name": "后勤与安全保卫部", "name_en": "Logistics & Security", "category": "logistics"},
-]
+from app.domain.wuhu import DEPARTMENTS, seed_wuhu_departments
 
 GLOSSARY = [
-    {"canonical": "辅导员", "synonyms": ["班主任", "导师", "辅导员老师"]},
-    {"canonical": "退课", "synonyms": ["退选", "撤销选课", "drop 课"]},
-    {"canonical": "学费", "synonyms": ["培养费", "学杂费"]},
-    {"canonical": "选课", "synonyms": ["选课系统", "抢课", "课程注册"]},
-    {"canonical": "学分", "synonyms": ["学分制", "学分数"]},
+    {"canonical": "12345政务服务便民热线", "synonyms": ["12345", "市长热线", "政务热线", "便民热线"]},
+    {"canonical": "营业员", "synonyms": ["接线员", "话务员", "热线受理员"]},
+    {"canonical": "群众诉求", "synonyms": ["来电诉求", "市民反映", "投诉事项", "咨询事项"]},
+    {"canonical": "转派", "synonyms": ["派单", "流转", "交办", "承办部门推荐"]},
+    {"canonical": "政策依据", "synonyms": ["法律依据", "文件依据", "条款依据", "办事指南"]},
 ]
-
-CALENDAR = {
-    "current_semester": "2025-2026 第一学期",
-    "semester_start": "2025-09-01",
-    "semester_end": "2026-01-18",
-    "week16_20": "选课时间",
-}
 
 
 async def main() -> None:
@@ -51,16 +35,10 @@ async def main() -> None:
     now = datetime.now(timezone.utc).isoformat()
     store = container.store
 
+    created = await seed_wuhu_departments(store)
     for dept in DEPARTMENTS:
-        d = dict(dept)
-        d.setdefault("admin_users", [])
-        d.setdefault("agent_config", {"model": "deepseek-v4-flash", "temperature": 0.1, "max_tokens": 2048})
-        d.setdefault("loop_phase", "human_in_loop")
-        d.setdefault("review_stats", {"total": 0, "correct": 0, "accuracy": 0.0})
-        d.setdefault("created_at", now)
-        d["updated_at"] = now
-        await store.upsert_department(d)
-        print(f"[dept] {d['_id']} {d['name']}")
+        print(f"[dept] {dept['_id']} {dept['name']}")
+    print(f"[dept] 新增 {created} 个芜湖政务部门")
 
     for i, g in enumerate(GLOSSARY):
         entry = {
@@ -73,9 +51,6 @@ async def main() -> None:
         }
         await store.upsert_glossary(entry)
     print(f"[glossary] {len(GLOSSARY)} 条")
-
-    await container.global_memory.set_calendar(CALENDAR)
-    print("[calendar] 校历已写入全局记忆")
 
     await container.rule_engine.seed_defaults()
     await container.hook_engine.seed_defaults()

@@ -18,10 +18,10 @@ def test_parse_text(tmp_path):
 
 def test_parse_markdown(tmp_path):
     p = tmp_path / "a.md"
-    p.write_text("# 选课办法\n\n- 第一项\n- 第二项\n", encoding="utf-8")
+    p.write_text("# 垃圾分类办法\n\n- 第一项\n- 第二项\n", encoding="utf-8")
     doc = DocumentParser().parse(p)
-    assert doc.blocks[0].type == "heading"
-    assert doc.blocks[0].text == "选课办法"
+    assert doc.title == "垃圾分类办法"
+    assert doc.blocks[0].type == "list_item"
 
 
 def test_cleaner_fullwidth():

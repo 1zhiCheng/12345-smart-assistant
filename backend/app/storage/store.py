@@ -47,6 +47,7 @@ COLLECTIONS = (
     "memory_audit",
     "memory_topics",
     "memory_sequences",
+    "workorders",
 )
 
 

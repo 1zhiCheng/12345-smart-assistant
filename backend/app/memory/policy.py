@@ -49,7 +49,7 @@ class MemoryPolicy:
 
     @staticmethod
     def org_item_readable(
-        item: dict[str, Any], dept_ids: list[str], role: str = "student"
+        item: dict[str, Any], dept_ids: list[str], role: str = "operator"
     ) -> bool:
         if item.get("status") != "active" or item.get("review_status") != "approved":
             return False

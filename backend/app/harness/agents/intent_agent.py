@@ -8,17 +8,18 @@ from app.llm.client import ChatMessage, LLMClient
 from app.storage.store import DataStore
 from app.utils.logging import get_logger
 from app.integrations.pi_runtime import PiAgentRuntimeClient
+from app.domain.wuhu import DEPARTMENT_KEYWORDS
 
 logger = get_logger(__name__)
 
-INTENT_PROMPT = """你是制度咨询意图识别助手。判断用户问题的意图类型、涉及部门、是否需要跨部门协同。
+INTENT_PROMPT = """你是芜湖 12345 政务热线意图识别助手。判断群众诉求的事项类型、承办部门和是否需要跨部门协同。
 
 仅输出 JSON：
 {{
   "type": "regulation_consult|process_guide|deadline_query|complaint|chitchat|other",
   "depts": ["dept_id"],           // 涉及的部门 id，从候选部门中选择；无法确定则 ["dept_all"]
-  "user_role": "student|teacher|admin",
-  "entities": {{}},               // 关键实体，如 {{"matter": "退课", "semester": "2025秋季"}}
+  "user_role": "operator|department_admin|system_admin",
+  "entities": {{}},               // 关键实体，如 {{"matter": "施工噪声", "location": "镜湖区"}}
   "needs_cross_dept": false,      // 是否涉及多个部门
   "confidence": 0.0-1.0
 }}
@@ -77,15 +78,7 @@ class IntentAgent:
     @staticmethod
     def _keyword_fallback(query: str) -> Intent:
         """无 LLM 时的关键词规则回退。"""
-        dept_keywords = {
-            "dept_jwc": ["选课", "考试", "成绩", "学分", "退课", "教务", "培养方案", "转专业"],
-            "dept_xsc": ["奖学金", "助学金", "宿舍", "社团", "处分", "学生证", "心理"],
-            "dept_cwc": ["缴费", "退费", "学费", "报销", "财务", "发票"],
-            "dept_rsc": ["人事", "职称", "招聘", "工资", "请假", "考勤"],
-            "dept_yjsy": ["研究生", "硕士", "博士", "学位论文", "导师", "开题", "答辩"],
-            "dept_zfxy": ["中法", "法语", "留学", "交换", "双学位", "赴法", "行李寄存"],
-            "dept_hqaq": ["后勤", "食堂", "公寓", "报修", "维修", "水电", "安保", "停车", "台风", "暴雨", "防汛", "应急", "安全"],
-        }
+        dept_keywords = DEPARTMENT_KEYWORDS
         depts = [d for d, kws in dept_keywords.items() if any(k in query for k in kws)]
         intent_type = "other"
         if any(k in query for k in ["截止", "什么时候", "最晚", "deadline", "时间"]):

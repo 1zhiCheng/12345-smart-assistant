@@ -7,15 +7,15 @@ import asyncio
 import pytest
 
 
-async def _seed_fact(container, doc_id="doc1", dept_id="dept_jwc", version="1.0"):
+async def _seed_fact(container, doc_id="doc1", dept_id="dept_city_management", version="1.0"):
     await container.store.insert_document({
-        "_id": doc_id, "dept_id": dept_id, "title": "选课办法",
+        "_id": doc_id, "dept_id": dept_id, "title": "垃圾分类办法",
         "version": version, "status": "active",
     })
     await container.store.insert_chunks([{
         "_id": f"{doc_id}:0", "doc_id": doc_id, "dept_id": dept_id,
-        "chunk_index": 0, "content": "学生应在第八周前完成退课。",
-        "section_path": ["退课"], "section_title": "退课时间",
+        "chunk_index": 0, "content": "群众应在第八周前完成住房补贴。",
+        "section_path": ["住房补贴"], "section_title": "住房补贴时间",
     }])
 
 
@@ -23,8 +23,8 @@ async def _seed_fact(container, doc_id="doc1", dept_id="dept_jwc", version="1.0"
 async def test_fact_plane_only_returns_active_scoped_chunks(fresh_container):
     c = fresh_container
     await _seed_fact(c)
-    assert await c.fact_plane.active_chunk("doc1:0", ["dept_jwc"])
-    assert await c.fact_plane.active_chunk("doc1:0", ["dept_cwc"]) is None
+    assert await c.fact_plane.active_chunk("doc1:0", ["dept_city_management"])
+    assert await c.fact_plane.active_chunk("doc1:0", ["dept_economy_trade"]) is None
     await c.store.update_document("doc1", {"status": "archived"})
     assert await c.fact_plane.active_chunk("doc1:0") is None
 
@@ -35,17 +35,17 @@ async def test_organization_memory_requires_and_rechecks_sources(fresh_container
     await _seed_fact(c)
     with pytest.raises(ValueError, match="官方来源"):
         await c.organization_memory.publish(
-            "department", "faq", "退课", "第八周前", [], dept_id="dept_jwc"
+            "department", "faq", "住房补贴", "第八周前", [], dept_id="dept_city_management"
         )
     item = await c.organization_memory.publish(
-        "department", "faq", "退课截止时间", "学生应在第八周前完成退课",
+        "department", "faq", "住房补贴截止时间", "群众应在第八周前完成住房补贴",
         [{"doc_id": "doc1", "chunk_id": "doc1:0", "document_version": "1.0"}],
-        dept_id="dept_jwc",
+        dept_id="dept_city_management",
     )
-    assert (await c.organization_memory.recall("退课截止时间", ["dept_jwc"]))[0]["_id"] == item["_id"]
-    assert await c.organization_memory.recall("退课截止时间", ["dept_cwc"]) == []
+    assert (await c.organization_memory.recall("住房补贴截止时间", ["dept_city_management"]))[0]["_id"] == item["_id"]
+    assert await c.organization_memory.recall("住房补贴截止时间", ["dept_economy_trade"]) == []
     await c.store.update_document("doc1", {"status": "archived"})
-    assert await c.organization_memory.recall("退课截止时间", ["dept_jwc"]) == []
+    assert await c.organization_memory.recall("住房补贴截止时间", ["dept_city_management"]) == []
     assert (await c.store.get("org_memory_items", item["_id"]))["status"] == "stale"
 
 
@@ -69,15 +69,15 @@ async def test_user_memory_consent_sensitivity_revision_and_forget(fresh_contain
 @pytest.mark.asyncio
 async def test_working_memory_stores_chunk_ids_and_context_respects_budget(fresh_container):
     c = fresh_container
-    await c.working_memory.append_message("s1", "user", "退课截止时间")
-    await c.working_memory.set_intent("s1", {"depts": ["dept_jwc"], "entities": {"matter": "退课"}})
+    await c.working_memory.append_message("s1", "user", "住房补贴截止时间")
+    await c.working_memory.set_intent("s1", {"depts": ["dept_city_management"], "entities": {"matter": "住房补贴"}})
     await c.working_memory.set_retrieved("s1", [{"_id": "doc1:0", "content": "不应进入Redis"}])
     state = await c.working_memory.get_context("s1")
     assert state["retrieved"] == ["doc1:0"]
     assert "不应进入Redis" not in str(state)
     await c.user_semantic_memory.remember("u1", "answer_style", "concise")
-    context = await c.memory_context_builder.build("s1", "u1", "退课", ["dept_jwc"])
-    assert context.session["entities"]["matter"] == "退课"
+    context = await c.memory_context_builder.build("s1", "u1", "住房补贴", ["dept_city_management"])
+    assert context.session["entities"]["matter"] == "住房补贴"
     assert "answer_style" in context.prompt_text()
     assert len(context.prompt_text()) <= c.settings.memory_context_max_chars
 
@@ -101,17 +101,17 @@ async def test_episodic_sequence_history_and_retention(fresh_container):
 @pytest.mark.asyncio
 async def test_hot_topics_use_atomic_aggregate(fresh_container):
     c = fresh_container
-    await c.dept_memory.bump_hot_query("dept_jwc", "退课截止时间")
-    await c.dept_memory.bump_hot_query("dept_jwc", "退课截止时间")
-    topics = await c.store.find("memory_topics", {"dept_id": "dept_jwc"})
+    await c.dept_memory.bump_hot_query("dept_city_management", "住房补贴截止时间")
+    await c.dept_memory.bump_hot_query("dept_city_management", "住房补贴截止时间")
+    topics = await c.store.find("memory_topics", {"dept_id": "dept_city_management"})
     assert len(topics) == 1 and topics[0]["count"] == 2
 
 
 @pytest.mark.asyncio
 async def test_hot_topics_concurrent_increment(fresh_container):
     c = fresh_container
-    await asyncio.gather(*(c.dept_memory.bump_hot_query("dept_jwc", "退课截止时间") for _ in range(20)))
-    topics = await c.store.find("memory_topics", {"dept_id": "dept_jwc"})
+    await asyncio.gather(*(c.dept_memory.bump_hot_query("dept_city_management", "住房补贴截止时间") for _ in range(20)))
+    topics = await c.store.find("memory_topics", {"dept_id": "dept_city_management"})
     assert topics[0]["count"] == 20
 
 

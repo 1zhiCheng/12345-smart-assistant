@@ -41,11 +41,11 @@ treatment 劣于 control 时自动回滚。
 
 ## 基线 Skill 与自动挖掘 Skill
 
-后端启动和 `scripts.seed_data` 会幂等创建“极端天气安全响应”“校园事项步骤导航”“学术节点与截止日期核验”。
-三者直接进入 `SkillExecutor`，会扩展 query、提升 top-k、注入输出模板或校历约束，并记录 treatment/control、
+后端启动和 `scripts.seed_data` 会幂等创建“工单要素完整性核验”“政策依据与回复生成”“紧急事项风险提示”。
+三者直接进入 `SkillExecutor`，会扩展 query、提升 top-k、注入输出模板，并记录 treatment/control、
 命中次数和成功率。Trace 达到聚类阈值后，Skill Miner 仍会生成新的候选 Skill，两类 Skill 共用同一治理链。
 
 ## 演示数据
 
-`python -m scripts.seed_demo_data` 为各部门生成模拟文档、待审核单与 badcase，并把
+Loop 使用真实工单审核和政策检索反馈形成 badcase，并把
 badcase 反思出的 rubric 规则写入各部门初始 Skill（见 `docs/loop-engineering.md`）。

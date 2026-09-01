@@ -132,6 +132,12 @@ class DocumentParser:
         lines = text.splitlines()
         blocks: list[Block] = []
         title = path.stem
+        meta: dict[str, Any] = {"format": "markdown"}
+        metadata_fields = {
+            "事项类别": "category", "牵头部门": "lead_department", "发布部门": "department",
+            "发布日期": "published_at", "来源": "source_url", "采集时间": "crawled_at",
+            "质检状态": "quality_status",
+        }
         buf: list[str] = []
         buf_type = "paragraph"
 
@@ -145,7 +151,17 @@ class DocumentParser:
             m = re.match(r"^(#{1,6})\s+(.*)$", line)
             if m:
                 flush()
-                blocks.append(Block(type="heading", level=len(m.group(1)), text=m.group(2).strip()))
+                heading = m.group(2).strip()
+                if len(m.group(1)) == 1 and title == path.stem:
+                    title = heading
+                    continue
+                blocks.append(Block(type="heading", level=len(m.group(1)), text=heading))
+                continue
+            field_match = re.match(r"^\s*-\s*([^:：]+)[:：]\s*(.*?)\s*$", line)
+            if field_match and field_match.group(1).strip() in metadata_fields:
+                flush()
+                key = metadata_fields[field_match.group(1).strip()]
+                meta[key] = field_match.group(2).strip()
                 continue
             if re.match(r"^\s*[-*+]\s+", line):
                 flush()
@@ -158,7 +174,7 @@ class DocumentParser:
                 continue
             buf.append(line)
         flush()
-        return ParsedDocument(title=title, blocks=blocks, raw_text=text, meta={"format": "markdown"})
+        return ParsedDocument(title=title, blocks=blocks, raw_text="\n".join(b.text for b in blocks if b.text), meta=meta)
 
     # ---------- HTML ----------
     def _parse_html(self, path: Path) -> ParsedDocument:

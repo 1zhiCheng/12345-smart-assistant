@@ -1,4 +1,4 @@
-"""Dept Router（自动部门路由 Agent）：把学生问题匹配到最符合的部门。
+"""Dept Router（自动部门路由 Agent）：把 12345 群众诉求匹配到承办部门。
 
 策略：关键词精确匹配（快速、可解释）→ LLM 语义路由（兜底）→ 全部部门。
 返回路由结果（dept_ids / matched_by / confidence / reasons / dept_names），
@@ -11,32 +11,25 @@ from typing import Any
 from app.llm.client import ChatMessage, LLMClient
 from app.storage.store import DataStore
 from app.utils.logging import get_logger
+from app.domain.wuhu import DEPARTMENT_KEYWORDS
 
 logger = get_logger(__name__)
 
 # 部门关键词路由表（覆盖全部部门；命中即路由到对应部门，可多部门）
-DEPT_KEYWORDS: dict[str, list[str]] = {
-    "dept_jwc": ["选课", "退课", "考试", "成绩", "学分", "学籍", "转专业", "辅修", "培养方案", "绩点", "重修", "教务处"],
-    "dept_xsc": ["奖学金", "助学金", "宿舍", "社团", "处分", "学生证", "心理", "综测", "勤工助学", "请假", "学生处"],
-    "dept_cwc": ["缴费", "退费", "学费", "报销", "财务", "发票", "到账", "退款", "收费", "财务处"],
-    "dept_rsc": ["人事", "职称", "招聘", "工资", "考勤", "社保", "入职", "离职", "合同", "评聘", "人事处"],
-    "dept_yjsy": ["研究生", "硕士", "博士", "学位", "论文", "导师", "开题", "答辩", "盲审", "中期", "研究生院"],
-    "dept_zfxy": ["中法", "法语", "留学", "交换", "双学位", "赴法", "行李寄存", "心理测评", "中法学院"],
-    "dept_hqaq": ["后勤", "食堂", "公寓", "报修", "维修", "水电", "安保", "停车", "台风", "暴雨", "防汛", "应急", "停电", "安全"],
-}
+DEPT_KEYWORDS = DEPARTMENT_KEYWORDS
 
-ROUTE_PROMPT = """你是部门路由助手。判断学生问题最应由哪个部门回答，输出 JSON：
+ROUTE_PROMPT = """你是芜湖 12345 事项分类与部门路由助手。判断群众诉求应由哪个部门承办，输出 JSON：
 {{"depts": ["dept_id"], "confidence": 0.0-1.0, "reason": "简短理由"}}
 
 候选部门：
 {departments}
 
-学生问题：{query}
+群众诉求：{query}
 """
 
 
 class DeptRouter:
-    """自动部门路由：学生问题 → 最匹配的部门。"""
+    """自动部门路由：群众诉求 → 最匹配的承办部门。"""
 
     def __init__(self, llm: LLMClient, store: DataStore) -> None:
         self.llm = llm

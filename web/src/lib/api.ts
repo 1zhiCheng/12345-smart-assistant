@@ -62,8 +62,67 @@ export interface User {
   id: string;
   username: string;
   name: string;
-  role: "student" | "admin";
+  role: "operator" | "department_admin" | "system_admin";
   dept_id: string;
+}
+
+export interface WorkOrderElements {
+  time: string;
+  time_basis: "stated" | "received_at";
+  location: string;
+  subjects: string[];
+  event: string;
+  request: string;
+  contact_hint: string;
+}
+
+export interface StandardWorkOrder {
+  case_id: string;
+  title: string;
+  summary: string;
+  content: string;
+  region: string;
+  source: {
+    type: "text" | "audio";
+    raw_text: string;
+    masked_text: string;
+    audio_file_name?: string | null;
+  };
+  elements: WorkOrderElements;
+  missing_fields: string[];
+  ambiguities: string[];
+  clarification_questions: string[];
+  quality: {
+    completeness: number;
+    fidelity: number;
+    clarity: number;
+    overall: number;
+    warnings: string[];
+  };
+  generation: {
+    mode: "llm" | "rule_fallback";
+    provider: string;
+    model: string;
+    fallback_reason: string;
+    evidence: Record<string, string[]>;
+  };
+  multiple_matters: boolean;
+  matter_candidates: Array<{ id: string; topic: string; description: string; evidence: string }>;
+  parent_case_id?: string | null;
+  matter_index?: number | null;
+  status: "draft" | "confirmed";
+  requires_human_review: boolean;
+  created_at: string;
+  confirmed_at?: string | null;
+  confirmed_by?: string | null;
+  handoff_status: "not_ready" | "pending" | "processing" | "completed";
+  handed_off_at?: string | null;
+  claimed_at?: string | null;
+  claimed_by?: string | null;
+  completed_at?: string | null;
+  classification?: Record<string, unknown> | null;
+  routing?: Record<string, unknown> | null;
+  reply?: Record<string, unknown> | null;
 }
 
 export interface PipelineStage {
@@ -298,6 +357,100 @@ export async function login(username: string, password: string): Promise<{ token
 
 export async function me(): Promise<User> {
   return request<User>("/api/v1/auth/me");
+}
+
+export async function register(username: string, password: string, name: string): Promise<{ token: string; user: User }> {
+  return request<{ token: string; user: User }>("/api/v1/auth/register", {
+    method: "POST",
+    body: JSON.stringify({ username, password, name }),
+  });
+}
+
+// ==================== 12345 诉求受理与工单生成 ====================
+export async function analyzeAppeal(payload: {
+  text: string;
+  source_type: "text" | "audio";
+  audio_file_name?: string | null;
+  raw_transcript?: string | null;
+}): Promise<StandardWorkOrder> {
+  return request<StandardWorkOrder>("/api/v1/intake/analyze", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function clarifyWorkOrder(
+  workorder: StandardWorkOrder,
+  answers: Partial<Record<"time" | "location" | "event" | "request" | "additional_details", string>>
+): Promise<StandardWorkOrder> {
+  return request<StandardWorkOrder>("/api/v1/intake/clarify", {
+    method: "POST",
+    body: JSON.stringify({ workorder, answers }),
+  });
+}
+
+export async function splitWorkOrder(workorder: StandardWorkOrder, candidateIds: string[]): Promise<StandardWorkOrder[]> {
+  return request<StandardWorkOrder[]>("/api/v1/intake/split", {
+    method: "POST",
+    body: JSON.stringify({ workorder, candidate_ids: candidateIds }),
+  });
+}
+
+export interface TranscriptionResult {
+  text: string;
+  formatted_text: string;
+  citizen_text: string;
+  turns: Array<{ role: "operator" | "citizen" | "unknown"; speaker: string; text: string }>;
+  role_format_mode: "acoustic" | "heuristic" | "labeled" | "unsegmented";
+  raw_text: string;
+  file_name: string;
+  provider: string;
+  model: string;
+  diarization_confidence: number;
+  diarization_reason: string;
+  generation: StandardWorkOrder["generation"];
+}
+
+export async function transcribeAudio(file: File): Promise<TranscriptionResult> {
+  const form = new FormData();
+  form.append("file", file);
+  const headers: Record<string, string> = {};
+  const token = getToken();
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  const resp = await fetch("/api/v1/intake/transcribe", { method: "POST", headers, body: form });
+  const json = (await resp.json()) as ApiResponse<TranscriptionResult> | { detail?: string };
+  if (!resp.ok) throw new Error((json as { detail?: string }).detail || `HTTP ${resp.status}`);
+  if (!("code" in json) || json.code !== 0) throw new Error("语音转写失败");
+  return json.data;
+}
+
+export async function confirmWorkOrder(workorder: StandardWorkOrder): Promise<StandardWorkOrder> {
+  return request<StandardWorkOrder>("/api/v1/intake/confirm", {
+    method: "POST",
+    body: JSON.stringify({ workorder }),
+  });
+}
+
+export async function listWorkOrders(): Promise<StandardWorkOrder[]> {
+  return request<StandardWorkOrder[]>("/api/v1/intake/workorders");
+}
+
+export async function listHandoffs(status: "pending" | "processing" | "completed" | "all" = "pending"): Promise<StandardWorkOrder[]> {
+  return request<StandardWorkOrder[]>(`/api/v1/intake/handoffs?status=${status}`);
+}
+
+export async function claimHandoff(caseId: string): Promise<StandardWorkOrder> {
+  return request<StandardWorkOrder>(`/api/v1/intake/handoffs/${caseId}/claim`, { method: "POST" });
+}
+
+export async function completeHandoff(
+  caseId: string,
+  result: { classification: Record<string, unknown>; routing: Record<string, unknown>; reply?: Record<string, unknown> | null }
+): Promise<StandardWorkOrder> {
+  return request<StandardWorkOrder>(`/api/v1/intake/handoffs/${caseId}/result`, {
+    method: "POST",
+    body: JSON.stringify(result),
+  });
 }
 
 // ==================== 问答 ====================

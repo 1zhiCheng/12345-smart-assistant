@@ -1,6 +1,7 @@
 """鉴权：用户账号、口令哈希、无状态 HMAC Token。
 
-- 用户角色：student（学生，进问答页）/ admin（管理员，进部门管理与审核中心）。
+- 用户角色：operator（营业员/热线受理员）/ department_admin（部门管理员）/
+  system_admin（系统管理员）。
 - Token 格式：`<user_id>.<hexdigest>`，HMAC-SHA256 签名，服务端无状态校验。
 - 部门管理员：admin 账号可绑定 dept_id，未绑定则管理全部部门。
 """
@@ -23,10 +24,9 @@ logger = get_logger(__name__)
 
 # 种子账号（演示用；生产应由管理员创建并妥善保管）
 DEFAULT_USERS = [
-    {"username": "student", "password": "student123", "name": "张三（学生）", "role": "student", "dept_id": ""},
-    {"username": "admin", "password": "admin123", "name": "系统管理员", "role": "admin", "dept_id": ""},
-    {"username": "jwc_admin", "password": "admin123", "name": "教务处管理员", "role": "admin", "dept_id": "dept_jwc"},
-    {"username": "cwc_admin", "password": "admin123", "name": "财务处管理员", "role": "admin", "dept_id": "dept_cwc"},
+    {"username": "operator", "password": "operator123", "name": "12345热线营业员", "role": "operator", "dept_id": ""},
+    {"username": "cgj_admin", "password": "admin123", "name": "城市管理局部门管理员", "role": "department_admin", "dept_id": "dept_city_management"},
+    {"username": "admin", "password": "admin123", "name": "系统管理员", "role": "system_admin", "dept_id": ""},
 ]
 
 
@@ -71,7 +71,7 @@ class AuthService:
             if await self.store.get("users", u["username"]) is None:
                 await self.store.upsert_user(self._to_user(u))
                 logger.info("已创建种子账号: %s (%s)", u["username"], u["role"])
-        logger.warning("已创建演示账号（student/student123, admin/admin123 等）。生产环境请设置 SEED_DEMO_USERS=false 并删除这些账号。")
+        logger.warning("已创建比赛演示账号（operator/operator123, cgj_admin/admin123, admin/admin123）。生产环境请关闭演示账号。")
 
     @staticmethod
     def _to_user(u: dict[str, Any]) -> dict[str, Any]:
@@ -79,16 +79,31 @@ class AuthService:
             "_id": u["username"],
             "username": u["username"],
             "name": u.get("name", u["username"]),
-            "role": u.get("role", "student"),
+            "role": u.get("role", "operator"),
             "dept_id": u.get("dept_id", ""),
             "password_hash": AuthService.hash_password(u["password"]),
             "created_at": _now(),
         }
 
     async def authenticate(self, username: str, password: str) -> Optional[dict[str, Any]]:
-        user = await self.store.get("users", username.strip())
+        user = await self.store.get("users", username.strip().lower())
         if user is None or not self.verify_password(password, user.get("password_hash", "")):
             return None
+        return self._public(user)
+
+    async def register_operator(self, username: str, password: str, name: str) -> Optional[dict[str, Any]]:
+        """注册营业员账号；公开入口不允许创建任何管理员角色。"""
+        normalized = username.strip().lower()
+        if await self.store.get("users", normalized) is not None:
+            return None
+        user = self._to_user({
+            "username": normalized,
+            "password": password,
+            "name": name.strip(),
+            "role": "operator",
+            "dept_id": "",
+        })
+        await self.store.upsert_user(user)
         return self._public(user)
 
     async def get_user(self, user_id: str) -> Optional[dict[str, Any]]:
@@ -104,7 +119,7 @@ class AuthService:
             "id": user.get("_id", ""),
             "username": user.get("username", ""),
             "name": user.get("name", ""),
-            "role": user.get("role", "student"),
+            "role": user.get("role", "operator"),
             "dept_id": user.get("dept_id", ""),
         }
 

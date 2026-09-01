@@ -25,7 +25,7 @@ export default function DeptPanel({ data, refresh, user }: { data: Dashboard; re
   // 新建部门表单
   const [nid, setNid] = useState("");
   const [nname, setNname] = useState("");
-  const [ncat, setNcat] = useState("general");
+  const [ncat, setNcat] = useState("城市管理");
 
   const loadDocs = useCallback(async () => {
     try {
@@ -96,7 +96,7 @@ export default function DeptPanel({ data, refresh, user }: { data: Dashboard; re
   }
 
   const depts = data.departments || [];
-  const isSuper = !user.dept_id;
+  const isSuper = user.role === "system_admin";
 
   return (
     <div>
@@ -106,16 +106,11 @@ export default function DeptPanel({ data, refresh, user }: { data: Dashboard; re
           <h3>新建部门</h3>
           <div className={styles.row} style={{ marginBottom: 8 }}>
             <input className={styles.input} placeholder="ID（如 dept_xxx）" value={nid} onChange={(e) => setNid(e.target.value)} />
-            <input className={styles.input} placeholder="名称（如 国际交流处）" value={nname} onChange={(e) => setNname(e.target.value)} />
+            <input className={styles.input} placeholder="名称（如 芜湖市水务局）" value={nname} onChange={(e) => setNname(e.target.value)} />
           </div>
           <div className={styles.row}>
             <select className={styles.select} value={ncat} onChange={(e) => setNcat(e.target.value)}>
-              <option value="general">通用</option>
-              <option value="academic">教务</option>
-              <option value="student">学生</option>
-              <option value="finance">财务</option>
-              <option value="admin">行政</option>
-              <option value="logistics">后勤</option>
+              {["城市管理","城乡建设","公共安全","公共服务","交通运输","经济财贸","科教文体","劳动和社会保障","农林水土","生态环境","市场监管","卫生健康"].map(category => <option key={category} value={category}>{category}</option>)}
             </select>
             <button className={styles.btn} onClick={onCreateDept} disabled={!nid || !nname}>
               创建

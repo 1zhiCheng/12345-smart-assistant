@@ -37,7 +37,7 @@ async def require_admin(
     authorization: Optional[str] = Header(default=None),
 ) -> dict:
     user = await require_user(request, authorization)
-    if user.get("role") != "admin":
+    if user.get("role") not in {"department_admin", "system_admin"}:
         raise HTTPException(status_code=403, detail="需要管理员权限")
     return user
 
@@ -59,4 +59,6 @@ async def require_internal(
 
 def scope_dept(user: Optional[dict]) -> Optional[str]:
     """管理员可见的部门范围：dept_id 非空则仅本部门；为空表示系统管理员（全部）。"""
+    if (user or {}).get("role") == "system_admin":
+        return None
     return (user or {}).get("dept_id") or None

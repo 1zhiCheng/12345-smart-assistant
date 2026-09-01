@@ -10,13 +10,13 @@ from app.integrations.pi_runtime import PiAgentRuntimeClient
 
 logger = get_logger(__name__)
 
-ANSWER_PROMPT = """你是学校制度咨询助手"文枢"。请基于给定的制度条款回答用户问题。
+ANSWER_PROMPT = """你是芜湖市12345政务知识辅助智能体。请基于给定的官方政务文档回答受理人员的问题。
 
 【必须遵守的规则】
 {rules}
 
 【回答要求】
-- 只依据给定条款回答，不得编造；若条款中无明确答案，明确回答"根据现有制度文件未找到明确规定"。
+- 只依据给定官方文档回答，不得编造；若材料中无明确答案，明确回答"根据当前已入库的官方政务文档未找到明确依据"。
 - 每句关键结论后以 [来源1] 形式标注引用编号。
 - 使用简洁、准确的中文，必要时分点说明。
 
@@ -62,12 +62,12 @@ class AnswerAgent:
             content = None
             if self.pi_runtime is not None:
                 content = await self.pi_runtime.run_text(
-                    "answer", "你是学校制度咨询助手，回答严谨、有据可依。", prompt,
+                    "answer", "你是芜湖市12345政务知识辅助智能体，回答严谨、有据可依。", prompt,
                     allowed_tools=[], timeout_seconds=self.timeout,
                 )
             if not content:
                 messages = [
-                    ChatMessage.system("你是学校制度咨询助手，回答严谨、有据可依。"),
+                    ChatMessage.system("你是芜湖市12345政务知识辅助智能体，回答严谨、有据可依。"),
                     ChatMessage.user(prompt),
                 ]
                 content = await self.llm.complete(messages, temperature=0.2)

@@ -1,4 +1,4 @@
-# 文枢 · 全栈编排（MongoDB + Redis + Python 后端 + pi 智能体服务 + Next.js 前端）
+# 芜湖政务 Agent · 全栈编排（MongoDB + Redis + Python 后端 + pi 智能体服务 + Next.js 前端）
 # 用法：docker compose up --build
 name: wenshu
 
@@ -61,7 +61,7 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./department_files:/app/department_files:ro
+      - ./wuhu_knowledge_base:/app/wuhu_knowledge_base:ro
       - upload_data:/data/uploads
 
   worker:

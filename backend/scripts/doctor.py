@@ -122,8 +122,8 @@ async def check_rerank(base_url: str, api_key: str, model: str, name: str, timeo
     url = base_url.rstrip("/") + "/rerank"
     payload = {
         "model": model,
-        "query": "选课时间",
-        "documents": ["选课在第16至18周进行", "学费在开学前缴纳"],
+        "query": "生活垃圾分类规定",
+        "documents": ["芜湖市实行生活垃圾分类管理", "居民管道天然气价格调整"],
     }
     result = {"name": name, "kind": "rerank", "model": model, "url": url, "ok": False}
     try:
@@ -166,7 +166,7 @@ async def run_all() -> list[dict[str, Any]]:
 
 def _print_report(results: list[dict[str, Any]]) -> None:
     print("=" * 66)
-    print("文枢 · 模型连通性自检（doctor）")
+    print("芜湖政务 Agent · 模型连通性自检（doctor）")
     print("=" * 66)
     for r in results:
         mark = "PASS" if r["ok"] else "FAIL"
@@ -183,7 +183,7 @@ def _print_report(results: list[dict[str, Any]]) -> None:
 
 
 async def main() -> int:
-    parser = argparse.ArgumentParser(description="文枢模型连通性自检")
+    parser = argparse.ArgumentParser(description="芜湖政务 Agent 模型连通性自检")
     parser.add_argument("--json", action="store_true", help="输出 JSON 结果")
     args = parser.parse_args()
 

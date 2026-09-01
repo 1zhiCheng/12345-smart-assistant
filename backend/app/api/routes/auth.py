@@ -1,14 +1,25 @@
-"""鉴权接口：登录 / 当前用户 / 用户列表。"""
+"""鉴权接口：营业员注册 / 登录 / 当前用户 / 用户列表。"""
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 
 from app.api.deps import require_admin, require_user
-from app.api.schemas import ApiResponse, LoginRequest
+from app.api.schemas import ApiResponse, LoginRequest, RegisterRequest
 from app.utils.logging import get_logger
 
 logger = get_logger(__name__)
 router = APIRouter(prefix="/auth", tags=["auth"])
+
+
+@router.post("/register", response_model=ApiResponse, status_code=201)
+async def register(body: RegisterRequest, request: Request):
+    """公开注册营业员账号，注册成功后直接签发登录 Token。"""
+    container = request.app.state.container
+    user = await container.auth.register_operator(body.username, body.password, body.name)
+    if user is None:
+        raise HTTPException(status_code=409, detail="该账号已存在，请直接登录或更换账号")
+    token = container.auth.issue_token(user["id"])
+    return ApiResponse(message="注册成功", data={"token": token, "user": user})
 
 
 @router.post("/login", response_model=ApiResponse)

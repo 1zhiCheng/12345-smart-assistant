@@ -27,9 +27,9 @@ def test_intent_fallback():
     agent = IntentAgent(_FakeLLM(), store)
     import asyncio
 
-    intent = asyncio.run(agent.infer("退课截止时间是第几周？", "u1", "上一轮事项：退课"))
+    intent = asyncio.run(agent.infer("生活垃圾分类规定什么时候生效？", "u1", "上一轮事项：垃圾分类"))
     assert intent.type == "deadline_query"
-    assert "dept_jwc" in intent.depts
+    assert "dept_city_management" in intent.depts
 
 
 def test_query_rewriter_fallback():
@@ -37,22 +37,22 @@ def test_query_rewriter_fallback():
     rw = QueryRewriter(_FakeLLM(), store)
     import asyncio
 
-    queries = asyncio.run(rw.rewrite("退课怎么办", None))
-    assert queries and queries[0] == "退课怎么办"
+    queries = asyncio.run(rw.rewrite("住房补贴怎么办", None))
+    assert queries and queries[0] == "住房补贴怎么办"
 
 
 def test_verifier_heuristic():
     v = VerifierAgent(_FakeLLM())
     import asyncio
 
-    answer = Answer(content="根据规定应于第8周前退课", citations=[])
-    result = asyncio.run(v.verify("退课时间", answer, []))
+    answer = Answer(content="根据规定应于第8周前住房补贴", citations=[])
+    result = asyncio.run(v.verify("住房补贴时间", answer, []))
     assert isinstance(result, VerificationResult)
 
 
 class _MemStore:
     async def list_departments(self):
-        return [{"_id": "dept_jwc", "name": "教务处"}, {"_id": "dept_cwc", "name": "财务处"}]
+        return [{"_id": "dept_city_management", "name": "城市管理局"}, {"_id": "dept_economy_trade", "name": "发展改革委"}]
 
     async def get_user_profile(self, user_id):
         return None

@@ -108,8 +108,13 @@ class LLMClient(ABC):
         temperature: Optional[float] = None,
         max_tokens: Optional[int] = None,
     ) -> Any:
-        """请求 JSON 输出并解析（兼容不支持 response_format 的服务）。"""
-        text = await self.complete(messages, temperature=temperature, max_tokens=max_tokens)
+        """请求 JSON 输出并解析。DeepSeek/OpenAI 兼容接口通过 response_format 启用 JSON 模式。"""
+        text = await self.complete(
+            messages,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            response_format={"type": "json_object"},
+        )
         return self._extract_json(text)
 
     async def stream(self, messages: list[dict[str, str]], **kwargs: Any) -> AsyncIterator[str]:

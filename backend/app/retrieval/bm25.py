@@ -47,7 +47,7 @@ class BM25Index:
         self._doc_len = {}
         for d in docs:
             id_ = d["_id"]
-            toks = tokenize(d.get("content", ""))
+            toks = tokenize(d.get("retrieval_text") or d.get("content", ""))
             if not toks:
                 continue
             self._docs[id_] = d
@@ -61,7 +61,7 @@ class BM25Index:
     def add(self, doc: dict[str, Any]) -> None:
         """增量添加单篇（简单实现：直接加入并更新统计）。"""
         id_ = doc["_id"]
-        toks = tokenize(doc.get("content", ""))
+        toks = tokenize(doc.get("retrieval_text") or doc.get("content", ""))
         if not toks:
             return
         self._docs[id_] = doc

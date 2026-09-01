@@ -11,7 +11,7 @@ INTENT_TYPES = ("regulation_consult", "process_guide", "deadline_query", "compla
 class Intent:
     type: str = "other"
     depts: list[str] = field(default_factory=list)
-    user_role: str = "student"
+    user_role: str = "operator"
     entities: dict[str, Any] = field(default_factory=dict)
     needs_cross_dept: bool = False
     confidence: float = 0.5
@@ -27,7 +27,7 @@ class Intent:
         return cls(
             type=t,
             depts=[str(d) for d in (data.get("depts") or [])],
-            user_role=str(data.get("user_role", "student")),
+            user_role=str(data.get("user_role", "operator")),
             entities=data.get("entities") or {},
             needs_cross_dept=bool(data.get("needs_cross_dept", False)),
             confidence=float(data.get("confidence", 0.5)),

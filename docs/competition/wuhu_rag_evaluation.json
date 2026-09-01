@@ -1,0 +1,443 @@
+{
+  "dataset": "evaluation\\real_document_qa.json",
+  "cases": 12,
+  "top_k": 5,
+  "recall_at_5": 1.0,
+  "mrr": 0.7667,
+  "citation_correctness": null,
+  "answer_consistency": null,
+  "details": [
+    {
+      "id": "city-garbage",
+      "rank": 2,
+      "hit_at_5": true,
+      "citation_correctness": null,
+      "answer_consistency": null,
+      "retrieved_titles": [
+        "《城市生活垃圾分类管理规范芜湖市地方标准》政策解读",
+        "芜湖市生活垃圾分类管理条例",
+        "《城市生活垃圾分类管理规范芜湖市地方标准》政策解读",
+        "芜湖市生活垃圾分类管理条例",
+        "芜湖市生活垃圾分类管理条例"
+      ],
+      "retrieval_branches": [
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ]
+      ]
+    },
+    {
+      "id": "housing-subsidy",
+      "rank": 1,
+      "hit_at_5": true,
+      "citation_correctness": null,
+      "answer_consistency": null,
+      "retrieved_titles": [
+        "《关于进一步完善住房保障租赁补贴工作的通知》跟踪解读",
+        "《关于进一步完善住房保障租赁补贴工作的通知》跟踪解读",
+        "《关于进一步完善住房保障租赁补贴工作的通知》跟踪解读",
+        "关于印发《芜湖市2024年城镇住房保障工作要点》的通知",
+        "关于印发《芜湖市2024年城镇住房保障工作要点》的通知"
+      ],
+      "retrieval_branches": [
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ]
+      ]
+    },
+    {
+      "id": "passport",
+      "rank": 1,
+      "hit_at_5": true,
+      "citation_correctness": null,
+      "answer_consistency": null,
+      "retrieved_titles": [
+        "电子普通护照申领须知",
+        "电子普通护照申领须知",
+        "电子普通护照申领须知",
+        "申办电子普通护照时如何提交本人签名信息？",
+        "重要提醒！事关身份证"
+      ],
+      "retrieval_branches": [
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ]
+      ]
+    },
+    {
+      "id": "dibao",
+      "rank": 2,
+      "hit_at_5": true,
+      "citation_correctness": null,
+      "answer_consistency": null,
+      "retrieved_titles": [
+        "社会救助政策——最低生活保障边缘家庭、低收入家庭",
+        "社会救助政策——城乡居民最低生活保障",
+        "社会救助政策——城乡居民最低生活保障",
+        "社会救助政策——刚性支出困难家庭",
+        "关于印发《芜湖市“十四五”民政事业发展规划》的通知"
+      ],
+      "retrieval_branches": [
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ]
+      ]
+    },
+    {
+      "id": "ride-hailing",
+      "rank": 1,
+      "hit_at_5": true,
+      "citation_correctness": null,
+      "answer_consistency": null,
+      "retrieved_titles": [
+        "关于兼职跑滴滴或者顺风车相关问题咨询",
+        "关于兼职跑滴滴或者顺风车相关问题咨询",
+        "芜湖市交通运输局关于延长我市出租汽车从业人员从业年龄的通知",
+        "芜湖市交通运输局关于延长我市出租汽车从业人员从业年龄的通知",
+        "芜湖市交通运输局关于延长我市出租汽车从业人员从业年龄的通知"
+      ],
+      "retrieval_branches": [
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ]
+      ]
+    },
+    {
+      "id": "gas-price",
+      "rank": 1,
+      "hit_at_5": true,
+      "citation_correctness": null,
+      "answer_consistency": null,
+      "retrieved_titles": [
+        "市发改委副主任徐虎解读《关于调整市区居民用管道天然气价格的通知》",
+        "市发改委副主任徐虎解读《关于调整市区居民用管道天然气价格的通知》",
+        "市发改委副主任徐虎解读《关于调整市区居民用管道天然气价格的通知》",
+        "芜湖市发改委关于公布芜湖市市区实行政府定价管理的供电供水供气供热行业收费清单",
+        "芜湖市发展和改革委员会关于进一步明确相关机构用电、用水、用气、用热价格按照居民类价格执行的通知"
+      ],
+      "retrieval_branches": [
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ]
+      ]
+    },
+    {
+      "id": "school-enrollment",
+      "rank": 2,
+      "hit_at_5": true,
+      "citation_correctness": null,
+      "answer_consistency": null,
+      "retrieved_titles": [
+        "2025年芜湖市市区义务教育阶段招生工作意见政策解读",
+        "关于印发《2026年芜湖市市区义务教育阶段招生工作意见》的通知",
+        "关于印发《2026年芜湖市市区义务教育阶段招生工作意见》的通知",
+        "关于印发《2026年芜湖市市区义务教育阶段招生工作意见》的通知",
+        "关于印发《2025年芜湖市市区义务教育阶段招生工作意见》的通知"
+      ],
+      "retrieval_branches": [
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ]
+      ]
+    },
+    {
+      "id": "social-insurance",
+      "rank": 1,
+      "hit_at_5": true,
+      "citation_correctness": null,
+      "answer_consistency": null,
+      "retrieved_titles": [
+        "《社会保险经办条例》问答",
+        "《社会保险经办条例》问答",
+        "《社会保险经办条例》问答",
+        "《社会保险经办条例》问答",
+        "《社会保险经办条例》问答"
+      ],
+      "retrieval_branches": [
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ]
+      ]
+    },
+    {
+      "id": "water-duty",
+      "rank": 2,
+      "hit_at_5": true,
+      "citation_correctness": null,
+      "answer_consistency": null,
+      "retrieved_titles": [
+        "芜湖市城市供水、节约用水和排水管理办法",
+        "供水单位有哪些职责？",
+        "芜湖市城市供水、节约用水和排水管理办法",
+        "芜湖市城市供水、节约用水和排水管理办法",
+        "芜湖市城市供水、节约用水和排水管理办法"
+      ],
+      "retrieval_branches": [
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ]
+      ]
+    },
+    {
+      "id": "construction-noise",
+      "rank": 1,
+      "hit_at_5": true,
+      "citation_correctness": null,
+      "answer_consistency": null,
+      "retrieved_titles": [
+        "开发商噪音污染，严重影响周边居民",
+        "突出生态环境问题整改验收销号公示（第四十二批）",
+        "突出生态环境问题整改验收销号公示（第四十二批）",
+        "关于芜湖浩鑫汽车零部件有限公司包装材料生产项目环境影响报告表审批意见的函",
+        "突出生态环境问题整改验收销号公示（第四十二批）"
+      ],
+      "retrieval_branches": [
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ]
+      ]
+    },
+    {
+      "id": "consumer-12315",
+      "rank": 1,
+      "hit_at_5": true,
+      "citation_correctness": null,
+      "answer_consistency": null,
+      "retrieved_titles": [
+        "12315投诉举报处置指挥中心",
+        "2025年度芜湖市市场监督管理局普法责任清单",
+        "2026年度芜湖市市场监督管理局普法责任清单",
+        "芜湖市市场监管局12315中心2026年第一季度消费投诉分析",
+        "2026年度芜湖市市场监督管理局普法责任清单"
+      ],
+      "retrieval_branches": [
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ]
+      ]
+    },
+    {
+      "id": "birth-policy",
+      "rank": 5,
+      "hit_at_5": true,
+      "citation_correctness": null,
+      "answer_consistency": null,
+      "retrieved_titles": [
+        "安徽省人口与计划生育条例",
+        "安徽省人口与计划生育条例",
+        "安徽省人口与计划生育条例",
+        "芜湖市卫生健康委员会",
+        "芜湖市人口与计划生育相关政策宣传"
+      ],
+      "retrieval_branches": [
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ],
+        [
+          "bm25",
+          "vector"
+        ]
+      ]
+    }
+  ]
+}

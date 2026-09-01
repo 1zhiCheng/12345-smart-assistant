@@ -55,7 +55,13 @@ class Indexer:
         self.metadata_extractor = MetadataExtractor(llm) if llm is not None else None
         self.organization_memory = None
 
-    async def ingest(self, file_path: Union[str, Path], dept_id: str, uploaded_by: str = "system") -> dict[str, Any]:
+    async def ingest(
+        self,
+        file_path: Union[str, Path],
+        dept_id: str,
+        uploaded_by: str = "system",
+        extract_metadata: bool = True,
+    ) -> dict[str, Any]:
         file_path = Path(file_path)
         if not file_path.exists():
             raise FileNotFoundError(f"文件不存在: {file_path}")
@@ -78,8 +84,8 @@ class Indexer:
         if not chunks:
             raise ValueError(f"文档未解析出有效内容: {file_path}")
         # 4. 元数据提取（LLM，可选）
-        meta: dict[str, Any] = {"effective_date": None, "doc_type": "other", "keywords": [], "applicable_scope": ["all"], "cross_refs": []}
-        if self.metadata_extractor is not None:
+        meta: dict[str, Any] = {"effective_date": None, "doc_type": self._infer_doc_type(cleaned.title), "keywords": [], "applicable_scope": ["all"], "cross_refs": []}
+        if extract_metadata and self.metadata_extractor is not None:
             meta = await self.metadata_extractor.extract(cleaned.title, cleaned.text)
 
         # 同部门同标题视为版本更新；以最近创建的版本为直接前驱。
@@ -103,7 +109,12 @@ class Indexer:
                 "file_hash": incoming_hash,
                 "uploaded_by": uploaded_by,
                 "uploaded_at": now_iso(),
+                "url": cleaned.meta.get("source_url", ""),
+                "published_at": cleaned.meta.get("published_at", ""),
+                "department": cleaned.meta.get("department", ""),
             },
+            "category": cleaned.meta.get("category", ""),
+            "lead_department": cleaned.meta.get("lead_department", ""),
             "tags": meta.get("keywords", []),
             "chunk_count": len(chunks),
             "vector_status": "pending",
@@ -117,7 +128,7 @@ class Indexer:
         stored_chunks: list[dict[str, Any]] = []
         try:
             # 5. 向量化
-            texts = [c["content"] for c in chunks]
+            texts = [self._retrieval_text(cleaned, c) for c in chunks]
             vectors = await self.embeddings.embed(texts)
 
             # 6. 索引构建（向量 + BM25 + MongoDB chunks）
@@ -132,11 +143,18 @@ class Indexer:
                     "section_path": chunk["section_path"],
                     "section_title": chunk["section_title"],
                     "content": content,
+                    "retrieval_text": texts[i],
                     "content_hash": chunk["content_hash"],
                     "char_count": chunk["char_count"],
                     "embedding_id": chunk_id,
                     "keywords": extract_keywords(content),
-                    "metadata": chunk["metadata"],
+                    "metadata": {
+                        **chunk["metadata"],
+                        "category": cleaned.meta.get("category", ""),
+                        "department": cleaned.meta.get("department", ""),
+                        "published_at": cleaned.meta.get("published_at", ""),
+                        "source_url": cleaned.meta.get("source_url", ""),
+                    },
                 }
                 stored_chunks.append(chunk_doc)
                 await self.vector_store.add(
@@ -217,3 +235,24 @@ class Indexer:
             return f"{int(major)}.{int(minor) + 1}"
         except (ValueError, AttributeError):
             return "1.0"
+
+    @staticmethod
+    def _retrieval_text(doc, chunk: dict[str, Any]) -> str:
+        context = [
+            f"文档标题：{doc.title}",
+            f"事项类别：{doc.meta.get('category', '')}" if doc.meta.get("category") else "",
+            f"发布部门：{doc.meta.get('department', '')}" if doc.meta.get("department") else "",
+            f"章节：{' > '.join(p for p in chunk.get('section_path', []) if p)}" if chunk.get("section_path") else "",
+            chunk["content"],
+        ]
+        return "\n".join(item for item in context if item)
+
+    @staticmethod
+    def _infer_doc_type(title: str) -> str:
+        if any(word in title for word in ("条例", "办法", "规定", "细则")):
+            return "regulation"
+        if any(word in title for word in ("指南", "流程", "须知", "问答")):
+            return "guide"
+        if any(word in title for word in ("通知", "公告", "意见")):
+            return "notice"
+        return "other"

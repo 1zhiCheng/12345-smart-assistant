@@ -18,10 +18,13 @@ node_modules/
 web/dist/
 .npm-cache/
 .next/
+.next.stale-*/
 out/
+*.tsbuildinfo
 
 # Env / secrets
 .env
+models/
 .env.local
 *.pem
 
@@ -32,9 +35,16 @@ out/
 data/
 volumes/
 chroma_data/
+/backups/
 *.log
+*.smoke.json
 
 # OS / IDE
 .DS_Store
 .idea/
 .vscode/
+
+# Competition reference materials (keep local until redistribution is confirmed)
+/12345赛题数据集-*/
+/【12345*.html
+/*极市开发者平台_files/

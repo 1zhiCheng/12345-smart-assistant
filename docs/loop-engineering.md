@@ -49,15 +49,13 @@ Execute ──► Observe ──► Reflect ──► Adapt ──► Deploy ─
 
 ## 6. Skills / Hooks / Rules
 
-- **Skills**：程序化知识"怎么做"。如 `deadline_query`（截止时间查询 + 校历工具 + 倒计时模板）。
-- **Hooks**：事件响应"何时触发什么"。如 `cross_dept_hook`（选课+缴费 → 同时检索教务处+财务处）。
+- **Skills**：程序化知识"怎么做"。如“政策依据与回复生成”会扩展检索并注入有依据的回复模板。
+- **Hooks**：事件响应"何时触发什么"。如施工噪声同时扩展检索住建与生态环境部门。
 - **Rules**：硬约束"必须遵守"。如 `cite_source_rule`（必须带引用）、`no_guess_rule`（无依据则明说）。
 
 ### 可执行基线 Skill
 
-`backend/app/loop/default_skills.py` 在启动时幂等提供三条真实 workflow：极端天气安全响应、校园事项步骤导航、
-学术节点与截止日期核验。它们用于在高频 Trace 尚未达到自动挖掘阈值前展示完整执行链，且会真实改变 query、top-k、
-输出模板或校历约束，记录版本、分桶、命中和成功率。自动挖掘 Skill 与它们使用同一个 `SkillExecutor`。
+`backend/app/loop/default_skills.py` 在启动时幂等提供三条比赛 workflow：工单要素完整性核验、政策依据与回复生成、紧急事项风险提示。它们会真实改变 query、top-k 和输出模板，并记录版本、分桶、命中和成功率。
 
 ## 7. 人工审核 Loop（部门渐进退出）
 
@@ -73,25 +71,17 @@ Execute ──► Observe ──► Reflect ──► Adapt ──► Deploy ─
 
 > 提示：`POST /admin/loop/run`（前端「手动触发一次 Loop」）的 Observe 阶段只读「未消费反馈」
 > （`feedback` 集合中 `consumed=False` 的记录），循环结束会把它们全部置为已消费。
-> 因此第二次点击会返回 `observed: 0`（反馈已处理完，属正常行为）；重复演示可重跑
-> `python -m scripts.seed_demo_data` 恢复 badcase。
+> 因此第二次点击会返回 `observed: 0`（反馈已处理完，属正常行为）。
 >
 > 当前管理端会自动轮询 `/api/v1/admin/loop/jobs/{job_id}`，显示 `queued/running/completed/failed`、阶段进度、
 > 信号、根因、候选、发布结果和前后差异；入队返回的 `job_id` 不再被当作最终报告。
 
-## 8. 演示扩展 Skill 与 rubric 规则
+## 8. 比赛 Skill 与 rubric 规则
 
-运行可选的 `seed_demo_data` 后，每个演示部门还会增加一个 Skill（`skill_<dept>_seed`），包含：
-
-- `unique_rules`：该部门独特规则（如教务处"退课截止第8周、退费按剩余周比例"），种子静态写入。
-- `rubric_rules`：由 badcase 反思总结出的评分卡规则，**初始为空，运行 Loop 后由 Reflect→Adapt 沉淀**。
-  执行「手动触发一次 Loop」时，`_deterministic_suggestions` 会从 badcase 的 `detail.rule` 抽取规则建议，
-  并把每条规则追加到对应部门 Skill 的 `rubric_rules`（同时生成待审核的全局/部门 Rule）。
+`unique_rules` 保存不可违反的比赛业务约束，例如不得把接线员话术写成群众事实，以及政策结论必须绑定官方来源。`rubric_rules` 由真实 badcase 反思后沉淀，经人工审核才能生效。
 
 Skill 指标：`trigger_count` / `success_count` / `success_rate` / `last_triggered` 在每次命中该 Skill
 的问答后实时更新（`orchestrator._record_skill_usage`）。
-
-演示数据生成：`python -m scripts.seed_demo_data`（合并部门 + 模拟文档 + 待审核单 + badcase + 初始 Skill）。
 
 Trace 属于观察数据；只有经过审核或实验验证的 Skills/Hooks/Rules 才进入程序性记忆。Loop 不得把
 敏感用户文本直接提升为长期用户记忆。

@@ -19,7 +19,7 @@ class UserMemory:
         return await self.store.get_user_profile(user_id) or {
             "_id": user_id,
             "user_id": user_id,
-            "role": "student",
+            "role": "operator",
             "prefs": {},
             "query_count": 0,
             "feedback_counts": {},
@@ -28,7 +28,7 @@ class UserMemory:
 
     async def record_query(self, user_id: str, query: str, intent_type: str = "") -> None:
         defaults = {
-            "user_id": user_id, "role": "student", "prefs": {},
+            "user_id": user_id, "role": "operator", "prefs": {},
             "feedback_counts": {}, "created_at": _now(),
         }
         await self.store.increment("user_profiles", user_id, "query_count", 1, defaults)
@@ -38,7 +38,7 @@ class UserMemory:
     async def record_feedback(self, user_id: str, signal: str, query: str) -> None:
         await self.store.increment(
             "user_profiles", user_id, f"feedback_counts.{signal}", 1,
-            {"user_id": user_id, "role": "student", "prefs": {}, "created_at": _now()},
+            {"user_id": user_id, "role": "operator", "prefs": {}, "created_at": _now()},
         )
 
     async def set_pref(self, user_id: str, key: str, value: Any) -> None:

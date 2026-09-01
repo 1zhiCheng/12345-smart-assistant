@@ -1,33 +1,30 @@
-"""导入 department_files 下的示例部门文档。
+"""导入芜湖官方政务知识库。
 
-目录名 → 部门 id 映射；递归查找 pdf/docx/md/txt/html。
-用法：python -m scripts.ingest_department_files [--base ../department_files]
+事项类别目录 → 部门 id 映射；递归查找 pdf/docx/md/txt/html。
+用法：python -m scripts.ingest_department_files [--base ../wuhu_knowledge_base]
 """
 from __future__ import annotations
 
 import argparse
 import asyncio
+import json
+import sys
 from pathlib import Path
 
 from app.config import get_settings
 from app.deps import build_container
+from app.domain.wuhu import CATEGORY_TO_DEPT
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 # 目录名（或关键词）→ dept_id 映射
-DEPT_MAP = {
-    "教务处": "dept_jwc",
-    "学生处": "dept_xsc",
-    "财务处": "dept_cwc",
-    "人事处": "dept_rsc",
-    "后勤": "dept_hqaq",      # 后勤与安全保卫部（已合并，无独立后勤处）
-    "研究生院": "dept_yjsy",
-    "中法学院": "dept_zfxy",
-    "安全保卫": "dept_hqaq",
-}
+DEPT_MAP = CATEGORY_TO_DEPT
 
 SUFFIXES = {".pdf", ".docx", ".doc", ".md", ".markdown", ".txt", ".html", ".htm"}
 
 # 候选目录（按优先级）：本地 backend/ 目录、Docker 容器内 /app、compose 挂载点
-BASE_CANDIDATES = ["../department_files", "/app/department_files", "department_files"]
+BASE_CANDIDATES = ["../wuhu_knowledge_base", "/app/wuhu_knowledge_base", "wuhu_knowledge_base"]
 
 
 def resolve_base(explicit: str | None) -> Path:
@@ -52,10 +49,10 @@ def resolve_dept(path: Path) -> str:
     return "dept_all"
 
 
-async def main(base: str) -> None:
+async def main(base: str, skip_conflicts: bool = False, skip_metadata_llm: bool = False) -> None:
     base_path = resolve_base(base or None)
     if not base_path.exists():
-        print(f"目录不存在: {base_path}（可显式指定 --base，如 --base /app/department_files）")
+        print(f"目录不存在: {base_path}（可显式指定 --base，如 --base /app/wuhu_knowledge_base）")
         return
 
     settings = get_settings()
@@ -68,15 +65,37 @@ async def main(base: str) -> None:
         except Exception:
             pass
 
-    files = [p for p in base_path.rglob("*") if p.is_file() and p.suffix.lower() in SUFFIXES]
+    # 采集知识库存在清单时，只导入清单中通过质量门禁的文件。这样 `_quarantine`
+    # 中可恢复的低价值材料不会被递归扫描误入 RAG。
+    manifest_path = base_path / "manifest.jsonl"
+    if manifest_path.exists():
+        accepted_paths = {
+            row["relative_path"]
+            for line in manifest_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+            for row in [json.loads(line)]
+        }
+        files = [base_path / relative for relative in sorted(accepted_paths) if (base_path / relative).is_file()]
+    else:
+        files = [
+            p
+            for p in base_path.rglob("*")
+            if p.is_file() and p.suffix.lower() in SUFFIXES and "_quarantine" not in p.parts
+        ]
     print(f"发现 {len(files)} 个文档待导入")
 
     ok, fail = 0, 0
     for fp in files:
         dept_id = resolve_dept(fp)
         try:
-            doc = await container.indexer.ingest(fp, dept_id=dept_id, uploaded_by="seed")
-            await container.conflict_detector.run_for_document(doc)
+            doc = await container.indexer.ingest(
+                fp,
+                dept_id=dept_id,
+                uploaded_by="seed",
+                extract_metadata=not skip_metadata_llm,
+            )
+            if not skip_conflicts:
+                await container.conflict_detector.run_for_document(doc)
             print(f"[ok] {fp.name} -> {dept_id} ({doc['chunk_count']} chunks)")
             ok += 1
         except Exception as exc:  # noqa: BLE001
@@ -90,6 +109,22 @@ async def main(base: str) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--base", default="", help="示例文档根目录（默认自动探测 ../department_files 或 /app/department_files）")
+    parser.add_argument("--base", default="", help="芜湖政务文档根目录（默认自动探测 ../wuhu_knowledge_base 或 /app/wuhu_knowledge_base）")
+    parser.add_argument(
+        "--skip-conflicts",
+        action="store_true",
+        help="批量建库时跳过逐文档冲突检测，避免产生大量 LLM API 调用",
+    )
+    parser.add_argument(
+        "--skip-metadata-llm",
+        action="store_true",
+        help="跳过 LLM 元数据抽取；用于无网络或低成本批量首次建库",
+    )
     args = parser.parse_args()
-    asyncio.run(main(args.base))
+    asyncio.run(
+        main(
+            args.base,
+            skip_conflicts=args.skip_conflicts,
+            skip_metadata_llm=args.skip_metadata_llm,
+        )
+    )

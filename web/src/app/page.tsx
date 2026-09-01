@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { clearToken, me, type User } from "@/lib/api";
 import Login from "@/components/Login";
-import Chat from "@/components/Chat";
 import AdminDashboard from "@/components/AdminDashboard";
+import IntakeStudio from "@/components/IntakeStudio";
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null);
@@ -36,9 +36,9 @@ export default function Home() {
     return <Login onLogin={onLogin} />;
   }
 
-  if (user.role === "admin") {
+  if (user.role === "department_admin" || user.role === "system_admin") {
     return <AdminDashboard user={user} onLogout={onLogout} />;
   }
 
-  return <Chat user={user} onLogout={onLogout} />;
+  return <IntakeStudio user={user} onLogout={onLogout} />;
 }

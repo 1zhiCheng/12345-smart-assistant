@@ -24,8 +24,8 @@ helm install wenshu deploy/helm/wenshu -n wenshu --create-namespace \
 
 每个部门 Agent 是独立 Deployment + HPA，按 `wenshu_dept_agent_inflight` 自定义 Pods 指标伸缩：
 
-- 冷门部门（国际交流处）：`minReplicas=1`
-- 热门部门（教务处/学生处）：`minReplicas=2`、`maxReplicas=20`
+- 低并发承办部门：`minReplicas=1`
+- 高并发部门（城市管理/公安/市场监管等）：`minReplicas=2`、`maxReplicas=20`
 
 ```yaml
 # 新增一个部门 Agent（模板化）

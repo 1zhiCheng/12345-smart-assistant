@@ -16,6 +16,7 @@ MAX_CHARS = 600
 
 # 条款边界：第X条 / 第X章 / 数字编号 / 一、二、...
 CLAUSE_RE = re.compile(r"^(第[一二三四五六七八九十百0-9]+[章节条款]|[一二三四五六七八九十]+、|\d+[.、．]|[（(]\d+[)）])")
+CLAUSE_ANY_RE = re.compile(r"(?:(?<=^)|(?<=[。；;\s]))(第[一二三四五六七八九十百0-9]+[条款]|[一二三四五六七八九十]+、|\d+[.、．]|[（(]\d+[)）])")
 
 
 class Chunker:
@@ -71,7 +72,7 @@ class Chunker:
         has_table = False
 
         def flush() -> None:
-            nonlocal buf, buf_len, has_table
+            nonlocal buf, buf_len, pages, has_table
             if not buf:
                 return
             content = "\n".join(buf).strip()
@@ -87,6 +88,7 @@ class Chunker:
                 )
             buf = []
             buf_len = 0
+            pages = []
             has_table = False
 
         for unit in units:
@@ -123,7 +125,7 @@ class Chunker:
     @staticmethod
     def _split_clause_line(line: str) -> list[str]:
         """将一行中多个编号条款拆开（保守：仅当编号在句中出现时拆分）。"""
-        positions = [m.start() for m in CLAUSE_RE.finditer(line)]
+        positions = [m.start(1) for m in CLAUSE_ANY_RE.finditer(line)]
         if len(positions) <= 1:
             return [line]
         parts = []
@@ -164,7 +166,10 @@ class Chunker:
     def _merge_short(self, chunks: list[dict[str, Any]]) -> list[dict[str, Any]]:
         merged: list[dict[str, Any]] = []
         for c in chunks:
-            if merged and (len(c["content"]) < self.min_chars or len(merged[-1]["content"]) < self.min_chars):
+            combined_length = len(merged[-1]["content"]) + 1 + len(c["content"]) if merged else 0
+            if merged and combined_length <= self.max_chars and (
+                len(c["content"]) < self.min_chars or len(merged[-1]["content"]) < self.min_chars
+            ):
                 last = merged[-1]
                 last["content"] = (last["content"] + "\n" + c["content"]).strip()
                 last["char_count"] = len(last["content"])

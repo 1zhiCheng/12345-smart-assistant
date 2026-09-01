@@ -6,9 +6,9 @@ import { join } from "node:path";
 const chrome = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const base = "http://localhost:8080";
 const roles = [
-  { key: "student", username: "student", password: "student123", expected: "制度问答工作台" },
-  { key: "department", username: "jwc_admin", password: "admin123", expected: "部门治理空间" },
-  { key: "super", username: "admin", password: "admin123", expected: "超级管理空间" },
+  { key: "operator", username: "operator", password: "operator123", expected: "制度问答工作台" },
+  { key: "department", username: "cgj_admin", password: "admin123", expected: "部门治理空间" },
+  { key: "super", username: "admin", password: "admin123", expected: "系统管理空间" },
 ];
 
 const delay = (ms) => new Promise(r => setTimeout(r, ms));
@@ -37,7 +37,7 @@ async function run(role, port) {
     const errors=await call("Runtime.evaluate",{expression:`({title:document.title,text:document.body.innerText.slice(0,5000),w:document.documentElement.scrollWidth,vw:document.documentElement.clientWidth})`,returnByValue:true});
     if(errors.result.value.w>errors.result.value.vw+2) throw new Error(`horizontal overflow ${errors.result.value.w}/${errors.result.value.vw}`);
     const checked=[];
-    if(role.key!=="student"){
+    if(role.key!=="operator"){
       const nav=[
         ["态势总览","Loop 渐进退出"],["知识资产","部门与制度事实治理"],
         ["可信审核","审核中心"],["进化 Loop","反馈如何改变下一轮行为"],
@@ -59,7 +59,7 @@ async function run(role, port) {
       await waitFor(call,`document.body.innerText.includes('制度事实平面')`);
     } else {
       const welcomeShot=await call("Page.captureScreenshot",{format:"png",captureBeyondViewport:false});
-      await writeFile("/tmp/wenshu-student-welcome.png",Buffer.from(welcomeShot.data,"base64"));
+      await writeFile("/tmp/wuhu-operator-welcome.png",Buffer.from(welcomeShot.data,"base64"));
       await call("Runtime.evaluate",{expression:`[...document.querySelectorAll('button')].find(b=>b.innerText.includes('我的长期记忆'))?.click()`}); await delay(500);
       await waitFor(call,`document.body.innerText.includes('我的长期记忆')`);
       await call("Runtime.evaluate",{expression:`[...document.querySelectorAll('section button')].find(b=>b.innerText==='×')?.click()`});

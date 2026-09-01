@@ -173,9 +173,9 @@ class UserProfile(MongoModel):
 
     user_id: str = ""
     name: str = ""
-    role: str = "student"  # student|teacher|admin
+    role: str = "operator"  # operator|department_admin|system_admin
     department: str = ""
-    grade: str = ""
+    work_unit: str = ""
     prefs: dict[str, Any] = Field(default_factory=dict)
     history_queries: list[str] = Field(default_factory=list)
     feedback_history: list[dict[str, Any]] = Field(default_factory=list)

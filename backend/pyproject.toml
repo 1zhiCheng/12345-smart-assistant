@@ -1,7 +1,7 @@
 [project]
 name = "wenshu-backend"
 version = "0.1.0"
-description = "文枢 · 跨部门文档处理与问答助手 后端"
+description = "芜湖政务 Agent · 12345热线工单与知识辅助后端"
 requires-python = ">=3.9"
 dependencies = [
     "fastapi>=0.110",
@@ -19,8 +19,11 @@ dependencies = [
     "beautifulsoup4>=4.12",
     "numpy>=1.26",
     "scikit-learn>=1.4",
+    "scipy>=1.12",
+    "onnxruntime>=1.18",
     "jieba>=0.42",
     "prometheus-client>=0.20",
+    "faster-whisper>=1.2,<2",
 ]
 
 [project.optional-dependencies]

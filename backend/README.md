@@ -1,4 +1,4 @@
-# 文枢后端（Python + FastAPI）
+# 芜湖政务 Agent 后端（Python + FastAPI）
 
 实现技术方案中的 L1 接入层（API）、L2 Harness 协同层、L3 Loop 进化层、L4 数据与检索层。
 
@@ -10,7 +10,7 @@ backend/
 │   ├── main.py              # FastAPI 入口 + lifespan + /metrics + 种子账号/字段回填
 │   ├── config.py            # 环境配置（DeepSeek / 中转站 / 存储 / Loop / 鉴权 / 审核）
 │   ├── deps.py              # 依赖装配（构建全局单例容器，含 auth / review_engine）
-│   ├── auth.py              # 鉴权：用户账号 + HMAC Token + 角色（student/admin）
+│   ├── auth.py              # 鉴权：营业员/部门管理员/系统管理员 + HMAC Token
 │   ├── api/                 # L1 接入层
 │   │   ├── router.py        # 路由汇总
 │   │   ├── schemas.py       # 请求/响应模型
@@ -87,7 +87,7 @@ uvicorn app.main:app --reload --port 8000
 |---|---|
 | `DEEPSEEK_API_KEY` / `DEEPSEEK_BASE_URL` / `DEEPSEEK_MODEL` | 主力对话模型（默认 `deepseek-v4-flash`） |
 | `RELAY_API_KEY` / `RELAY_BASE_URL` | 中转站（OpenAI 兼容），用于 bge 等非 DeepSeek 模型 |
-| `EMBEDDING_PROVIDER` / `EMBEDDING_MODEL` | `relay`(`text-embedding-3-large`) / `local` / `hash` |
+| `EMBEDDING_PROVIDER` / `EMBEDDING_MODEL` | 默认 `local`(`BAAI/bge-small-zh-v1.5`)；`hash` 仅用于单元测试 |
 | `STORAGE_MODE` | `mongo` / `memory` |
 | `LOOP_PHASE` | `human_in_loop` / `human_on_loop` / `human_out_of_loop` |
 | `AUTH_SECRET` | Token 签名密钥（生产务必修改） |
@@ -96,14 +96,11 @@ uvicorn app.main:app --reload --port 8000
 ## 运行与验证
 
 ```bash
-# 种子数据（部门/术语/校历/默认规则/3 条基线 Skill）
+# 种子数据（芜湖 12 类部门/12345 术语/规则/3 条基线 Skill）
 python -m scripts.seed_data
 
-# 演示数据（合并部门 + 每部门模拟文档/待审核单/badcase/初始 Skill）
-python -m scripts.seed_demo_data
-
-# 导入 department_files 示例文档
-python -m scripts.ingest_department_files --base ../department_files
+# 导入芜湖官方政务文档
+python -m scripts.ingest_department_files --base ../wuhu_knowledge_base --skip-conflicts --skip-metadata-llm
 
 # 测试
 pytest
@@ -113,7 +110,7 @@ pytest
 
 1. **Harness 轻量编排**：Agent 走固定 DAG（Intent→Rewrite→Retrieve→Answer→Verify），
    不依赖 LangChain/AutoGen，输入输出结构化、可调试。
-2. **混合检索**：BM25（jieba）+ 向量（`text-embedding-3-large`/local/hash）RRF 融合 + 重排。
+2. **混合检索**：BM25（jieba）+ 本地中文 bge 向量 + RRF 融合，可选重排。
 3. **Loop 自进化**：反馈队列 → Reflect 归因 → Skill/Hook/Rule 更新 → 灰度部署，
    按 `LOOP_PHASE` 控制人在环中/环上/环外。
 4. **统一存储抽象**：`DataStore` 接口 + Mongo/Memory 双实现，离线可跑、可测。

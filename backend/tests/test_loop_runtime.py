@@ -14,7 +14,7 @@ def _skill(percent: float = 1.0):
         "version": 2, "gray_percent": percent, "status": "active",
         "trigger": {"intent_patterns": ["截止"]},
         "action": {"type": "workflow", "steps": [
-            {"step": 1, "action": "retrieve", "params": {"query": "{matter} 校历 截止日期", "top_k": 9}},
+            {"step": 1, "action": "retrieve", "params": {"query": "{matter} 官方文件 生效日期", "top_k": 9}},
             {"step": 2, "action": "call_tool", "params": {"tool": "calendar_lookup"}},
         ]},
     }
@@ -26,11 +26,11 @@ async def test_skill_treatment_changes_retrieval_plan():
     executor = SkillExecutor(store, default_top_k=5)
     skill = _skill(1.0)
     await store.upsert_skill(skill)
-    matched = await executor.matching("开题截止时间")
-    plan = await executor.prepare("开题截止时间", ["开题截止时间"], matched, "session-1", "u1")
+    matched = await executor.matching("宅基地截止时间")
+    plan = await executor.prepare("宅基地截止时间", ["宅基地截止时间"], matched, "session-1", "u1")
     assert plan.top_k == 9
-    assert any("校历 截止日期" in q for q in plan.queries)
-    assert any("校历" in text for text in plan.instructions)
+    assert any("官方文件 生效日期" in q for q in plan.queries)
+    assert any("官方时间配置" in text for text in plan.instructions)
     row = (await store.find("strategy_executions"))[0]
     assert row["group"] == "treatment"
 
@@ -41,15 +41,15 @@ async def test_default_skills_are_idempotent_and_executable():
     assert await seed_default_skills(store) == 3
     assert await seed_default_skills(store) == 0
     executor = SkillExecutor(store, default_top_k=5)
-    matched = await executor.matching("暴雨天气有哪些安全事项", ["dept_hqaq"])
-    assert [skill["name"] for skill in matched] == ["极端天气安全响应"]
+    matched = await executor.matching("小区发生燃气泄漏怎么办", ["dept_public_security"])
+    assert [skill["name"] for skill in matched] == ["紧急事项风险提示"]
     plan = await executor.prepare(
-        "暴雨天气有哪些安全事项", ["暴雨天气有哪些安全事项"],
-        matched, "demo-session", "student",
+        "小区发生燃气泄漏怎么办", ["小区发生燃气泄漏怎么办"],
+        matched, "demo-session", "operator",
     )
     assert plan.top_k == 8
     assert plan.treatment_skills[0]["origin"] == "builtin_baseline"
-    assert any("风险-行动-求助清单" in instruction for instruction in plan.instructions)
+    assert any("危险提示-人工升级-转派建议" in instruction for instruction in plan.instructions)
     assert len(await store.find("strategy_versions")) == 3
 
 
@@ -66,9 +66,9 @@ async def test_skill_control_keeps_baseline_plan():
     store = MemoryStore()
     executor = SkillExecutor(store, default_top_k=5)
     skill = _skill(0.0)
-    plan = await executor.prepare("开题截止时间", ["开题截止时间"], [skill], "session-2", "u1")
+    plan = await executor.prepare("宅基地截止时间", ["宅基地截止时间"], [skill], "session-2", "u1")
     assert plan.top_k == 5
-    assert plan.queries == ["开题截止时间"]
+    assert plan.queries == ["宅基地截止时间"]
     assert not plan.instructions
     assert (await store.find("strategy_executions"))[0]["group"] == "control"
 
@@ -79,10 +79,10 @@ async def test_department_rules_are_scoped(fresh_container):
     await c.rule_engine.seed_defaults()
     await c.store.upsert_rule({
         "_id": "dept-rule", "name": "only-jwc", "scope": "department",
-        "dept_id": "dept_jwc", "content": "仅教务处规则", "priority": 50, "status": "active",
+        "dept_id": "dept_city_management", "content": "仅城市管理局规则", "priority": 50, "status": "active",
     })
-    assert any(r["_id"] == "dept-rule" for r in await c.rule_engine.active_rules(["dept_jwc"]))
-    assert all(r["_id"] != "dept-rule" for r in await c.rule_engine.active_rules(["dept_cwc"]))
+    assert any(r["_id"] == "dept-rule" for r in await c.rule_engine.active_rules(["dept_city_management"]))
+    assert all(r["_id"] != "dept-rule" for r in await c.rule_engine.active_rules(["dept_economy_trade"]))
 
 
 @pytest.mark.asyncio

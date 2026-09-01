@@ -31,8 +31,15 @@ class RetrievalAgent:
                 hits = await self.hybrid.retrieve(query, vec, dept_id=dept_id)
                 for h in hits:
                     id_ = h.get("id", "")
-                    if id_ and id_ not in seen:
-                        seen[id_] = h
+                    if id_:
+                        score = h.get("rerank_score", h.get("_rrf", h.get("score", 0.0)))
+                        previous = seen.get(id_)
+                        previous_score = (
+                            previous.get("rerank_score", previous.get("_rrf", previous.get("score", 0.0)))
+                            if previous else -1.0
+                        )
+                        if previous is None or score > previous_score:
+                            seen[id_] = h
 
         # 检索后统一从持久化存储回填完整 chunk，避免向量库只返回 metadata
         # 导致正文、关键词和章节信息缺失；同时在返回前强制校验文档仍为 active。

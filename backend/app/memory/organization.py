@@ -31,7 +31,7 @@ class OrganizationMemory:
             "source_refs": verified_refs, "source_doc_ids": sorted({r["doc_id"] for r in verified_refs}),
             "authority": authority, "confidence": 1.0, "review_status": review_status,
             "effective_from": effective_from, "effective_to": effective_to, "status": "active",
-            "access_scope": access_scope or ["student", "teacher", "admin"],
+            "access_scope": access_scope or ["operator", "department_admin", "system_admin"],
             "usage_count": 0, "revision": 1, "created_by": actor_id,
             "created_at": datetime.now(timezone.utc), "updated_at": datetime.now(timezone.utc),
         }
@@ -39,7 +39,7 @@ class OrganizationMemory:
         return item
 
     async def recall(
-        self, query: str, dept_ids: list[str], role: str = "student", limit: int = 8
+        self, query: str, dept_ids: list[str], role: str = "operator", limit: int = 8
     ) -> list[dict[str, Any]]:
         from app.retrieval.bm25 import tokenize
 

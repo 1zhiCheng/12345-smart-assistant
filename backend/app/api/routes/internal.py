@@ -3,7 +3,7 @@
 - 全部端点要求请求头 `X-Internal-Token: <INTERNAL_API_TOKEN>`（见 app/api/deps.require_internal）。
 - /internal/retrieve        混合检索
 - /internal/departments     部门列表
-- /internal/calendar        校历（全局记忆）
+- /internal/calendar        政务服务时间（全局记忆，兼容旧路由名）
 - /internal/glossary        术语表
 - /internal/feedback        提交反馈
 - /internal/feedback/pending 待处理反馈

@@ -17,7 +17,7 @@ EXTRACT_PROMPT = """你是制度文档元数据抽取助手。请从给定文档
 - effective_date: 生效日期（YYYY-MM-DD，无则 null）
 - doc_type: 文档类型，取值之一 regulation(制度办法)/notice(通知)/guide(指南)/form(表格)/other
 - keywords: 关键词列表（3-8 个中文短语）
-- applicable_scope: 适用对象列表，取值集合子集：undergraduate(本科生)/graduate(研究生)/faculty(教职工)/staff(行政人员)/all(全体)
+- applicable_scope: 适用对象列表，取值集合子集：citizen(自然人)/enterprise(企业与个体工商户)/department(政府部门)/all(全部)
 - cross_refs: 文中引用的其他制度文件名列表（无则 []）
 
 JSON 结构：
@@ -58,7 +58,7 @@ class MetadataExtractor:
         if not isinstance(data, dict):
             return {"effective_date": None, "doc_type": "other", "keywords": [], "applicable_scope": ["all"], "cross_refs": []}
         allowed_types = {"regulation", "notice", "guide", "form", "other"}
-        allowed_scope = {"undergraduate", "graduate", "faculty", "staff", "all"}
+        allowed_scope = {"citizen", "enterprise", "department", "all"}
         return {
             "effective_date": data.get("effective_date") or None,
             "doc_type": data.get("doc_type") if data.get("doc_type") in allowed_types else "other",

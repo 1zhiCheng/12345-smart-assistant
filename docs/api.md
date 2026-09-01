@@ -12,7 +12,8 @@
 
 | 方法 | 路径 | 说明 |
 |---|---|---|
-| POST | `/api/v1/auth/login` | 登录，返回 `{token, user}`；账号 `student/student123`、`admin/admin123` |
+| POST | `/api/v1/auth/register` | 注册营业员账号并直接返回 `{token, user}`；不能通过公开接口创建管理员 |
+| POST | `/api/v1/auth/login` | 登录，返回 `{token, user}`；演示账号 `operator/operator123`、`cgj_admin/admin123`、`admin/admin123` |
 | GET | `/api/v1/auth/me` | 当前登录用户 |
 | GET | `/api/v1/auth/users` | 用户列表（管理员） |
 
@@ -36,7 +37,7 @@
 > 当某部门累计正确率 ≥ `REVIEW_ACCURACY_THRESHOLD` 且样本 ≥ `REVIEW_MIN_SAMPLES` 时，该部门自动进入
 > `human_out_of_loop`，未抽中的文档自动通过，同时保留抽检和错误回退。
 
-> 部门管理员数据隔离：`dept_id` 非空的管理员（如 `jwc_admin`）调用管理端接口时只能看到/操作本部门的
+> 部门管理员数据隔离：`dept_id` 非空的管理员（如 `cgj_admin`）调用管理端接口时只能看到/操作本部门的
 > 部门、文档、Skill、Hooks/Rules、审核单；跨部门访问返回 403。系统管理员（`admin`，`dept_id` 为空）看全部。
 
 ## 接口列表
@@ -59,7 +60,7 @@
 
 ```json
 {
-  "query": "退课截止时间是第几周？",
+  "query": "芜湖市生活垃圾分类有哪些规定？",
   "session_id": "uuid",
   "dept_ids": null
 }
@@ -67,8 +68,23 @@
 
 `user_id` 只从 Bearer Token 获取；客户端提交的身份字段不会被接受。会话读取和删除同时校验所有权。
 
-> 学生端不再手动选部门：`dept_ids` 传 `null`，后端由 **DeptRouter（自动部门路由 Agent）** 将问题匹配到最符合的部门。
+> 营业员受理群众诉求时 `dept_ids` 可传 `null`，后端由 **DeptRouter** 辅助推荐承办部门，最终结果须人工确认。
 > 响应新增 `route` 字段：`{dept_ids, dept_names, matched_by(keyword|llm|all), confidence, reasons}`，供前端展示「自动路由到 XX 部门」。
+
+### 12345 工单受理与交接
+
+| 方法 | 路径 | 说明 |
+|---|---|---|
+| POST | `/api/v1/intake/analyze` | A 分析文本或已校对转写，生成工单草稿 |
+| POST | `/api/v1/intake/transcribe` | A 上传录音并返回带角色的话轮转写 |
+| POST | `/api/v1/intake/clarify` | A 补充追问信息并重新生成草稿 |
+| POST | `/api/v1/intake/split` | A 生成多事项子工单草稿 |
+| POST | `/api/v1/intake/confirm` | A 人工确认并送入 B 的待分派队列 |
+| GET | `/api/v1/intake/handoffs?status=...` | B 查询交接队列（管理员） |
+| POST | `/api/v1/intake/handoffs/{case_id}/claim` | B 领取待处理工单（管理员） |
+| POST | `/api/v1/intake/handoffs/{case_id}/result` | B 回写分类、转派与回复结果（管理员） |
+
+交接状态依次为 `pending → processing → completed`。草稿不会出现在交接队列中，成员 B 必须先领取才能回写结果。
 
 ### 文档入库
 
@@ -133,7 +149,7 @@
 | POST | `/api/v1/internal/retrieve` | 混合检索，返回 chunk（含 doc_title） |
 | POST | `/api/v1/internal/dept/answer` | 部门 Agent 专用问答；强制请求 dept_id 与实例 `DEPT_ID` 一致 |
 | GET | `/api/v1/internal/departments` | 部门列表 |
-| GET | `/api/v1/internal/calendar` | 校历（全局记忆） |
+| GET | `/api/v1/internal/calendar` | 政务服务时间配置（兼容路由名） |
 | GET | `/api/v1/internal/glossary` | 术语表 |
 | POST | `/api/v1/internal/feedback` | 提交反馈 |
 | GET | `/api/v1/internal/feedback/pending` | 待处理反馈 |

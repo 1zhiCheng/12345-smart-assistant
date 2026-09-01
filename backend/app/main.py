@@ -1,4 +1,4 @@
-"""文枢后端入口（FastAPI）。"""
+"""芜湖市12345政务 Agent 后端入口（FastAPI）。"""
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
@@ -13,6 +13,7 @@ from app.config import get_settings
 from app.deps import build_container
 from app.utils.logging import get_logger, setup_logging
 from app.loop.default_skills import seed_default_skills
+from app.domain.wuhu import seed_wuhu_departments
 
 logger = get_logger(__name__)
 
@@ -36,14 +37,17 @@ async def lifespan(app: FastAPI):
         except Exception as exc:  # noqa: BLE001
             logger.warning("Redis 连接失败(%s)，会话回退内存", exc)
 
-    # 种子默认 Rules / Hooks
+    # 种子芜湖 12345 部门与默认 Rules / Hooks
+    created_departments = await seed_wuhu_departments(container.store)
+    if created_departments:
+        logger.info("已创建 %d 个芜湖政务部门", created_departments)
     await container.rule_engine.seed_defaults()
     await container.hook_engine.seed_defaults()
     seeded_skills = await seed_default_skills(container.store)
     if seeded_skills:
         logger.info("已创建 %d 个可执行基线 Skills", seeded_skills)
 
-    # 种子账号（学生/管理员）
+    # 种子比赛演示账号（营业员/部门管理员/系统管理员）
     await container.auth.seed_users()
 
     # 回填部门 Loop 阶段与审核统计字段（兼容旧数据）

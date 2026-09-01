@@ -27,7 +27,7 @@ export default function AdminDashboard({ user, onLogout }: { user: User; onLogou
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [sideOpen, setSideOpen] = useState(false);
-  const isSuper = !user.dept_id;
+  const isSuper = user.role === "system_admin";
 
   const refresh = useCallback(async () => {
     try { setData(await dashboard()); setError(""); }
@@ -39,8 +39,8 @@ export default function AdminDashboard({ user, onLogout }: { user: User; onLogou
 
   return <div className={styles.wrap}>
     <aside className={`${styles.sidebar} ${sideOpen ? styles.sidebarMobileOpen : ""}`}>
-      <div className={styles.brand}><span className={styles.brandSeal}>文</span><span><b>文枢</b><small>WENSHU CONTROL</small></span></div>
-      <div className={styles.scopeCard}><span className={styles.scopeIcon}><Icon name={isSuper ? "shield" : "building"} size={17}/></span><span><b>{isSuper ? "超级管理空间" : "部门治理空间"}</b><small>{isSuper ? "全局策略与事实控制平面" : `${user.dept_id} · 数据已强制隔离`}</small></span></div>
+      <div className={styles.brand}><span className={styles.brandSeal}>芜</span><span><b>芜湖智慧政务</b><small>WUHU GOVERNANCE</small></span></div>
+      <div className={styles.scopeCard}><span className={styles.scopeIcon}><Icon name={isSuper ? "shield" : "building"} size={17}/></span><span><b>{isSuper ? "系统管理空间" : "部门治理空间"}</b><small>{isSuper ? "全局策略与事实控制平面" : `${user.dept_id} · 数据已强制隔离`}</small></span></div>
       <nav className={styles.nav}>{TABS.map(t => <button key={t.key} className={`${styles.navItem} ${tab === t.key ? styles.navActive : ""}`} onClick={() => {setTab(t.key);setSideOpen(false)}}>
         <span className={styles.navIcon}><Icon name={t.icon} size={18}/></span><span><b>{t.label}</b><small>{t.sub}</small></span>
         {t.key === "review" && (data?.pending_review_count || 0) > 0 && <em>{data!.pending_review_count}</em>}
@@ -52,7 +52,7 @@ export default function AdminDashboard({ user, onLogout }: { user: User; onLogou
       <header className={styles.header}>
         <button className={styles.mobileMenu} onClick={() => setSideOpen(true)}><Icon name="menu"/></button>
         <div><div className={styles.breadcrumb}>控制台 / {isSuper ? "全局" : user.dept_id}</div><h1>{current.label}</h1><p>{current.sub}</p></div>
-        <div className={styles.headerRight}><button className={styles.refreshBtn} onClick={refresh}><Icon name="refresh" size={16}/>刷新数据</button><div className={styles.avatar}>{user.name.slice(0,1)}</div><div className={styles.userInfo}><b>{user.name}</b><small>{isSuper ? "超级管理员" : "部门管理员"}</small></div></div>
+        <div className={styles.headerRight}><button className={styles.refreshBtn} onClick={refresh}><Icon name="refresh" size={16}/>刷新数据</button><div className={styles.avatar}>{user.name.slice(0,1)}</div><div className={styles.userInfo}><b>{user.name}</b><small>{isSuper ? "系统管理员" : "部门管理员"}</small></div></div>
       </header>
       <main className={styles.body}>
         {error && <div className={styles.errorBanner}><Icon name="shield" size={17}/>{error}</div>}

@@ -21,7 +21,7 @@ MongoDB（motor 异步）+ Redis（redis.asyncio）+ 内存回退。
 
 其中：
 
-- `users` —— 登录账号（角色 `student`/`admin`，可绑定 `dept_id` 做部门管理员）
+- `users` —— 登录账号（角色 `operator`/`department_admin`/`system_admin`，部门管理员绑定 `dept_id`）
 - `review_orders` —— 人工审核单（新文档自动出题 → 系统作答 → 逐题判定）
 - `test_questions` —— 测试题库（审核反馈积累，驱动部门渐进退出）
 - `conversation_events/summaries` —— 有 TTL 的情景记忆，不再用 Trace 兼任会话历史
