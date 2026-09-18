@@ -1,8 +1,8 @@
 /**
  * 模型提供方装配：基于 @earendil-works/pi-ai 的统一 LLM API。
  *
- * - deepseek：主力对话模型（OpenAI 兼容，https://api.deepseek.com）
- * - relay   ：中转站（OpenAI 兼容，https://yunwu.ai/v1），用于非 DeepSeek 模型
+ * - deepseek：可选对话模型（OpenAI 兼容，https://api.deepseek.com）
+ * - relay   ：可选中转站；仅在明确配置、授权的数据边界内使用
  */
 import {
   createModels,

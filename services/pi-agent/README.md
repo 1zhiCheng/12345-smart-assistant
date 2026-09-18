@@ -1,4 +1,4 @@
-# 文枢 pi Agent Runtime
+# 芜湖12345智慧助手 pi Agent Runtime
 
 基于 [pi](https://github.com/earendil-works/pi)（`@earendil-works/pi-agent-core` + `@earendil-works/pi-ai`）实现的统一概率性 Agent 执行引擎。
 
@@ -21,7 +21,7 @@ services/pi-agent/
 │   ├── config.ts        # 环境配置
 │   ├── providers.ts     # pi-ai 提供方（DeepSeek / 中转站，OpenAI 兼容）
 │   ├── runtime.ts       # 运行时装配（model + streamFn + tools）
-│   ├── tools.ts         # AgentTool 工具集（检索/校历/部门/术语/反馈/沉淀产物）
+│   ├── tools.ts         # AgentTool 工具集（检索/政务日历/部门/术语/反馈/沉淀产物）
 │   ├── agents.ts        # Agent 定义 + runAgent 运行器 + prompt
 │   ├── orchestrator.ts  # Intent→Rewrite→Retrieve→Answer→Verify DAG
 │   ├── loop.ts          # Loop 引擎（Observe→Reflect→Adapt）
@@ -55,12 +55,13 @@ npm run build && npm start   # 生产模式
 
 ## 环境变量
 
-见 [`.env.example`](./.env.example)。关键：`DEEPSEEK_API_KEY`、`BACKEND_URL`（Python 后端地址）。
+关键配置见项目根目录 `.env.example`：`DEEPSEEK_API_KEY`、`BACKEND_URL`（Python 后端地址）和
+`INTERNAL_API_TOKEN`。本服务默认不接入生产主链；启用前应确认诉求脱敏、数据外发授权和密钥管理。
 
 ## 关键设计
 
 1. **pi Agent loop + tool calling**：Intent/Answer 等 Agent 是 pi `Agent` 实例，模型自主决定调用工具
-   （`list_departments` / `get_glossary` / `retrieve_documents` / `lookup_calendar` 等）。
+   （`list_departments` / `get_glossary` / `retrieve_documents` / `lookup_service_calendar` 等）。
 2. **Loop 主路径边界**：生产 Loop 由 Python `LoopEngine` + Redis Stream Worker 控制，pi 通过统一
    `/v1/agent/run` 执行 Reflect；`loop.ts` 与 `/loop/run` 仅保留为兼容/独立实验路径，不负责生产策略发布。
 3. **职责收敛**：pi 不读取业务数据库，也不决定部门权限、记忆写入或策略发布。

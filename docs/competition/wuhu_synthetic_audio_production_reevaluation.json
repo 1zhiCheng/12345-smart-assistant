@@ -1,0 +1,3875 @@
+{
+  "metadata": {
+    "created_at": "2026-09-15T13:45:47+08:00",
+    "source_report": "docs\\competition\\wuhu_synthetic_audio_evaluation.json",
+    "mode": "reuse_cached_asr_production",
+    "field_similarity_thresholds": {
+      "location": 0.6,
+      "event": 0.35,
+      "request": 0.4
+    },
+    "notes": [
+      "仅复评工单抽取与路由；ASR/角色指标直接继承源报告。"
+    ]
+  },
+  "summary": {
+    "manifest_cases": 36,
+    "evaluated_cases": 36,
+    "successful_cases": 36,
+    "failed_cases": 0,
+    "failed_ids": [],
+    "audio_minutes": 31.5034,
+    "runtime_minutes": 22.2303,
+    "asr": {
+      "cer_mean": 0.0639,
+      "cer_median": 0.0615,
+      "cer_p95": 0.0922
+    },
+    "speaker_roles": {
+      "acoustic_diarization_accept_rate": 1.0,
+      "both_roles_present_rate": 1.0,
+      "five_turn_exact_rate": 0.9167,
+      "role_sequence_accuracy": 0.9667,
+      "operator_cer_mean": 0.1084,
+      "citizen_cer_mean": 0.0566
+    },
+    "workorder": {
+      "generation_mode_counts": {
+        "llm": 36
+      },
+      "llm_success_rate": 1.0,
+      "field_completeness": 1.0,
+      "location_similarity": 0.712,
+      "event_similarity": 0.3278,
+      "request_similarity": 0.2094,
+      "field_pass_rate": 0.3889,
+      "content_support_precision": 0.7929,
+      "region_accuracy": 1.0
+    },
+    "routing": {
+      "top1_accuracy": 1.0,
+      "topk_accuracy": 1.0,
+      "matched_by": {
+        "keyword": 36
+      }
+    },
+    "by_category": {
+      "交通运输": {
+        "cases": 3,
+        "asr_cer": 0.081,
+        "role_sequence_exact_rate": 1.0,
+        "routing_top1_accuracy": 1.0,
+        "routing_topk_accuracy": 1.0,
+        "field_pass_rate": 0.3333
+      },
+      "公共安全": {
+        "cases": 3,
+        "asr_cer": 0.047,
+        "role_sequence_exact_rate": 0.6667,
+        "routing_top1_accuracy": 1.0,
+        "routing_topk_accuracy": 1.0,
+        "field_pass_rate": 0.6667
+      },
+      "公共服务": {
+        "cases": 3,
+        "asr_cer": 0.0669,
+        "role_sequence_exact_rate": 1.0,
+        "routing_top1_accuracy": 1.0,
+        "routing_topk_accuracy": 1.0,
+        "field_pass_rate": 0.2222
+      },
+      "农林水土": {
+        "cases": 3,
+        "asr_cer": 0.0658,
+        "role_sequence_exact_rate": 1.0,
+        "routing_top1_accuracy": 1.0,
+        "routing_topk_accuracy": 1.0,
+        "field_pass_rate": 0.5556
+      },
+      "劳动和社会保障": {
+        "cases": 3,
+        "asr_cer": 0.0819,
+        "role_sequence_exact_rate": 0.6667,
+        "routing_top1_accuracy": 1.0,
+        "routing_topk_accuracy": 1.0,
+        "field_pass_rate": 0.1111
+      },
+      "卫生健康": {
+        "cases": 3,
+        "asr_cer": 0.0501,
+        "role_sequence_exact_rate": 1.0,
+        "routing_top1_accuracy": 1.0,
+        "routing_topk_accuracy": 1.0,
+        "field_pass_rate": 0.3333
+      },
+      "城乡建设": {
+        "cases": 3,
+        "asr_cer": 0.0623,
+        "role_sequence_exact_rate": 1.0,
+        "routing_top1_accuracy": 1.0,
+        "routing_topk_accuracy": 1.0,
+        "field_pass_rate": 0.4444
+      },
+      "城市管理": {
+        "cases": 3,
+        "asr_cer": 0.0575,
+        "role_sequence_exact_rate": 1.0,
+        "routing_top1_accuracy": 1.0,
+        "routing_topk_accuracy": 1.0,
+        "field_pass_rate": 0.5556
+      },
+      "市场监管": {
+        "cases": 3,
+        "asr_cer": 0.0582,
+        "role_sequence_exact_rate": 1.0,
+        "routing_top1_accuracy": 1.0,
+        "routing_topk_accuracy": 1.0,
+        "field_pass_rate": 0.5555
+      },
+      "生态环境": {
+        "cases": 3,
+        "asr_cer": 0.0613,
+        "role_sequence_exact_rate": 1.0,
+        "routing_top1_accuracy": 1.0,
+        "routing_topk_accuracy": 1.0,
+        "field_pass_rate": 0.3333
+      },
+      "科教文体": {
+        "cases": 3,
+        "asr_cer": 0.0678,
+        "role_sequence_exact_rate": 1.0,
+        "routing_top1_accuracy": 1.0,
+        "routing_topk_accuracy": 1.0,
+        "field_pass_rate": 0.2222
+      },
+      "经济财贸": {
+        "cases": 3,
+        "asr_cer": 0.0669,
+        "role_sequence_exact_rate": 0.6667,
+        "routing_top1_accuracy": 1.0,
+        "routing_topk_accuracy": 1.0,
+        "field_pass_rate": 0.3333
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "SYN-CM-001",
+      "category": "城市管理",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\城市管理\\SYN-CM-001.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\城市管理\\SYN-CM-001.txt",
+      "audio_duration_seconds": 60.503,
+      "runtime_seconds": 60.1348,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是芜湖12345政务服务便民热线 请问有什么可以帮您。喂 你好啊 我想反映个事情 我们小区西门口那个垃圾投放点 这几天一大早就冲地 高压水枪加上车子发动的声音 吵得真是不得了。请问大概几点开始 具体是在小区哪个位置。差不多早上六点半 就在镜湖区这边某小区西门口 你们帮忙讲一下 声音大的工作最好八点以后再做。我们早上还要睡觉啊。好的 我复述一下。您反映的是 环卫作业噪声扰民。位置在镜湖区某小区西门垃圾投放点。希望协调环卉单位将高噪声作业调整至早上8点以后并加强管理。我已经记录 会转交进湖�区政府核实处理。请您保持电话畅通。感谢您的来电。再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6271,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 这里是五湖12345政务服务便民热线 请问有什么可以帮您\n群众：喂 你好啊 我想反映个事情 我们小区西门口那个垃圾头放点。 这几天一大早就充电。 高压水枪加上车子发动的声音 吵得真是不得了\n接线员：请问大概几点开始。 具体是在小区哪个位置\n群众：差不多早上六点半 就在静湖区这边某小区新门口 你们帮忙讲一下。 声音大的工作最好八点以后再做我们早上还要睡觉啊\n接线员：好的 我复述一下您反映的是 环卫作业噪声扰民位置在静湖区某小区西门垃圾投放点希望协调环卉单位将高噪声作业调整至早上8点以后并加强管理我已经记录 会转交进湖�区政府核实处理请您保持电话畅通感谢您的来电再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "镜湖区",
+        "location": "镜湖区某小区西门垃圾投放点",
+        "event": "该垃圾投放点连续多日早上六点半左右使用高压水枪冲洗，作业车辆同时发动，噪声影响附近居民休息",
+        "request": "协调环卫单位将高噪声作业调整至早上八点以后并加强管理",
+        "department_id": "dept_city_management"
+      },
+      "workorder": {
+        "title": "关于镜湖区某小区西门口垃圾投放点小区西门口垃圾投放点清晨六点半左右使用高压水的问题",
+        "region": "镜湖区",
+        "elements": {
+          "time": "2026年9月15日 13:44（按来电时间）",
+          "time_basis": "received_at",
+          "location": "镜湖区某小区西门口垃圾投放点",
+          "subjects": [],
+          "event": "小区西门口垃圾投放点清晨六点半左右使用高压水枪和车辆发动，产生噪声，影响群众早上睡觉。",
+          "request": "希望将声音大的工作调整到八点以后再做。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.55,
+          "overall": 0.91,
+          "warnings": [
+            "具体小区名称未明确，原文仅称“某小区”",
+            "“充电”具体指什么不明确",
+            "作业主体不明确"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": true,
+          "request": true
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_city_management",
+          "dept_ecology_environment"
+        ],
+        "dept_names": [
+          "芜湖市城市管理局",
+          "芜湖市生态环境局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_city_management"
+      },
+      "metrics": {
+        "asr_cer": 0.0361,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0694,
+        "citizen_cer": 0.0571,
+        "field_completeness": 1.0,
+        "location_similarity": 0.963,
+        "event_similarity": 0.5783,
+        "request_similarity": 0.4091,
+        "field_pass_rate": 1.0,
+        "content_support_precision": 0.4211,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-CM-002",
+      "category": "城市管理",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\城市管理\\SYN-CM-002.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\城市管理\\SYN-CM-002.txt",
+      "audio_duration_seconds": 50.327,
+      "runtime_seconds": 41.5233,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 芜湖12345热线 请讲一下您要反应的问题。你好 我讲一下啊 我们这边商业街路口 晚上摆摊得太多了 餐车横着一停 忙到都给堵掉了 人走路只能绕到马路上。您说的是哪个区 大带每天什么时间比较集中。鸠江区这边 晚上七点以后最多 不是不让人家做生意 就是要管规范一点 把路让出来 垃圾也要收干净。好的 我复述一下 您反映的是流动摊贩占道经营 位置在鸠江区某商业街路口 希望规范摊贯经营位置并清理占用的盲道。我已经记录 会转交鸠疆区政府何时处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.612,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 五湖12345热线 请讲一下您要反应的问题\n群众：你好 我讲一下啊 我们这边商业街路口 晚上摆摊得太多了 餐车横着一停 忙到都给堵掉了 人走路只能绕到马路上\n接线员：您说的是哪个区 大带每天什么时间比较集中\n群众：鸠江区这边 晚上七点以后最多 不是不让人家做生意 就是要管规范一点 把路让出来 垃圾也要收干净\n接线员：好的 我复述一下 您反映的是流动摊贩占道经营 位置在鸠江区某商业街路口。 希望规范摊贯经营位置并清理占用的盲道我已经记录。 会转交鸠疆区政府何时处理。 请您保持电话畅通。 感谢您的来电。 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "鸠江区",
+        "location": "鸠江区某商业街路口",
+        "event": "晚间多辆流动餐车占用商业街路口和盲道经营，顾客聚集并遗留垃圾，影响居民通行",
+        "request": "规范摊贩经营位置并清理占用的盲道",
+        "department_id": "dept_city_management"
+      },
+      "workorder": {
+        "title": "关于鸠江区这边晚上七点以后最多不是不让人家做生意就是要管规范一点把路商业街路口晚上摆摊太多餐车横",
+        "region": "鸠江区",
+        "elements": {
+          "time": "晚上七点以后",
+          "time_basis": "stated",
+          "location": "鸠江区这边晚上七点以后最多不是不让人家做生意就是要管规范一点把路",
+          "subjects": [],
+          "event": "商业街路口晚上摆摊太多，餐车横着停，忙到路被堵掉，行人只能绕到马路上。",
+          "request": "希望管规范一点，把路让出来，垃圾也要收干净。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 1.0,
+          "overall": 1.0,
+          "warnings": []
+        },
+        "field_passes": {
+          "location": false,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_city_management"
+        ],
+        "dept_names": [
+          "芜湖市城市管理局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_city_management"
+      },
+      "metrics": {
+        "asr_cer": 0.0657,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0968,
+        "citizen_cer": 0.0337,
+        "field_completeness": 1.0,
+        "location_similarity": 0.1951,
+        "event_similarity": 0.1818,
+        "request_similarity": 0.1143,
+        "field_pass_rate": 0.0,
+        "content_support_precision": 0.7551,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-CM-003",
+      "category": "城市管理",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\城市管理\\SYN-CM-003.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\城市管理\\SYN-CM-003.txt",
+      "audio_duration_seconds": 47.831,
+      "runtime_seconds": 55.1815,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是12345 请问您遇到什么事情了。我想反映一下 小区东门除去那一节路 路灯一个礼拜都不亮了。晚上黑咕隆咚的 老人小孩走那边不太安全。麻烦您确认一下具体区域和希望怎么处理。在异江区某小区东門外面的人行道 希望赶紧找人修一下 至少晚上把灯恢复 不然容易摔跤。好的 我复述一下 您反映的是 路灯长期不亮 位置在异江区某小区东门人行道 希望尽快检修路灯并恢复照明。我已经记录 会转交异江區政府何时处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6107,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 这里是12345 请问您遇到什么事情了\n群众：我想反映一下 小区东门除去那一节路 路灯一个礼拜都不亮了晚上黑咕隆咚的 老人小孩走那边不太安全麻\n接线员：烦您确认一下具体区域和希望怎么处理\n群众：在异江区某小区东門外面的人行道。 希望赶紧找人修一下 至少晚上把灯恢复 不然容易摔跤\n接线员：好的 我复述一下 您反映的是 路灯长期不亮 位置在异江区某小区东门人行道 希望尽快检修路灯并恢复照明我已经记录 会转交异江區政府何时处理 请您保持电话畅通。 感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "弋江区",
+        "location": "弋江区某小区东门人行道",
+        "event": "小区东门外一段人行道路灯连续一周不亮，夜间行人较多，存在安全隐患",
+        "request": "尽快检修路灯并恢复照明",
+        "department_id": "dept_city_management"
+      },
+      "workorder": {
+        "title": "关于弋江区某小区东门外面的人行道小区东门外面的人行道路灯一个礼拜都不亮黑咕隆的问题",
+        "region": "弋江区",
+        "elements": {
+          "time": "晚上",
+          "time_basis": "stated",
+          "location": "弋江区某小区东门外面的人行道",
+          "subjects": [],
+          "event": "小区东门外面的人行道路灯一个礼拜都不亮，晚上黑咕隆咚的，老人小孩走那边不太安全，容易摔跤。",
+          "request": "希望赶紧找人修一下，至少晚上把灯恢复。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 1.0,
+          "overall": 1.0,
+          "warnings": []
+        },
+        "field_passes": {
+          "location": true,
+          "event": true,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_city_management"
+        ],
+        "dept_names": [
+          "芜湖市城市管理局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_city_management"
+      },
+      "metrics": {
+        "asr_cer": 0.0707,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0948,
+        "citizen_cer": 0.061,
+        "field_completeness": 1.0,
+        "location_similarity": 0.88,
+        "event_similarity": 0.4507,
+        "request_similarity": 0.2857,
+        "field_pass_rate": 0.6667,
+        "content_support_precision": 0.9123,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-CJ-001",
+      "category": "城乡建设",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\城乡建设\\SYN-CJ-001.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\城乡建设\\SYN-CJ-001.txt",
+      "audio_duration_seconds": 53.351,
+      "runtime_seconds": 20.9541,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "你好 这里是芜湖12345政务服务便民热线 请问有什么可以帮您。你好 我家住顶楼 一下雨卧室墙角就往下渗水 墙皮都鼓起来了 物业来看过两回 每次都说再等等 到现在也没修。请问是哪个小区奶栋楼 您希望我们重点协调什么。镜湖区某老小区三号楼 主要就是让物业别再拖了 赶紧把楼顶漏水原因查清楚 把防水修好。好的 我复述一下 您反映的是楼顶渗水维修 位置在镜湖区某老旧小区三号楼 希望协调物业查明漏水原因并尽快修复。我已经记录 汇转交进湖医政府何时处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6161,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：你好 这里是五湖12345政务服务便民热线 请问有什么可以帮您\n群众：你好 我家住顶楼 一下雨卧室墙角就往下渗水 墙皮都鼓起来了。 物业来看过两回 每次都说再等等 到现在也没修请\n接线员：问是哪个小区奶栋楼 您希望我们重点协调什么\n群众：静湖区某老小区三号楼。 主要就是让物业别再拖了 赶紧把楼顶漏水原因查清楚 把防水修好\n接线员：好的 我复述一下 您反映的是楼顶渗水维修 位置在静湖区某老旧小区三号楼 希望协调物业查明漏水原因并尽快修复我已经记录 汇转交进湖医政府何时处理 请您保持电话畅通。 感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "镜湖区",
+        "location": "镜湖区某老旧小区三号楼",
+        "event": "三号楼顶层住户卧室在降雨后持续渗水，物业多次查看但未安排维修",
+        "request": "协调物业查明漏水原因并尽快修复",
+        "department_id": "dept_housing_construction"
+      },
+      "workorder": {
+        "title": "关于镜湖区某老小区三号楼群众家住顶楼下雨时卧室墙角渗水墙皮鼓起物业来的问题",
+        "region": "镜湖区",
+        "elements": {
+          "time": "2026年9月15日 13:44（按来电时间）",
+          "time_basis": "received_at",
+          "location": "镜湖区某老小区三号楼",
+          "subjects": [
+            "物业"
+          ],
+          "event": "群众家住顶楼，下雨时卧室墙角渗水，墙皮鼓起；物业来看过两回，每次都说再等等，到现在也没修。",
+          "request": "让物业别再拖了，赶紧把楼顶漏水原因查清楚，把防水修好。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 1.0,
+          "overall": 1.0,
+          "warnings": []
+        },
+        "field_passes": {
+          "location": true,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_housing_construction"
+        ],
+        "dept_names": [
+          "芜湖市住房和城乡建设局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_housing_construction"
+      },
+      "metrics": {
+        "asr_cer": 0.0556,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.1136,
+        "citizen_cer": 0.0238,
+        "field_completeness": 1.0,
+        "location_similarity": 0.9524,
+        "event_similarity": 0.2647,
+        "request_similarity": 0.359,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.8548,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-CJ-002",
+      "category": "城乡建设",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\城乡建设\\SYN-CJ-002.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\城乡建设\\SYN-CJ-002.txt",
+      "audio_duration_seconds": 51.959,
+      "runtime_seconds": 50.2765,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 芜湖12345热线 请讲一下您要反应的问题。我们安置小区地下车库又进水了 昨晚下点雨 入口那块水都慢到轮胎边上 车子根本不敢往里开。具体在哪个区域 目前还有积水吗。弯制区某安置小區 现在水退了一点 但排得特别慢。希望把排水沟和水泵都检查一下 别每次下雨都这样。好的 我复述一下 您反映的是地下车库积水 位置在湾指区某安治小区地下轻库 希望疏通排水设施并检查车庫防汛措施 我已经记录 会转交湾指去政府核实处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.606,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 五湖12345热线 请讲一下您要反应的问题我们\n群众：安置小区地下车库又进水了 昨晚下点雨 入口那块水都慢到轮胎边上 车子根本不敢往里开具\n接线员：体在哪个区域 目前还有积水吗\n群众：弯制区某安置小區 现在水退了一点 但排得特别慢希望把排水沟和水泵都检查一下 别每次下雨都这样\n接线员：好的 我复述一下 您反映的是地下车库积水 位置在湾指区某安治小区地下轻库 希望疏通排水设施并检查车庫防汛措施 我已经记录 会转交湾指去政府核实处理 请您保持电话畅通。 感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "湾沚区",
+        "location": "湾沚区某安置小区地下车库",
+        "event": "地下车库入口在降雨后大量积水，排水速度慢，多辆车辆通行受影响",
+        "request": "疏通排水设施并检查车库防汛措施",
+        "department_id": "dept_housing_construction"
+      },
+      "workorder": {
+        "title": "关于湾沚区某安置小区地下车库安置小区地下车库又进水了下点雨入口那块水都慢的问题",
+        "region": "湾沚区",
+        "elements": {
+          "time": "昨晚",
+          "time_basis": "stated",
+          "location": "湾沚区某安置小区地下车库",
+          "subjects": [],
+          "event": "安置小区地下车库又进水了，昨晚下点雨，入口那块水都慢到轮胎边上，车子根本不敢往里开，现在水退了一点，但排得特别慢。",
+          "request": "希望把排水沟和水泵都检查一下，别每次下雨都这样。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.85,
+          "overall": 0.97,
+          "warnings": [
+            "安置小区具体名称未提供"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_housing_construction"
+        ],
+        "dept_names": [
+          "芜湖市住房和城乡建设局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_housing_construction"
+      },
+      "metrics": {
+        "asr_cer": 0.0792,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.1261,
+        "citizen_cer": 0.0843,
+        "field_completeness": 1.0,
+        "location_similarity": 1.0,
+        "event_similarity": 0.2532,
+        "request_similarity": 0.2162,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.9861,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-CJ-003",
+      "category": "城乡建设",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\城乡建设\\SYN-CJ-003.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\城乡建设\\SYN-CJ-003.txt",
+      "audio_duration_seconds": 49.991,
+      "runtime_seconds": 46.5011,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是12345 请问你遇到什么事情了。我想讲一下这边修路的事。前段时间挖路埋水管 弄完以后就随便填了一下。现在一路都是坑 车子开过去颠得很。请问道路位于哪里 现场有没有设置警示标志。繁昌区某镇主干道那一段 现在也没看到明显的牌子。希望施工单位回来重新弄平 别留个烂摊子。好的 我复述一下 你反映的是道路施工后路面破损 位置在繁昌区某阵主干道路段 希望督促施工单位重新修复并做好安全警示。我已经记录会转交繁昂区政府何时处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6092,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 这里是12345 请问你遇到什么事情了\n群众：我想讲一下这边修路的事前段时间挖路埋水管 弄完以后就随便填了一下现在一路都是坑 车子开过去颠得很\n接线员：请问道路位于哪里 现场有没有设置警示标志\n群众：繁昌区某镇主干道那一段。 现在也没看到明显的牌子。希望施工单位回来重新弄平 别留个烂摊子\n接线员：好的 我复述一下 你反映的是道路施工后路面破损 位置在繁昌区某阵主干道路段。 希望督促施工单位重新修复并做好安全警示我已经记录会转交繁昂区政府何时处理 请您保持电话畅通。 感谢您的来电。 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "繁昌区",
+        "location": "繁昌区某镇主干道路段",
+        "event": "自来水管施工结束后路面回填不平整，形成多处坑洼，车辆经过时颠簸明显",
+        "request": "督促施工单位重新修复并做好安全警示",
+        "department_id": "dept_housing_construction"
+      },
+      "workorder": {
+        "title": "关于繁昌区某镇主干道挖路埋水管后回填不实导致路面坑洼车辆行驶颠簸的问题",
+        "region": "繁昌区",
+        "elements": {
+          "time": "2026年9月15日 13:44（按来电时间）",
+          "time_basis": "received_at",
+          "location": "繁昌区某镇主干道",
+          "subjects": [
+            "施工单位"
+          ],
+          "event": "挖路埋水管后回填不实，导致路面坑洼，车辆行驶颠簸，且现场无明显警示牌。",
+          "request": "希望施工单位回来重新弄平路面。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.7,
+          "overall": 0.94,
+          "warnings": [
+            "具体镇名未明确",
+            "施工单位名称未明确"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": true,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_housing_construction"
+        ],
+        "dept_names": [
+          "芜湖市住房和城乡建设局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_housing_construction"
+      },
+      "metrics": {
+        "asr_cer": 0.0521,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.088,
+        "citizen_cer": 0.0,
+        "field_completeness": 1.0,
+        "location_similarity": 0.8889,
+        "event_similarity": 0.4516,
+        "request_similarity": 0.3871,
+        "field_pass_rate": 0.6667,
+        "content_support_precision": 0.3636,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-PA-001",
+      "category": "公共安全",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\公共安全\\SYN-PA-001.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\公共安全\\SYN-PA-001.txt",
+      "audio_duration_seconds": 54.695,
+      "runtime_seconds": 55.9171,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "你好 这里是芜湖12345政务服务便民热线 请问有什么可以帮您。你好 我们小区消防通道天天晚上停满车 尤其转弯那个地方卡得死死的 真有火情 消防车肯定进不来。具体是哪个小区 车辆通常在什么时段占用。鸠江区某小区晚上八点以后最严重 希望物业和相关部门一起管 不能只贴张纸就算了。好的 我复述一下 您反映的是 消防通道被车辆占用 位置在鸠江区某小区消防通路 希望清理站到车较并建立常态管理措施 我已经记录 会转交鸠疆区政府 市消防救援支队合时处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.5859,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：你好 这里是五湖12345政务服务便民热线 请问有什么可以帮您\n群众：你好 我们小区消防通道天天晚上停满车。 尤其转弯那个地方卡得死死的 真有火情 消防车肯定进不来具\n接线员：体是哪个小区 车辆通常在什么时段占用\n群众：鸠江区某小区晚上八点以后最严重。 希望物业和相关部门一起管 不能只贴张纸就算了\n接线员：好的 我复述一下 您反映的是 消防通道被车辆占用 位置在鸠江区某小区消防通路 希望清理站到车较并建立常态管理措施 我已经记录 会转交鸠疆区政府 市消防救援支队合时处理 请您保持电话畅通。 感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "鸠江区",
+        "location": "鸠江区某小区消防通道",
+        "event": "小区消防通道夜间长期停放私家车，转弯位置也被占用，消防车辆可能无法通行",
+        "request": "清理占道车辆并建立常态管理措施",
+        "department_id": "dept_public_security"
+      },
+      "workorder": {
+        "title": "关于鸠江区某小区小区消防通道每天晚上停满车尤其转弯处堵塞严重的问题",
+        "region": "鸠江区",
+        "elements": {
+          "time": "每天晚上，晚上八点以后最严重",
+          "time_basis": "stated",
+          "location": "鸠江区某小区",
+          "subjects": [
+            "物业",
+            "相关部门"
+          ],
+          "event": "小区消防通道每天晚上停满车，尤其转弯处堵塞严重，群众担心发生火情时消防车无法进入。",
+          "request": "希望物业和相关部门一起管，不能只贴张纸就算了。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.85,
+          "overall": 0.97,
+          "warnings": [
+            "小区具体名称不明确"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": true,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_public_security"
+        ],
+        "dept_names": [
+          "芜湖市公安局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_public_security"
+      },
+      "metrics": {
+        "asr_cer": 0.0602,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.1087,
+        "citizen_cer": 0.0128,
+        "field_completeness": 1.0,
+        "location_similarity": 0.75,
+        "event_similarity": 0.4225,
+        "request_similarity": 0.0556,
+        "field_pass_rate": 0.6667,
+        "content_support_precision": 0.6552,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-PA-002",
+      "category": "公共安全",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\公共安全\\SYN-PA-002.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\公共安全\\SYN-PA-002.txt",
+      "audio_duration_seconds": 53.567,
+      "runtime_seconds": 58.3215,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "你好 芜湖12345热线 请讲一下您要反应的问题。喂 我在学校门口 这个十字路口红绿灯从早上开始就一直闪黄灯 放学的时候孩子多 车也不让 太危险了。请告诉我具体区域目前是否已经发生事故。南陵县某学校闷口还没有撞到人 但是现场很乱。最好马上来修 再安排个人先指挥一下。好的 我复述一下。您反映的是交通信号灯故障 位置在南陵县某学校门口十字路口 希望尽快维修信号灶并安排人员疏导交通 我已经记录 会转交南陵线政府 市公安局核实处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 1,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.5663,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：你好 五湖12345热线 请讲一下您要反应的问题\n群众：喂 我在学校门口。这个十字路口红绿灯从早上开始就一直闪黄灯 放学的时候孩子多。车也不让 太危险了。请告诉我具体区域目前是否已经发生事故。南陵县某学校闷口还没有撞到人 但是现场很乱最好马上来修 再安排个人先指挥一下\n接线员：好的，我复述一下您反映的是交通信号灯故障 位置在南陵县某学校门口十字路口。希望尽快维修信号灶并安排人员疏导交通。我已经记录。会转交南陵线政府 市公安局核实处理 请您保持电话畅通。感谢您的来电 再见",
+        "format_mode": "heuristic"
+      },
+      "expected": {
+        "region": "南陵县",
+        "location": "南陵县某学校门口十字路口",
+        "event": "学校门口十字路口红绿灯从上午开始持续黄灯闪烁，上下学时段车辆和学生混行",
+        "request": "尽快维修信号灯并安排人员疏导交通",
+        "department_id": "dept_public_security"
+      },
+      "workorder": {
+        "title": "关于南陵县某学校门口十字路口红绿灯从早上开始一直闪黄灯放学的时候孩子多车的问题",
+        "region": "南陵县",
+        "elements": {
+          "time": "2026年9月15日 13:44（按来电时间）",
+          "time_basis": "received_at",
+          "location": "南陵县某学校门口十字路口",
+          "subjects": [
+            "我在学校",
+            "南陵县某学校"
+          ],
+          "event": "南陵县某学校门口十字路口红绿灯从早上开始一直闪黄灯，放学的时候孩子多，车也不让，现场很乱，还没有撞到人。",
+          "request": "最好马上来修，再安排个人先指挥一下。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.7,
+          "overall": 0.94,
+          "warnings": [
+            "学校名称不明确，原文仅称“南陵县某学校闷口”",
+            "“闷口”指代不明，可能为“门口”"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": true,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_public_security"
+        ],
+        "dept_names": [
+          "芜湖市公安局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_public_security"
+      },
+      "metrics": {
+        "asr_cer": 0.0481,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 0.0,
+        "role_sequence_accuracy": 0.6,
+        "operator_cer": 0.2171,
+        "citizen_cer": 0.2405,
+        "field_completeness": 1.0,
+        "location_similarity": 1.0,
+        "event_similarity": 0.4938,
+        "request_similarity": 0.25,
+        "field_pass_rate": 0.6667,
+        "content_support_precision": 0.9194,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-PA-003",
+      "category": "公共安全",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\公共安全\\SYN-PA-003.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\公共安全\\SYN-PA-003.txt",
+      "audio_duration_seconds": 53.567,
+      "runtime_seconds": 31.1069,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "你好 这里是12345 请问您遇到什么事情了。我想问一下 今天有人打电话说是社区的 让我加他私人账号 还问银行卡信息 我感觉不对 小区里好几个人都接到了。你有没有提供验证码或转账 对方自称是哪个社区。没有 我什么都没给 就是无为市某小区这边 想请你们核实一下 也提醒一下其他老人 别有人上当。好的 我复述一下 您反映的是疑似电信诈骗宣传 位置在无为市某居民小区 希望核实相关电话并向居民发布反诈提醒。我已经记录 会转交无为市政府 市公安局核实处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6276,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：你好 这里是12345。 请问您遇到什么事情了我想\n群众：问一下。 今天有人打电话说是社区的。 让我加他私人账号 还问银行卡信息 我感觉不对 小区里好几个人都接到了\n接线员：你有没有提供验证码或转账 对方自称是哪个社区\n群众：没有 我什么都没给 就是无为市某小区这边。 想请你们核实一下。 也提醒一下其他老人 别有人上当\n接线员：好的 我复述一下 您反映的是疑似电信诈骗宣传 位置在无为市某居民小区 希望核实相关电话并向居民发布反诈提醒我已经记录 会转交无为市政府 市公安局核实处理 请您保持电话畅通。 感谢您的来电。 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "无为市",
+        "location": "无为市某居民小区",
+        "event": "小区居民连续收到冒充社区工作人员的电话，对方要求添加私人社交账号并发送银行卡信息",
+        "request": "核实相关电话并向居民发布反诈提醒",
+        "department_id": "dept_public_security"
+      },
+      "workorder": {
+        "title": "关于无无为市某小区有人打电话自称社区人员要求添加私人账号并询问的问题",
+        "region": "无为市",
+        "elements": {
+          "time": "今天",
+          "time_basis": "stated",
+          "location": "无无为市某小区",
+          "subjects": [],
+          "event": "有人打电话自称社区人员，要求添加私人账号并询问银行卡信息，小区里好几个人都接到了，群众感觉不对，未提供任何信息。",
+          "request": "请核实一下，也提醒一下其他老人，别有人上当。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.55,
+          "overall": 0.91,
+          "warnings": [
+            "来电者具体身份不明",
+            "来电号码未知",
+            "涉及的小区具体名称未提供"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": true,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_public_security"
+        ],
+        "dept_names": [
+          "芜湖市公安局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_public_security"
+      },
+      "metrics": {
+        "asr_cer": 0.0326,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0709,
+        "citizen_cer": 0.0227,
+        "field_completeness": 1.0,
+        "location_similarity": 0.8,
+        "event_similarity": 0.4,
+        "request_similarity": 0.2286,
+        "field_pass_rate": 0.6667,
+        "content_support_precision": 0.6232,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-PS-001",
+      "category": "公共服务",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\公共服务\\SYN-PS-001.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\公共服务\\SYN-PS-001.txt",
+      "audio_duration_seconds": 50.735,
+      "runtime_seconds": 28.1298,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是无湖12345政务服务便民热线 请问有什么可以帮您。你好 我们小区今天突然停水了 早上到现在一滴水都没有 之前也没人通知 问物业他也讲不清楚。请问在什么位置 停水设计一栋楼还是多个楼洞。镜湖区某小区 好几栋都停了 希望查一下到底哪里坏了 尽快来水 什么时候恢复也给个准化。好的 我复述一下 您反映的是计划外停水 位置在镜湖区某小区 希望核实停水原因并尽快恢复供水。我已经记录会转交进湖医政府 无湖供水公司核实处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6066,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 这里是无湖12345政务服务便民热线 请问有什么可以帮您\n群众：你好 我们小区今天突然停水了 早上到现在一滴水都没有。 之前也没人通知 问物业他也讲不清楚请\n接线员：问在什么位置。 停水设计一栋楼还是多个楼洞\n群众：镜湖区某小区 好几栋都停了。 希望查一下到底哪里坏了。 尽快来水 什么时候恢复也给个准化\n接线员：好的 我复述一下 您反映的是计划外停水 位置在静湖区某小区 希望核实停水原因并尽快恢复供水我已经记录会转交进湖医政府。 无湖供水公司核实处理 请您保持电话畅通。 感谢您的来电。 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "镜湖区",
+        "location": "镜湖区某小区",
+        "event": "小区多个楼栋从上午起突然停水，居民未提前收到通知，物业也无法说明恢复时间",
+        "request": "核实停水原因并尽快恢复供水",
+        "department_id": "dept_public_services"
+      },
+      "workorder": {
+        "title": "关于镜湖区某小区今天突然停水早上到现在一滴水都没有之前也没人的问题",
+        "region": "镜湖区",
+        "elements": {
+          "time": "今天早上到现在",
+          "time_basis": "stated",
+          "location": "镜湖区某小区",
+          "subjects": [],
+          "event": "镜湖区某小区今天突然停水，早上到现在一滴水都没有，之前也没人通知，问物业他也讲不清楚，好几栋都停了。",
+          "request": "希望查一下到底哪里坏了。尽快来水 什么时候恢复也给个准化",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.55,
+          "overall": 0.91,
+          "warnings": [
+            "小区具体名称未提供",
+            "停水具体原因未提供",
+            "物业名称未提供"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_public_services"
+        ],
+        "dept_names": [
+          "芜湖市民政局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_public_services"
+      },
+      "metrics": {
+        "asr_cer": 0.0628,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.1085,
+        "citizen_cer": 0.0256,
+        "field_completeness": 1.0,
+        "location_similarity": 1.0,
+        "event_similarity": 0.3038,
+        "request_similarity": 0.2051,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.9714,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-PS-002",
+      "category": "公共服务",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\公共服务\\SYN-PS-002.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\公共服务\\SYN-PS-002.txt",
+      "audio_duration_seconds": 48.527,
+      "runtime_seconds": 26.7151,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 芜湖12345热线 请讲一下您要反应的问题。我昨天在手机上充了燃气费 钱已经扣掉了 但是表里余额一点没变 现在家里做饭都用不了。请问您是哪个区的用户 支付页面是否显示成功。一江区这边 页面显示支付成功 记录我也留着 麻烦帮我查一下 把钱补到账户里。好的 我复述一下。您反映的是 燃气充值后未到账。位置在一江区某小区燃气用户。希望核对充值记录并恢复燃气余额。我已经记录。会转交易江区政府。无湖中燃公司何时处理。请您保持电话畅通。感谢您的来电。再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6137,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 五湖12345热线 请讲一下您要反应的问题\n群众：我昨天在手机上充了燃气费 钱已经扣掉了 但是表里余额一点没变 现在家里做饭都用不了\n接线员：请问您是哪个区的用户 支付页面是否显示成功\n群众：一江区这边 页面显示支付成功 记录我也留着。 麻烦帮我查一下 把钱补到账户里\n接线员：好的 我复述一下您反映的是 燃气充值后未到账位置在一江区某小区燃气用户希望核对充值记录并恢复燃气余额我已经记录会转交易江区政府无湖中燃公司何时处理请您保持电话畅通感谢您的来电再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "弋江区",
+        "location": "弋江区某小区燃气用户",
+        "event": "居民通过线上平台充值燃气费后余额未更新，支付记录显示扣款成功，暂时无法正常用气",
+        "request": "核对充值记录并恢复燃气余额",
+        "department_id": "dept_public_services"
+      },
+      "workorder": {
+        "title": "关于弋江区群众在手机上充了燃气费钱已经扣掉但表里余额一的问题",
+        "region": "弋江区",
+        "elements": {
+          "time": "昨天",
+          "time_basis": "stated",
+          "location": "弋江区",
+          "subjects": [],
+          "event": "群众昨天在手机上充了燃气费，钱已经扣掉，但表里余额一点没变，现在家里做饭都用不了；页面显示支付成功，记录也留着。",
+          "request": "麻烦帮我查一下，把钱补到账户里。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 1.0,
+          "overall": 1.0,
+          "warnings": []
+        },
+        "field_passes": {
+          "location": false,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_public_services"
+        ],
+        "dept_names": [
+          "芜湖市民政局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_public_services"
+      },
+      "metrics": {
+        "asr_cer": 0.06,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.093,
+        "citizen_cer": 0.0141,
+        "field_completeness": 1.0,
+        "location_similarity": 0.4615,
+        "event_similarity": 0.2529,
+        "request_similarity": 0.0,
+        "field_pass_rate": 0.0,
+        "content_support_precision": 0.9048,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-PS-003",
+      "category": "公共服务",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\公共服务\\SYN-PS-003.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\公共服务\\SYN-PS-003.txt",
+      "audio_duration_seconds": 49.775,
+      "runtime_seconds": 59.2858,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是12345 请问您遇到什么事情了。这几天晚上 家里老师突然断电 一会儿来一会儿又跳 冰箱空调都不敢开 整栋楼的人都在问。这种情况持续几天了 具体位于哪个区域。连续三个晚上了 在京开区某小区 希望宫殿的人来把线路和配电箱好好查一下 别老师反复停。好的 我复述一下 您反映的是夜间频繁跳闸 位置在京开区某小区配电设施 希望检查配电计 并消除频繁停电问题。我已经记录会转交经济技术开发区 国网乌湖供电公司何时处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6076,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 这里是12345 请问您遇到什么事情了\n群众：这几天晚上 家里老师突然断电 一会儿来一会儿又跳 冰箱空调都不敢开 整栋楼的人都在问\n接线员：这种情况持续几天了 具体位于哪个区域\n群众：连续三个晚上了 在京开区某小区。 希望宫殿的人来把线路和配电箱好好查一下 别老师反复停\n接线员：好的 我复述一下 您反映的是夜间频繁跳闸 位置在京开区某小区配电设施 希望检查配电计 并消除频繁停电问题我已经记录会转交经济技术开发区 国网乌湖供电公司何时处理 请您保持电话畅通。 感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "经开区",
+        "location": "经开区某小区配电设施",
+        "event": "小区连续三个晚上出现短时停电和反复跳闸，居民电器使用受到影响",
+        "request": "检查配电设施并消除频繁停电问题",
+        "department_id": "dept_public_services"
+      },
+      "workorder": {
+        "title": "关于经开区某小区家里突然断电一会儿来一会儿又跳冰箱空调都不敢的问题",
+        "region": "经开区",
+        "elements": {
+          "time": "连续三个晚上",
+          "time_basis": "stated",
+          "location": "经开区某小区",
+          "subjects": [],
+          "event": "连续三个晚上家里突然断电，一会儿来一会儿又跳，冰箱空调都不敢开，整栋楼的人都在问。",
+          "request": "希望供电的人来把线路和配电箱好好查一下，别反复停。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.55,
+          "overall": 0.91,
+          "warnings": [
+            "原文中“老师”疑似为“老是”的笔误，但无法确认。",
+            "原文中“宫殿的人”疑似为“供电的人”的笔误，但无法确认。",
+            "未提供小区具体名称、楼栋或门牌号。"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_public_services"
+        ],
+        "dept_names": [
+          "芜湖市民政局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_public_services"
+      },
+      "metrics": {
+        "asr_cer": 0.078,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0859,
+        "citizen_cer": 0.0649,
+        "field_completeness": 1.0,
+        "location_similarity": 0.75,
+        "event_similarity": 0.2424,
+        "request_similarity": 0.1579,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.8983,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-TR-001",
+      "category": "交通运输",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\交通运输\\SYN-TR-001.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\交通运输\\SYN-TR-001.txt",
+      "audio_duration_seconds": 57.239,
+      "runtime_seconds": 33.7907,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是芜湖12345政务服务便民热线 请问有什么可以帮您。你好 我每天早上在这个站坐车 最近这趟公交越来越难等 今天等了四十多分钟都没来 站台上全是赶上班上学的人。请问是哪条线路 哪个站点 主要发生在几点左右。市市区某线路 在某公交站 早上7点半到8点这段最明显 希望高峰期多发几班 别让大家干等。好的 我复述一下 您反应的是 公交班次间隔过长 位置在芜湖市某公郊站 希望合适车辆运行情况并合理增加早高峰班次。我已经记录 会转交市交通运输局 五湖公交集团合适处理 请您保持电话畅通。感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.5988,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 这里是五湖12345政务服务便民热线 请问有什么可以帮您\n群众：你好 我每天早上在这个站坐车。 最近这趟公交越来越难等。 今天等了四十多分钟都没来 站台上全是赶上班上学的人\n接线员：请问是哪条线路 哪个站点。 主要发生在几点左右市\n群众：市区某线路 在某公交站 早上7点半到8点这段最明显 希望高峰期多发几班 别让大家干等\n接线员：好的 我复述一下。 您反应的是 公交班次间隔过长。 位置在五湖市某公郊站 希望合适车辆运行情况并合理增加早高峰班次我已经记录 会转交市交通运输局 五湖公交集团合适处理 请您保持电话畅通感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "市本级",
+        "location": "芜湖市某公交站",
+        "event": "早高峰期间某公交线路连续等待四十多分钟仍未到站，站内上班和上学乘客较多",
+        "request": "核实车辆运行情况并合理增加早高峰班次",
+        "department_id": "dept_transportation"
+      },
+      "workorder": {
+        "title": "关于市区某线路在某公交站早上7点半到8点等车时间过长今天等了四十多分的问题",
+        "region": "市本级",
+        "elements": {
+          "time": "最近",
+          "time_basis": "stated",
+          "location": "市区某线路在某公交站",
+          "subjects": [],
+          "event": "市区某线路在某公交站早上7点半到8点等车时间过长，今天等了四十多分钟，站台上全是赶上班上学的人。",
+          "request": "希望高峰期多发几班，别让大家干等。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.7,
+          "overall": 0.94,
+          "warnings": [
+            "具体公交线路未明确",
+            "具体公交站名未明确"
+          ]
+        },
+        "field_passes": {
+          "location": false,
+          "event": true,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_transportation"
+        ],
+        "dept_names": [
+          "芜湖市交通运输局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_transportation"
+      },
+      "metrics": {
+        "asr_cer": 0.0664,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.1079,
+        "citizen_cer": 0.0345,
+        "field_completeness": 1.0,
+        "location_similarity": 0.5882,
+        "event_similarity": 0.3544,
+        "request_similarity": 0.1818,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.8475,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-TR-002",
+      "category": "交通运输",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\交通运输\\SYN-TR-002.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\交通运输\\SYN-TR-002.txt",
+      "audio_duration_seconds": 49.751,
+      "runtime_seconds": 22.2661,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "你好 芜湖12345热线 请讲一下你要反应的问题。我刚才在商圈打车 排了半天 两辆出租车问我去哪里 一听路程不远就直接开走了 这不是明摆着聚在吗。请问事情发生的时间和地点 你有没有记下车牌。大概晚上九点 在镜湖区某商圈上课点 我记下了其中一辆车牢 希望查一下也把这个行为管一管。好的 我复述一下。您反映的是 出租车聚在 位置在镜湖区某商圈出租車上课点。希望核查设施车辆并规范出租者经营行为。我已经记录 汇转交市交通运输局何时处理 请您保持电话畅通。感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.609,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：你好。 五湖12345热线 请讲一下你要反应的问题我\n群众：刚才在商圈打车 排了半天 两辆出租车问我去哪里 一听路程不远就直接开走了 这不是明摆着聚在吗请\n接线员：问事情发生的时间和地点 你有没有记下车牌\n群众：大概晚上九点 在静湖区某商圈上课点 我记下了其中一辆车牢 希望查一下也把这个行为管一管\n接线员：好的 我复述一下您反映的是 出租车聚在 位置在静湖区某商圈出租車上课点希望核查设施车辆并规范出租者经营行为我已经记录 汇转交市交通运输局何时处理 请您保持电话畅通感谢您的来电。 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "镜湖区",
+        "location": "镜湖区某商圈出租车上客点",
+        "event": "市民在商圈出租车上客点排队乘车时，两辆巡游出租车询问目的地后拒绝搭载",
+        "request": "核查涉事车辆并规范出租车经营行为",
+        "department_id": "dept_transportation"
+      },
+      "workorder": {
+        "title": "关于镜湖区某商圈上客点两辆出租车问去哪里一听路程不远就直接开走了的问题",
+        "region": "镜湖区",
+        "elements": {
+          "time": "大概晚上九点",
+          "time_basis": "stated",
+          "location": "镜湖区某商圈上客点",
+          "subjects": [],
+          "event": "两辆出租车问去哪里，一听路程不远就直接开走了。",
+          "request": "希望查一下也把这个行为管一管。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.7,
+          "overall": 0.94,
+          "warnings": [
+            "未提供记下的车牌号具体信息",
+            "未明确具体是哪个商圈"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_transportation"
+        ],
+        "dept_names": [
+          "芜湖市交通运输局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_transportation"
+      },
+      "metrics": {
+        "asr_cer": 0.11,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.1746,
+        "citizen_cer": 0.0843,
+        "field_completeness": 1.0,
+        "location_similarity": 0.8571,
+        "event_similarity": 0.1481,
+        "request_similarity": 0.2,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.9412,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-TR-003",
+      "category": "交通运输",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\交通运输\\SYN-TR-003.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\交通运输\\SYN-TR-003.txt",
+      "audio_duration_seconds": 49.535,
+      "runtime_seconds": 22.286,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是12345 请问您遇到什么事情了。我反映一下村里这条路 有个靠水塘的弯道 护栏少了一大截 晚上又没灯 车子稍微快一点就很危险。具体在什么区域 护兰大约缺了多长。湾指区某村的农村公路差不多20米 希望先放警示牌 再尽快把护树补起来。好的 我复述一下 您反映的是道路护栏缺失 位置在湾纸区某农村公路弯道路段 希望尽快设置临时警示并修复护树栏。我已经记录 会转交湾约区政府市交通运输局核实处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.5742,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 这里是12345 请问您遇到什么事情了\n群众：我反映一下村里这条路 有个靠水塘的弯道 护栏少了一大截 晚上又没灯 车子稍微快一点就很危险\n接线员：具体在什么区域 护兰大约缺了多长\n群众：湾指区某村的农村公路差不多20米。 希望先放警示牌 再尽快把护树补起来\n接线员：好的 我复述一下 您反映的是道路护栏缺失 位置在湾纸区某农村公路弯道路段 希望尽快设置临时警示并修复护树栏我已经记录 会转交湾约区政府市交通运输局核实处理 请您保持电话畅通。 感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "湾沚区",
+        "location": "湾沚区某农村公路弯道路段",
+        "event": "农村公路临水弯道路段约二十米护栏缺失，夜间照明不足，车辆经过存在坠落风险",
+        "request": "尽快设置临时警示并修复护栏",
+        "department_id": "dept_transportation"
+      },
+      "workorder": {
+        "title": "关于湾沚区某村农村公路靠水塘的弯道护栏少了一大截约20米又没灯车子稍微快一点就的问题",
+        "region": "湾沚区",
+        "elements": {
+          "time": "晚上",
+          "time_basis": "stated",
+          "location": "湾沚区某村农村公路靠水塘的弯道",
+          "subjects": [],
+          "event": "湾沚区某村农村公路靠水塘的弯道护栏少了一大截，约20米，晚上又没灯，车子稍微快一点就很危险。",
+          "request": "希望先放警示牌，再尽快把护树补起来。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.85,
+          "overall": 0.97,
+          "warnings": [
+            "原文“护树”指代不明，可能为“护栏”的笔误，但无法确认。"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_transportation"
+        ],
+        "dept_names": [
+          "芜湖市交通运输局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_transportation"
+      },
+      "metrics": {
+        "asr_cer": 0.0667,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0738,
+        "citizen_cer": 0.0548,
+        "field_completeness": 1.0,
+        "location_similarity": 0.7407,
+        "event_similarity": 0.2895,
+        "request_similarity": 0.2069,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.8596,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-EF-001",
+      "category": "经济财贸",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\经济财贸\\SYN-EF-001.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\经济财贸\\SYN-EF-001.txt",
+      "audio_duration_seconds": 55.943,
+      "runtime_seconds": 26.9912,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是芜湖12345政务服务便民热线 请问有什么可以帮您。我是做小生意的 最近有人说能帮企业办贷款 但是要先交一笔咨询费 合同离退不退款 写得也不清楚 我心里没底。请问企与在哪个区 你目前是否已经付款。进湖区还没交钱 主要想问这种收费靠不靠谱 也想了解一下正规的企丶融资渠道。好的 我复述一下 您反映的是 融资服务收费咨询 位置在镜湖区某小微企业 希望资学收费是否合法并获得正规融赎渠道指引。我已经记录 会转交进湖匙政府 是地方金融管理局核实处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 1,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6163,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "unknown",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "待确认：您好\n接线员：这里是五湖12345政务服务便民热线 请问有什么可以帮您\n群众：我是做小生意的 最近有人说能帮企业办贷款 但是要先交一笔咨询费。合同离退不退款 写得也不清楚 我心里没底请。问企与在哪个区 你目前是否已经付款。进湖区还没交钱。主要想问这种收费靠不靠谱 也想了解一下正规的企丶融资渠道\n接线员：好的，我复述一下 您反映的是 融资服务收费咨询 位置在镜湖区某小微企业。希望资学收费是否合法并获得正规融赎渠道指引。我已经记录。会转交进湖匙政府 是地方金融管理局核实处理 请您保持电话畅通。感谢您的来电 再见",
+        "format_mode": "heuristic"
+      },
+      "expected": {
+        "region": "镜湖区",
+        "location": "镜湖区某小微企业",
+        "event": "小微企业办理融资时被第三方服务机构要求先支付较高咨询服务费，但合同对退款条件约定不清",
+        "request": "咨询收费是否合法并获得正规融资渠道指引",
+        "department_id": "dept_economy_trade"
+      },
+      "workorder": {
+        "title": "关于镜湖区有人称能帮企业办贷款但要求先交一笔咨询费合同的问题",
+        "region": "镜湖区",
+        "elements": {
+          "time": "最近",
+          "time_basis": "stated",
+          "location": "镜湖区",
+          "subjects": [],
+          "event": "有人称能帮企业办贷款，但要求先交一笔咨询费，合同里退不退款写得也不清楚，群众心里没底。",
+          "request": "想了解这种收费靠不靠谱，也想了解正规的企业融资渠道。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.7,
+          "overall": 0.94,
+          "warnings": [
+            "未说明声称能帮办贷款的具体主体或机构名称",
+            "未说明合同的具体内容或签订对象"
+          ]
+        },
+        "field_passes": {
+          "location": false,
+          "event": true,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_economy_trade"
+        ],
+        "dept_names": [
+          "芜湖市发展和改革委员会"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_economy_trade"
+      },
+      "metrics": {
+        "asr_cer": 0.0727,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 0.0,
+        "role_sequence_accuracy": 0.6,
+        "operator_cer": 0.223,
+        "citizen_cer": 0.2469,
+        "field_completeness": 1.0,
+        "location_similarity": 0.5455,
+        "event_similarity": 0.375,
+        "request_similarity": 0.3721,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.7258,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-EF-002",
+      "category": "经济财贸",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\经济财贸\\SYN-EF-002.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\经济财贸\\SYN-EF-002.txt",
+      "audio_duration_seconds": 53.399,
+      "runtime_seconds": 24.3315,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "你好 芜湖12345热线 请讲一下您要反应的问题。你好 我们企业准备把生产线做一下智能化改造 听说有计改方面的补助。但是网上文件比较多 不晓得我们符不符合。企与位于哪个园区 您主要需要确认政策条件还是办理流程。在经济技术开发区 两个都想问 麻烦给一个现在有效的政策 还有材料清单和具体咨询窗口。好的 我复述一下 您反映的是 汇起政策申报咨询 位置在经济技术开发区某制造企业 希望提供适用政策 申报条件及办理窗口信息 我已经记录 会转交经济技术开发区 核实处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6279,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：你好 五湖12345热线 请讲一下您要反应的问题\n群众：你好 我们企业准备把生产线做一下智能化改造。 听说有计改方面的补助但是网上文件比较多 不晓得我们符不符合\n接线员：企与位于哪个园区。 您主要需要确认政策条件还是办理流程在\n群众：经开区。 两个都想问。 麻烦给一个现在有效的政策 还有材料清单和具体咨询窗口\n接线员：好的 我复述一下 您反映的是 汇起政策申报咨询。 位置在经开区某制造企业 希望提供适用政策 申报条件及办理窗口信息 我已经记录 会转交经济技术开发区 核实处理 请您保持电话畅通。 感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "经开区",
+        "location": "经开区某制造企业",
+        "event": "企业准备进行设备智能化改造，希望了解当前可申请的技术改造补助和申报材料",
+        "request": "提供适用政策、申报条件及办理窗口信息",
+        "department_id": "dept_economy_trade"
+      },
+      "workorder": {
+        "title": "关于经开区企业准备把生产线做一下智能化改造听说有计改方的问题",
+        "region": "经开区",
+        "elements": {
+          "time": "2026年9月15日 13:44（按来电时间）",
+          "time_basis": "received_at",
+          "location": "经开区",
+          "subjects": [],
+          "event": "企业准备把生产线做一下智能化改造，听说有计改方面的补助但网上文件比较多，不晓得符不符合。",
+          "request": "给一个现在有效的政策，还有材料清单和具体咨询窗口。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.7,
+          "overall": 0.94,
+          "warnings": [
+            "“计改”具体指什么政策类别不明确",
+            "“两个都想问”中的“两个”指代不明"
+          ]
+        },
+        "field_passes": {
+          "location": false,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_economy_trade"
+        ],
+        "dept_names": [
+          "芜湖市发展和改革委员会"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_economy_trade"
+      },
+      "metrics": {
+        "asr_cer": 0.0888,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0909,
+        "citizen_cer": 0.0244,
+        "field_completeness": 1.0,
+        "location_similarity": 0.5455,
+        "event_similarity": 0.32,
+        "request_similarity": 0.2,
+        "field_pass_rate": 0.0,
+        "content_support_precision": 0.9524,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-EF-003",
+      "category": "经济财贸",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\经济财贸\\SYN-EF-003.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\经济财贸\\SYN-EF-003.txt",
+      "audio_duration_seconds": 49.463,
+      "runtime_seconds": 30.6737,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是12345 请问您遇到什么事情了 我刚开了个小店 客户现在要电子发票 我以前没弄过 手机上找了半天也没找到从哪里申请。您的经营在哪个区 主要是不清楚 开票入口还是额度问题 鸠江区 入口和额度都不懂 希望把步骤讲清楚 有问题我该联系哪个窗口 也告诉我一下。好的 我复述一下 您反映的是个体经营发票开具咨询 位置在鸠江区某商户 希望说明电子发票办理流程和咨误渠道 我已经记录会转交鸠疆区政府 市税务局核实处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6214,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 这里是12345。 请问您遇到什么事情了\n群众：我刚开了个小店 客户现在要电子发票 我以前没弄过 手机上找了半天也没找到从哪里申请\n接线员：您的经营在哪个区。 主要是不清楚 开票入口还是额度问题\n群众：鸠江区 入口和额度都不懂。 希望把步骤讲清楚 有问题我该联系哪个窗口 也告诉我一下\n接线员：好的 我复述一下 您反映的是个体经营发票开具咨询 位置在鸠江区某商户 希望说明电子发票办理流程和咨误渠道 我已经记录会转交鸠疆区政府。 市税务局核实处理 请您保持电话畅通。 感谢您的来电。 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "鸠江区",
+        "location": "鸠江区某商户",
+        "event": "个体商户首次为客户开具电子发票，不清楚线上申请入口和开票额度规则",
+        "request": "说明电子发票办理流程和咨询渠道",
+        "department_id": "dept_economy_trade"
+      },
+      "workorder": {
+        "title": "关于鸠江区群众新开小店客户需要电子发票群众以前没弄过在的问题",
+        "region": "鸠江区",
+        "elements": {
+          "time": "2026年9月15日 13:45（按来电时间）",
+          "time_basis": "received_at",
+          "location": "鸠江区",
+          "subjects": [],
+          "event": "群众新开小店，客户需要电子发票，群众以前没弄过，在手机上找了半天没找到从哪里申请，不清楚鸠江区的入口和额度。",
+          "request": "希望把申请电子发票的步骤讲清楚，并告知有问题该联系哪个窗口。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 1.0,
+          "overall": 1.0,
+          "warnings": []
+        },
+        "field_passes": {
+          "location": true,
+          "event": true,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_economy_trade"
+        ],
+        "dept_names": [
+          "芜湖市发展和改革委员会"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_economy_trade"
+      },
+      "metrics": {
+        "asr_cer": 0.0392,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0615,
+        "citizen_cer": 0.0,
+        "field_completeness": 1.0,
+        "location_similarity": 0.6667,
+        "event_similarity": 0.35,
+        "request_similarity": 0.186,
+        "field_pass_rate": 0.6667,
+        "content_support_precision": 0.5789,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-SE-001",
+      "category": "科教文体",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\科教文体\\SYN-SE-001.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\科教文体\\SYN-SE-001.txt",
+      "audio_duration_seconds": 53.687,
+      "runtime_seconds": 29.6178,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是芜湖12345政务服务便民热线 请问有什么可以帮您。我家孩子今年上一年级 网上报名材料都传了 结果系统显示异常半截 我重新点也进不去 眼看时间要到了 比较着急。您报名的是哪个区 系统有没有提示具体缺少什么材料。经济技术开发区系统没写清楚 希望教育部门帮我查一下到底哪里有问题 需要补什么 现下去哪办。好的 我复述一下 您反映的是 又生小报名异常 位置在经济技术开发区某小学招生片区 希望核实异常原因并指导补充材料或线下办理。我已经记录 会转交经济技术开发区核实处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6308,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 这里是五湖12345政务服务便民热线 请问有什么可以帮您我\n群众：家孩子今年上一年级 网上报名材料都传了 结果系统显示异常半截 我重新点也进不去 眼看时间要到了 比较着急\n接线员：您报名的是哪个区 系统有没有提示具体缺少什么材料经\n群众：开区系统没写清楚。 希望教育部门帮我查一下到底哪里有问题 需要补什么 现下去哪办\n接线员：好的 我复述一下 您反映的是 又生小报名异常 位置在经开区某小学招生片区 希望核实异常原因并指导补充材料或线下办理我已经记录 会转交经济技术开发区核实处理 请您保持电话畅通。 感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "经开区",
+        "location": "经开区某小学招生片区",
+        "event": "家长通过线上平台提交幼升小报名材料后显示异常办结，多次尝试仍无法重新提交",
+        "request": "核实异常原因并指导补充材料或线下办理",
+        "department_id": "dept_education_science_culture_sports"
+      },
+      "workorder": {
+        "title": "关于经开区孩子今年上一年级网上报名材料都传了系统显示异的问题",
+        "region": "经开区",
+        "elements": {
+          "time": "2026年9月15日 13:45（按来电时间）",
+          "time_basis": "received_at",
+          "location": "经开区",
+          "subjects": [
+            "群众",
+            "孩子",
+            "教育部门"
+          ],
+          "event": "孩子今年上一年级，网上报名材料都传了，系统显示异常半截，重新点击也进不去，眼看时间要到了，比较着急。经开区系统没写清楚。",
+          "request": "希望教育部门帮我查一下到底哪里有问题，需要补什么，现下去哪办。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.7,
+          "overall": 0.94,
+          "warnings": [
+            "系统显示异常半截的具体表现不明确",
+            "经开区系统没写清楚的具体内容不明确"
+          ]
+        },
+        "field_passes": {
+          "location": false,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_education_science_culture_sports"
+        ],
+        "dept_names": [
+          "芜湖市教育局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_education_science_culture_sports"
+      },
+      "metrics": {
+        "asr_cer": 0.0804,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0719,
+        "citizen_cer": 0.0588,
+        "field_completeness": 1.0,
+        "location_similarity": 0.4615,
+        "event_similarity": 0.25,
+        "request_similarity": 0.1304,
+        "field_pass_rate": 0.0,
+        "content_support_precision": 0.95,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-SE-002",
+      "category": "科教文体",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\科教文体\\SYN-SE-002.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\科教文体\\SYN-SE-002.txt",
+      "audio_duration_seconds": 52.127,
+      "runtime_seconds": 27.9501,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "你好 芜湖12345热线 请讲一下您要反应的问题。你好 我给孩子报了20节兴趣课 只上了三节 后来身体不舒服 不能继续 跟机构讲退剩下的钱 对方一直不给办。培训机构位于哪里 您是否保留合同和付款记录。在鸠江区 合同 付款截图和上课记录都有 希望帮忙协调 已经上的可以扣 没上的应该退给我。好的 我附述一下 您反映的是 培训课程退费 位置在鸠江区某校外培讯机构 希望协调培�训机构按实际消费情况退还剩余课时费。我已经记录 会转交鸠将区政府何时处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6066,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：你好 五湖12345热线 请讲一下您要反应的问题\n群众：你好 我给孩子报了20节兴趣课 只上了三节。 后来身体不舒服 不能继续 跟机构讲退剩下的钱 对方一直不给办培\n接线员：训机构位于哪里 您是否保留合同和付款记录在\n群众：鸠江区 合同 付款截图和上课记录都有。 希望帮忙协调 已经上的可以扣 没上的应该退给我\n接线员：好的 我附述一下 您反映的是 培训课程退费 位置在鸠江区某校外培讯机构 希望协调培�训机构按实际消费情况退还剩余课时费我已经记录 会转交鸠将区政府何时处理 请您保持电话畅通。 感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "鸠江区",
+        "location": "鸠江区某校外培训机构",
+        "event": "家长购买二十节兴趣课程，孩子上了三节后因身体原因无法继续，机构拒绝退还剩余费用",
+        "request": "协调培训机构按实际消费情况退还剩余课时费",
+        "department_id": "dept_education_science_culture_sports"
+      },
+      "workorder": {
+        "title": "关于鸠江区给孩子报了20节兴趣课只上了三节后因身体不舒的问题",
+        "region": "鸠江区",
+        "elements": {
+          "time": "2026年9月15日 13:45（按来电时间）",
+          "time_basis": "received_at",
+          "location": "鸠江区",
+          "subjects": [],
+          "event": "给孩子报了20节兴趣课，只上了三节，后因身体不舒服不能继续，跟机构讲退剩下的钱，对方一直不给办。",
+          "request": "希望帮忙协调，已经上的可以扣，没上的应该退给我。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.7,
+          "overall": 0.94,
+          "warnings": [
+            "未提及具体机构名称",
+            "未提及具体时间"
+          ]
+        },
+        "field_passes": {
+          "location": false,
+          "event": true,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_education_science_culture_sports"
+        ],
+        "dept_names": [
+          "芜湖市教育局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_education_science_culture_sports"
+      },
+      "metrics": {
+        "asr_cer": 0.066,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.1172,
+        "citizen_cer": 0.0357,
+        "field_completeness": 1.0,
+        "location_similarity": 0.4615,
+        "event_similarity": 0.45,
+        "request_similarity": 0.1463,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.9524,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-SE-003",
+      "category": "科教文体",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\科教文体\\SYN-SE-003.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\科教文体\\SYN-SE-003.txt",
+      "audio_duration_seconds": 53.591,
+      "runtime_seconds": 52.7663,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是12345 请问您遇到什么事情了。我想问一下这边体育馆到底什么时候开。周末跑过去两次都碰到临时闭馆 门口贴张纸 网上又查不到 白跑一趟。请问是哪个区的场馆 您希望通过什么方式查询通知。异江区某公共体育館 最好公众号或者小程序提前发通知 把固定开放时间也写清楚。好的 我复述一下。您反映的是 公共场馆开放时间咨询 位置在一江区某公共体育场馆 希望公布稳定的开放时间及临时调整通知渠道 我已经记录 汇转交易江区政府何时处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6014,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 这里是12345。 请问您遇到什么事情了\n群众：我想问一下这边体育馆到底什么时候开周末跑过去两次都碰到临时闭馆 门口贴张纸 网上又查不到 白跑一趟\n接线员：请问是哪个区的场馆 您希望通过什么方式查询通知异\n群众：江区某公共体育館。 最好公众号或者小程序提前发通知 把固定开放时间也写清楚\n接线员：好的 我复述一下您反映的是 公共场馆开放时间咨询 位置在一江区某公共体育场馆 希望公布稳定的开放时间及临时调整通知渠道 我已经记录 汇转交易江区政府何时处理 请您保持电话畅通。 感谢您的来电。 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "弋江区",
+        "location": "弋江区某公共体育场馆",
+        "event": "居民发现公共体育场馆周末多次临时闭馆，公告仅在现场张贴，线上无法查询准确开放时间",
+        "request": "公布稳定的开放时间及临时调整通知渠道",
+        "department_id": "dept_education_science_culture_sports"
+      },
+      "workorder": {
+        "title": "关于弋江区某公共体育馆群众周末前往两次碰到临时闭馆门口贴张纸网上又的问题",
+        "region": "弋江区",
+        "elements": {
+          "time": "2026年9月15日 13:45（按来电时间）",
+          "time_basis": "received_at",
+          "location": "弋江区某公共体育馆",
+          "subjects": [],
+          "event": "群众周末前往弋江区某公共体育馆，两次碰到临时闭馆，门口贴张纸，网上又查不到，白跑一趟。",
+          "request": "最好公众号或者小程序提前发通知，把固定开放时间也写清楚。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.7,
+          "overall": 0.94,
+          "warnings": [
+            "体育馆具体名称不明确，原文仅称“弋江区某公共体育館”",
+            "临时闭馆的具体日期或时间段不明确"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_education_science_culture_sports"
+        ],
+        "dept_names": [
+          "芜湖市教育局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_education_science_culture_sports"
+      },
+      "metrics": {
+        "asr_cer": 0.0569,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0846,
+        "citizen_cer": 0.0247,
+        "field_completeness": 1.0,
+        "location_similarity": 0.9474,
+        "event_similarity": 0.3421,
+        "request_similarity": 0.2727,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.8571,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-LS-001",
+      "category": "劳动和社会保障",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\劳动和社会保障\\SYN-LS-001.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\劳动和社会保障\\SYN-LS-001.txt",
+      "audio_duration_seconds": 51.167,
+      "runtime_seconds": 51.5818,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是芜湖12345征务府便民热线 请问有什么可以帮您。我在经济技术开发区一家厂上班 这两个月周末基本都加班 但是工资条上一分前加班费都没有 问主管就一直说下个月补。您是否有劳动合同 考勤和工资流水 希望部门怎么帮助。这些我都有截图 希望劳动监察帮忙核实 该给的加班工资尽快补给我们。好的 我复述一下 您反映的是拖欠加班公司 为止在经济技术开发区某制造企业 希望核实考勤和工资记录并督促依法支付加班公资。我已经记录 会转交经济技术开发区 核实处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.5973,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 这里是五湖12345征务府便民热线 请问有什么可以帮您\n群众：我在经开区一家厂上班。 这两个月周末基本都加班 但是工资条上一分前加班费都没有 问主管就一直说下个月补您\n接线员：是否有劳动合同 考勤和工资流水 希望部门怎么帮助这\n群众：些我都有截图。 希望劳动监察帮忙核实 该给的加班工资尽快补给我们\n接线员：好的 我复述一下 您反映的是拖欠加班公司 为止在经开区某制造企业 希望核实考勤和工资记录并督促依法支付加班公资我已经记录 会转交经济技术开发区 核实处理 请您保持电话畅通。 感谢您的来电。 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "经开区",
+        "location": "经开区某制造企业",
+        "event": "员工连续两个月周末加班，但工资中未体现加班费，企业口头承诺补发后一直未兑现",
+        "request": "核实考勤和工资记录并督促依法支付加班工资",
+        "department_id": "dept_labor_social_security"
+      },
+      "workorder": {
+        "title": "关于经开区一家厂群众在上班这两个月周末基本都加班但工资条上一的问题",
+        "region": "经开区",
+        "elements": {
+          "time": "2026年9月15日 13:45（按来电时间）",
+          "time_basis": "received_at",
+          "location": "经开区一家厂",
+          "subjects": [],
+          "event": "群众在经开区一家厂上班，这两个月周末基本都加班，但工资条上一分钱加班费都没有，问主管就一直说下个月补，群众有截图。",
+          "request": "希望劳动监察帮忙核实，该给的加班工资尽快补给我们。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.55,
+          "overall": 0.91,
+          "warnings": [
+            "未提及工厂名称",
+            "未提及群众姓名",
+            "未提及具体加班日期"
+          ]
+        },
+        "field_passes": {
+          "location": false,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_labor_social_security"
+        ],
+        "dept_names": [
+          "芜湖市人力资源和社会保障局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_labor_social_security"
+      },
+      "metrics": {
+        "asr_cer": 0.1023,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.1159,
+        "citizen_cer": 0.026,
+        "field_completeness": 1.0,
+        "location_similarity": 0.4286,
+        "event_similarity": 0.3448,
+        "request_similarity": 0.2791,
+        "field_pass_rate": 0.0,
+        "content_support_precision": 0.8919,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-LS-002",
+      "category": "劳动和社会保障",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\劳动和社会保障\\SYN-LS-002.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\劳动和社会保障\\SYN-LS-002.txt",
+      "audio_duration_seconds": 56.303,
+      "runtime_seconds": 30.7621,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "你好 芜湖12345热线 请讲一下您要反映的问题。我以前在外省工作交过养老保险 现在回五湖自己做事 准备按灵活就业继续交 不晓得以前那部分怎么赚回来。你目前住在哪个区 主要想献上办理还是到窗口办理。住进湖区能献上最好 麻烦讲一下从哪里申请 要准夈哪些材料 献下窗口也给我一个地址。好的 我复述一下 您反映的是养老保险转移接续咨询 位置在镜湖区灵活就业人员 希望说明转积条件 线上办理入口和所需材料。我已经记录 会转交进湖匙政府 市人力资源和社会保障局核实处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.574,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：你好。 五湖12345热线 请讲一下您要反映的问题我\n群众：以前在外省工作交过养老保险。 现在回五湖自己做事 准备按灵活就业继续交 不晓得以前那部分怎么赚回来\n接线员：你目前住在哪个区 主要想献上办理还是到窗口办理\n群众：住进湖区能献上最好。 麻烦讲一下从哪里申请 要准夈哪些材料。 献下窗口也给我一个地址\n接线员：好的 我复述一下 您反映的是养老保险转移接续咨询 位置在镜湖区灵活就业人员 希望说明转积条件 线上办理入口和所需材料我已经记录 会转交进湖匙政府 市人力资源和社会保障局核实处理 请您保持电话畅通。 感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "镜湖区",
+        "location": "镜湖区灵活就业人员",
+        "event": "市民从外省返回芜湖以灵活就业身份参保，不清楚原养老保险关系如何转入",
+        "request": "说明转移条件、线上办理入口和所需材料",
+        "department_id": "dept_labor_social_security"
+      },
+      "workorder": {
+        "title": "关于镜湖区群众以前在外省工作交过养老保险现在回芜湖自己的问题",
+        "region": "镜湖区",
+        "elements": {
+          "time": "2026年9月15日 13:45（按来电时间）",
+          "time_basis": "received_at",
+          "location": "镜湖区",
+          "subjects": [],
+          "event": "群众以前在外省工作交过养老保险，现在回芜湖自己做事，准备按灵活就业继续交，不晓得以前那部分怎么转回来。",
+          "request": "麻烦讲一下从哪里申请，要准备哪些材料，线下窗口也给我一个地址。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.55,
+          "overall": 0.91,
+          "warnings": [
+            "“以前那部分怎么赚回来”中的“赚回来”具体指什么（如转移接续、合并账户等）不明确。",
+            "“献上最好”含义不明确，可能指线下办理最好。",
+            "“献下窗口”含义不明确，可能指线下窗口。"
+          ]
+        },
+        "field_passes": {
+          "location": false,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_labor_social_security"
+        ],
+        "dept_names": [
+          "芜湖市人力资源和社会保障局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_labor_social_security"
+      },
+      "metrics": {
+        "asr_cer": 0.0759,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0922,
+        "citizen_cer": 0.0843,
+        "field_completeness": 1.0,
+        "location_similarity": 0.5,
+        "event_similarity": 0.2785,
+        "request_similarity": 0.0889,
+        "field_pass_rate": 0.0,
+        "content_support_precision": 0.8514,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-LS-003",
+      "category": "劳动和社会保障",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\劳动和社会保障\\SYN-LS-003.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\劳动和社会保障\\SYN-LS-003.txt",
+      "audio_duration_seconds": 53.039,
+      "runtime_seconds": 53.9443,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是12345 请问您遇到什么事情了。我家人在工地干活的时候手受伤住院了 单位只说先治疗 工伤怎么报 谁来报都没讲 我们怕过了时间。工地位于哪里 目前是否保留劳动关系和受伤经过材料。在无为市 合同和医院材料都有 想问清楚申报实现 单位不报的画家属能不能报 还缺什么材料。好的 我复述一下 您反映的是工商认定办理咨询 位置在无为市某建筑工地 希望咨诩工商订定实现责任主体和申请材料。我已经记录 会转交无为市政府核实处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 1,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.5876,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 这里是12345。请问您遇到什么事情了\n群众：我家人在工地干活的时候手受伤住院了 单位只说先治疗 工伤怎么报 谁来报都没讲 我们怕过了时间工。地位于哪里 目前是否保留劳动关系和受伤经过材料在。无为市。合同和医院材料都有。想问清楚申报实现 单位不报的画家属能不能报 还缺什么材料\n接线员：好的，我复述一下 您反映的是工商认定办理咨询。位置在无为市某建筑工地。希望咨诩工商订定实现责任主体和申请材料。我已经记录。会转交无为市政府核实处理 请您保持电话畅通。感谢您的来电 再见",
+        "format_mode": "heuristic"
+      },
+      "expected": {
+        "region": "无为市",
+        "location": "无为市某建筑工地",
+        "event": "建筑工人在作业时手部受伤并已住院，施工单位尚未告知工伤申报流程",
+        "request": "咨询工伤认定时限、责任主体和申请材料",
+        "department_id": "dept_labor_social_security"
+      },
+      "workorder": {
+        "title": "关于无为市群众家人在工地干活时手受伤住院单位只说先治疗的问题",
+        "region": "无为市",
+        "elements": {
+          "time": "2026年9月15日 13:45（按来电时间）",
+          "time_basis": "received_at",
+          "location": "无为市",
+          "subjects": [
+            "群众家人",
+            "单位"
+          ],
+          "event": "群众家人在工地干活时手受伤住院，单位只说先治疗，未说明工伤怎么报、谁来报，群众担心超过申报时间。",
+          "request": "询问工伤申报时限；单位不报时家属能否申报；还缺什么材料。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.25,
+          "overall": 0.85,
+          "warnings": [
+            "受伤具体时间未提供",
+            "工地具体位置未提供",
+            "单位名称未提供",
+            "目前是否保留劳动关系未明确",
+            "受伤经过材料是否齐全未明确"
+          ]
+        },
+        "field_passes": {
+          "location": false,
+          "event": true,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_labor_social_security"
+        ],
+        "dept_names": [
+          "芜湖市人力资源和社会保障局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_labor_social_security"
+      },
+      "metrics": {
+        "asr_cer": 0.0676,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 0.0,
+        "role_sequence_accuracy": 0.6,
+        "operator_cer": 0.2698,
+        "citizen_cer": 0.321,
+        "field_completeness": 1.0,
+        "location_similarity": 0.5455,
+        "event_similarity": 0.411,
+        "request_similarity": 0.381,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.5373,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-AW-001",
+      "category": "农林水土",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\农林水土\\SYN-AW-001.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\农林水土\\SYN-AW-001.txt",
+      "audio_duration_seconds": 52.991,
+      "runtime_seconds": 51.0397,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "你好 这里是芜湖12345政务服务便民热线 请问有什么可以帮您。你好 我们村这边田里没水了 不是没水源 是那条主水渠全被淤泥和草堵住了。这几天这么热 稻子都快吃不消了。具体在什么地方 受影响的大概有多少农户。无为市某村 十几户都受影哄 希望赶紧安排人把取清一下 再协调放水 不然庄稼要坏。好的 我复述一下。您反映的是灌溉渠道堵塞 位置在无为市某村农田灌溅渠 希望尽快组织清淤疏通并恢复灌溃。我已经记录 会转交无为市政府何时处理 请您保持电话畅通。感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6122,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：你好 这里是五湖12345政务服务便民热线 请问有什么可以帮您\n群众：你好 我们村这边田里没水了 不是没水源 是那条主水渠全被淤泥和草堵住了这几天这么热 稻子都快吃不消了\n接线员：具体在什么地方。 受影响的大概有多少农户无\n群众：为市某村。 十几户都受影哄。 希望赶紧安排人把取清一下。 再协调放水 不然庄稼要坏\n接线员：好的 我复述一下您反映的是灌溉渠道堵塞 位置在无为市某村农田灌溅渠 希望尽快组织清淤疏通并恢复灌溃我已经记录 会转交无为市政府何时处理 请您保持电话畅通感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "无为市",
+        "location": "无为市某村农田灌溉渠",
+        "event": "村内主灌溉渠被淤泥和杂草堵塞，近期持续高温，多户水稻田无法正常引水",
+        "request": "尽快组织清淤疏通并恢复灌溉",
+        "department_id": "dept_agriculture_forestry_water"
+      },
+      "workorder": {
+        "title": "关于无无为市某村主水渠全被淤泥和草堵住田里没水稻子快吃不消十的问题",
+        "region": "无为市",
+        "elements": {
+          "time": "2026年9月15日 13:45（按来电时间）",
+          "time_basis": "received_at",
+          "location": "无无为市某村",
+          "subjects": [],
+          "event": "主水渠全被淤泥和草堵住，田里没水，稻子快吃不消，十几户受影响。",
+          "request": "希望赶紧安排人把取清一下，再协调放水。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.7,
+          "overall": 0.94,
+          "warnings": [
+            "村名不明确，原文仅写“无无为市某村”",
+            "“把取清一下”表述不清，可能指清理水渠"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_agriculture_forestry_water"
+        ],
+        "dept_names": [
+          "芜湖市农业农村局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_agriculture_forestry_water"
+      },
+      "metrics": {
+        "asr_cer": 0.058,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0952,
+        "citizen_cer": 0.037,
+        "field_completeness": 1.0,
+        "location_similarity": 0.625,
+        "event_similarity": 0.3448,
+        "request_similarity": 0.0667,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.8372,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-AW-002",
+      "category": "农林水土",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\农林水土\\SYN-AW-002.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\农林水土\\SYN-AW-002.txt",
+      "audio_duration_seconds": 48.023,
+      "runtime_seconds": 20.6894,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 芜湖12345热线 请讲一下您要反应的问题。我宅基地申请交上去三个多月了 村里说早就报了 可是一直没消息 问来问去也不晓得卡在哪一步。请问 您是哪个县的 是否收到过补材料通知。南陵县某村没有人通知补权料 就是想查一下现在到哪个环节 大概什么时候能有答复。好的 我复述一下 您反映的是 宅基地申请进度咨询 位置在南陵县某村村民宅基的 希望查询当前办理环节及预计答复时间 我已经记录 会转交南陵线政府何时处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6342,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好。 五湖12345热线 请讲一下您要反应的问题\n群众：我宅基地申请交上去三个多月了 村里说早就报了 可是一直没消息 问来问去也不晓得卡在哪一步请\n接线员：问 您是哪个县的 是否收到过补材料通知\n群众：南陵县某村没有人通知补权料 就是想查一下现在到哪个环节 大概什么时候能有答复\n接线员：好的 我复述一下 您反映的是 宅基地申请进度咨询 位置在南陵县某村村民宅基的。 希望查询当前办理环节及预计答复时间 我已经记录 会转交南陵线政府何时处理。 请您保持电话畅通。 感谢您的来电。 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "南陵县",
+        "location": "南陵县某村村民宅基地",
+        "event": "村民提交宅基地申请三个多月，村级材料已上报，但一直未收到审核结果",
+        "request": "查询当前办理环节及预计答复时间",
+        "department_id": "dept_agriculture_forestry_water"
+      },
+      "workorder": {
+        "title": "关于南陵县某村宅基地申请交上去三个多月村里说早就报了但一直的问题",
+        "region": "南陵县",
+        "elements": {
+          "time": "2026年9月15日 13:45（按来电时间）",
+          "time_basis": "received_at",
+          "location": "南陵县某村",
+          "subjects": [],
+          "event": "宅基地申请交上去三个多月，村里说早就报了，但一直没消息，问来问去也不晓得卡在哪一步，没有人通知补材料。",
+          "request": "查一下现在到哪个环节，大概什么时候能有答复。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.55,
+          "overall": 0.91,
+          "warnings": [
+            "南陵县某村的具体村名不明确",
+            "宅基地申请的具体提交日期不明确",
+            "申请提交给哪个具体部门不明确"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": true,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_agriculture_forestry_water"
+        ],
+        "dept_names": [
+          "芜湖市农业农村局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_agriculture_forestry_water"
+      },
+      "metrics": {
+        "asr_cer": 0.0547,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0968,
+        "citizen_cer": 0.026,
+        "field_completeness": 1.0,
+        "location_similarity": 0.6667,
+        "event_similarity": 0.3684,
+        "request_similarity": 0.2857,
+        "field_pass_rate": 0.6667,
+        "content_support_precision": 0.8923,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-AW-003",
+      "category": "农林水土",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\农林水土\\SYN-AW-003.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\农林水土\\SYN-AW-003.txt",
+      "audio_duration_seconds": 50.159,
+      "runtime_seconds": 21.3993,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是12345 请问您遇到什么事情了。我反映个急一点的是 村里唐坝靠排水口那边一直往外渗水。这两天水位高了以后 渗得比以前明显多。唐坖位于哪个区域 附近是否有人居住或通行。在湾纸区某村 下面有条村路经常有人走。希望水利的人赶快来看一下 该降水降水 该加固加固。好的 我复述一下 您反映的是糖坝渗漏安全隐患 位置在湾指区某村糖坝 希望尽快现场检查并采取加固或降水措施 我已经记录 会转交湾指去政府何时处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6256,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 这里是12345 请问您遇到什么事情了我\n群众：反映个急一点的是 村里唐坝靠排水口那边一直往外渗水这两天水位高了以后 渗得比以前明显多\n接线员：唐坖位于哪个区域 附近是否有人居住或通行在\n群众：湾纸区某村 下面有条村路经常有人走希望水利的人赶快来看一下 该降水降水 该加固加固\n接线员：好的 我复述一下 您反映的是糖坝渗漏安全隐患 位置在湾指区某村糖坝 希望尽快现场检查并采取加固或降水措施 我已经记录 会转交湾指去政府何时处理 请您保持电话畅通。 感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "湾沚区",
+        "location": "湾沚区某村塘坝",
+        "event": "村塘坝体靠近排水口处持续渗水，近期水位上涨后渗水量明显增加",
+        "request": "尽快现场检查并采取加固或降水措施",
+        "department_id": "dept_agriculture_forestry_water"
+      },
+      "workorder": {
+        "title": "关于湾沚区某村唐坝靠排水口村里唐坝靠排水口那边一直往外渗水这两天水位高的问题",
+        "region": "湾沚区",
+        "elements": {
+          "time": "2026年9月15日 13:45（按来电时间）",
+          "time_basis": "received_at",
+          "location": "湾沚区某村唐坝靠排水口",
+          "subjects": [],
+          "event": "村里唐坝靠排水口那边一直往外渗水，这两天水位高了以后渗得比以前明显多，下面有条村路经常有人走。",
+          "request": "希望水利的人赶快来看一下，该降水降水，该加固加固。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.85,
+          "overall": 0.97,
+          "warnings": [
+            "具体村名未明确，仅表述为“湾沚区某村”"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": true,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_agriculture_forestry_water"
+        ],
+        "dept_names": [
+          "芜湖市农业农村局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_agriculture_forestry_water"
+      },
+      "metrics": {
+        "asr_cer": 0.0846,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.1333,
+        "citizen_cer": 0.0617,
+        "field_completeness": 1.0,
+        "location_similarity": 0.6667,
+        "event_similarity": 0.3889,
+        "request_similarity": 0.1579,
+        "field_pass_rate": 0.6667,
+        "content_support_precision": 0.9846,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-EN-001",
+      "category": "生态环境",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\生态环境\\SYN-EN-001.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\生态环境\\SYN-EN-001.txt",
+      "audio_duration_seconds": 54.071,
+      "runtime_seconds": 21.624,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "你好 这里是芜湖12345政务服务便民热线 请问有什么可以帮你。我们家靠工业园这边 这几天晚上窗户都不敢开 一股刺鼻的味道 半夜还有机器嗡嗡响 搞得人睡不着。请问具体在哪个县区 异尾和噪声通常几点出现。南陵县某园区附近 晚上十点以后最明显 希望环保的人夜里也来测一下 白天过来可能什么都没有。好的 我复述一下 您反映的是企业意味和夜间噪声 位置在南陵县某工业园区周边 希望开展夜间监测并核查相关企与排放情况。我已经记录 会转交南陵线政府 市生态环境局何时处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6129,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：你好 这里是五湖12345政务服务便民热线 请问有什么可以帮你\n群众：我们家靠工业园这边 这几天晚上窗户都不敢开 一股刺鼻的味道 半夜还有机器嗡嗡响 搞得人睡不着请\n接线员：问具体在哪个县区 异尾和噪声通常几点出现\n群众：南陵县某园区附近 晚上十点以后最明显。 希望环保的人夜里也来测一下。 白天过来可能什么都没有\n接线员：好的 我复述一下 您反映的是企业意味和夜间噪声 位置在南陵县某工业园区周边 希望开展夜间监测并核查相关企与排放情况我已经记录 会转交南陵线政府 市生态环境局何时处理 请您保持电话畅通。 感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "南陵县",
+        "location": "南陵县某工业园区周边",
+        "event": "居民连续多晚闻到工业园区方向传来的刺鼻气味，并伴有设备低频噪声，影响开窗和休息",
+        "request": "开展夜间监测并核查相关企业排放情况",
+        "department_id": "dept_ecology_environment"
+      },
+      "workorder": {
+        "title": "关于南陵县某园区附近晚上十点以后出现刺鼻气味和机器嗡嗡响导致群众的问题",
+        "region": "南陵县",
+        "elements": {
+          "time": "晚上十点以后最明显",
+          "time_basis": "stated",
+          "location": "南陵县某园区附近",
+          "subjects": [],
+          "event": "南陵县某园区附近晚上十点以后出现刺鼻气味和机器嗡嗡响，导致群众不敢开窗、睡不着。",
+          "request": "希望环保的人夜里也来测一下。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.7,
+          "overall": 0.94,
+          "warnings": [
+            "群众未提供具体园区名称或地址",
+            "群众未提供具体小区或居住位置"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_ecology_environment"
+        ],
+        "dept_names": [
+          "芜湖市生态环境局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_ecology_environment"
+      },
+      "metrics": {
+        "asr_cer": 0.058,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.1064,
+        "citizen_cer": 0.012,
+        "field_completeness": 1.0,
+        "location_similarity": 0.6667,
+        "event_similarity": 0.2432,
+        "request_similarity": 0.1333,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.6939,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-EN-002",
+      "category": "生态环境",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\生态环境\\SYN-EN-002.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\生态环境\\SYN-EN-002.txt",
+      "audio_duration_seconds": 52.343,
+      "runtime_seconds": 45.3315,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 芜湖12345热线 请讲一下您要反应的问题。我散步的时候看到河边有个管子往外流水 颜色灰黑灰黑的 还有味道 下面水面上都起泡了 看着不正常。请问河道在什么位置 这种情况持续多久了。近湖区某条支流 至少两天了 希望赶紧去取样查一下 看是不是有人偷牌 别越流越多。好的 我复述一下 您反映的是 河道疑似污水排放 位置在镜湖区某河道支流 希望排查污水来源并及时处置。我已经记录 会转交进湖医政府 市生态环境局核实处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.5903,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 五湖12345热线 请讲一下您要反应的问题我\n群众：散步的时候看到河边有个管子往外流水 颜色灰黑灰黑的 还有味道 下面水面上都起泡了 看着不正常\n接线员：请问河道在什么位置 这种情况持续多久了\n群众：近湖区某条支流 至少两天了。 希望赶紧去取样查一下 看是不是有人偷牌 别越流越多\n接线员：好的 我复述一下 您反映的是 河道疑似污水排放 位置在静湖区某河道支流 希望排查污水来源并及时处置我已经记录 会转交进湖医政府 市生态环境局核实处理 请您保持电话畅通。 感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "镜湖区",
+        "location": "镜湖区某河道支流",
+        "event": "河道排口连续两天流出灰黑色水体并伴有异味，下游水面出现少量泡沫",
+        "request": "排查污水来源并及时处置",
+        "department_id": "dept_ecology_environment"
+      },
+      "workorder": {
+        "title": "关于镜湖区某条支流散步时看到河边有管子往外流灰黑色、有味道的水的问题",
+        "region": "镜湖区",
+        "elements": {
+          "time": "2026年9月15日 13:45（按来电时间）",
+          "time_basis": "received_at",
+          "location": "镜湖区某条支流",
+          "subjects": [],
+          "event": "散步时看到河边有管子往外流灰黑色、有味道的水，水面起泡，已持续至少两天。",
+          "request": "希望赶紧去取样查一下，看是不是有人偷排，别越流越多。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.55,
+          "overall": 0.91,
+          "warnings": [
+            "具体是哪条支流不明确",
+            "管子具体位置不明确",
+            "排水是否属于偷排不明确"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_ecology_environment"
+        ],
+        "dept_names": [
+          "芜湖市生态环境局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_ecology_environment"
+      },
+      "metrics": {
+        "asr_cer": 0.0498,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0894,
+        "citizen_cer": 0.0385,
+        "field_completeness": 1.0,
+        "location_similarity": 0.8,
+        "event_similarity": 0.2903,
+        "request_similarity": 0.0588,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.6852,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-EN-003",
+      "category": "生态环境",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\生态环境\\SYN-EN-003.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\生态环境\\SYN-EN-003.txt",
+      "audio_duration_seconds": 50.783,
+      "runtime_seconds": 24.2896,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是12345 请问您遇到什么事情了。这边工地一刮风全是灰 土堆也没盖 扎土车出来轮胎上都是泥 路边店门一天擦几遍都擦不干净。工地位于哪个区 阳尘主要在什么时间比较严重。异江区某工地 白天车子进出的时候最厉害 希望把土盖起来 车轮冲干净 路面也及时扫一下。好的 我复述一下 你反映的是施工阳尘污染 位置在一江区某再建工地周边 希望督促工地覆盖土方 冲洗车辆并清扫道路。我已经记录 会转交易江区政府 是住房和城乡建设局合时处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.5975,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 这里是12345 请问您遇到什么事情了\n群众：这边工地一刮风全是灰 土堆也没盖 扎土车出来轮胎上都是泥 路边店门一天擦几遍都擦不干净\n接线员：工地位于哪个区 阳尘主要在什么时间比较严重异\n群众：江区某工地 白天车子进出的时候最厉害。 希望把土盖起来 车轮冲干净 路面也及时扫一下好的\n接线员：我复述一下 你反映的是施工阳尘污染 位置在一江区某再建工地周边 希望督促工地覆盖土方 冲洗车辆并清扫道路我已经记录 会转交易江区政府 是住房和城乡建设局合时处理 请您保持电话畅通。 感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "弋江区",
+        "location": "弋江区某在建工地周边",
+        "event": "工地土方裸露且车辆驶出时未有效冲洗，晴天道路扬尘明显，附近商户和居民受影响",
+        "request": "督促工地覆盖土方、冲洗车辆并清扫道路",
+        "department_id": "dept_ecology_environment"
+      },
+      "workorder": {
+        "title": "关于弋江区某工地工地一刮风全是灰土堆没盖渣土车出来轮胎上都是的问题",
+        "region": "弋江区",
+        "elements": {
+          "time": "2026年9月15日 13:45（按来电时间）",
+          "time_basis": "received_at",
+          "location": "弋江区某工地",
+          "subjects": [],
+          "event": "工地一刮风全是灰，土堆没盖，渣土车出来轮胎上都是泥，路边店门一天擦几遍都擦不干净，白天车子进出的时候最厉害。",
+          "request": "希望把土盖起来，车轮冲干净，路面也及时扫一下。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.85,
+          "overall": 0.97,
+          "warnings": [
+            "工地具体名称或位置不明确，仅知在弋江区"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_ecology_environment"
+        ],
+        "dept_names": [
+          "芜湖市生态环境局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_ecology_environment"
+      },
+      "metrics": {
+        "asr_cer": 0.0762,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.1212,
+        "citizen_cer": 0.0513,
+        "field_completeness": 1.0,
+        "location_similarity": 0.75,
+        "event_similarity": 0.1429,
+        "request_similarity": 0.1622,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.9412,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-MR-001",
+      "category": "市场监管",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\市场监管\\SYN-MR-001.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\市场监管\\SYN-MR-001.txt",
+      "audio_duration_seconds": 56.207,
+      "runtime_seconds": 35.7151,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是芜湖12345政务服务便民热线 请问有什么可以帮您。我中午点了个外卖 吃到一半发现菜里有异物 照片和订单都在 联系商家 他一句话就说 不是他们家的 也不给处理。商家位于哪个区 您是否保留食物和相关证据。镜湖区 剩下的餐和照片我都留着 希望市场监管去查一下卫生情况 也给我一个处理结果。好的 我复述一下 您反映的是食品中发现异物 位置在镜湾区某餐饮店 希望核查餐饭店食品安全和经营卫生情況。我已经记录 会转交进湖区政府 市市场监督管理局核实处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.5739,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 这里是五湖12345政务服务便民热线 请问有什么可以帮您我\n群众：中午点了个外卖 吃到一半发现菜里有异物 照片和订单都在。 联系商家 他一句话就说 不是他们家的 也不给处理\n接线员：商家位于哪个区 您是否保留食物和相关证据\n群众：镜湖区 剩下的餐和照片我都留着 希望市场监管去查一下卫生情况。 也给我一个处理结果\n接线员：好的 我复述一下。 您反映的是食品中发现异物 位置在镜湾区某餐饮店 希望核查餐饭店食品安全和经营卫生情況我已经记录 会转交进湖区政府 市市场监督管理局核实处理 请您保持电话畅通 感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "镜湖区",
+        "location": "镜湖区某餐饮店",
+        "event": "市民购买外卖餐食后在菜品中发现异物，与商家沟通时商家拒绝处理",
+        "request": "核查餐饮店食品安全和经营卫生情况",
+        "department_id": "dept_market_regulation"
+      },
+      "workorder": {
+        "title": "关于镜湖区剩下的餐和照片我都留着希望市场群众点外卖吃到一半发现菜里有异物联系商家后商的问题",
+        "region": "镜湖区",
+        "elements": {
+          "time": "中午",
+          "time_basis": "stated",
+          "location": "镜湖区剩下的餐和照片我都留着希望市场",
+          "subjects": [],
+          "event": "群众中午点外卖，吃到一半发现菜里有异物，联系商家后商家称不是他们家的且不给处理。",
+          "request": "希望市场监管去查一下卫生情况，也给我一个处理结果。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 1.0,
+          "overall": 1.0,
+          "warnings": []
+        },
+        "field_passes": {
+          "location": false,
+          "event": true,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_market_regulation",
+          "dept_health"
+        ],
+        "dept_names": [
+          "芜湖市市场监督管理局",
+          "芜湖市卫生健康委员会"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_market_regulation"
+      },
+      "metrics": {
+        "asr_cer": 0.0409,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0809,
+        "citizen_cer": 0.0119,
+        "field_completeness": 1.0,
+        "location_similarity": 0.32,
+        "event_similarity": 0.3636,
+        "request_similarity": 0.2564,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.7966,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-MR-002",
+      "category": "市场监管",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\市场监管\\SYN-MR-002.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\市场监管\\SYN-MR-002.txt",
+      "audio_duration_seconds": 49.943,
+      "runtime_seconds": 18.9354,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "你好 芜湖12345热线 请讲一下您要反映的问题。你好 我刚在一家理发店洗个头 进去的时候没看到价格 结账突然要收100多 问他是什么项目 他自己也讲不清楚。门店位于哪里 您有没有付款凭证。南陵县某理发店 付款记录有 希望去查一下有没有明码标价 这个收费到底合不合理。好的 我复述一下 您反映的是为明码标价 位置在南陵县某里发电 希望核查门店明码標价和收费行为。我已经记录 会转交南陵线政府何时处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.4416,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：你好 五湖12345热线 请讲一下您要反映的问题\n群众：你好 我刚在一家理发店洗个头。 进去的时候没看到价格 结账突然要收100多 问他是什么项目 他自己也讲不清楚\n接线员：门店位于哪里 您有没有付款凭证\n群众：南陵县某理发店。 付款记录有。 希望去查一下有没有明码标价。 这个收费到底合不合理\n接线员：好的 我复述一下。 您反映的是为明码标价 位置在南陵县某里发电。 希望核查门店明码標价和收费行为我已经记录 会转交南陵线政府何时处理 请您保持电话畅通。 感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "南陵县",
+        "location": "南陵县某理发店",
+        "event": "消费者洗发前未看到价目表，结账时被收取明显高于预期的服务费用，店员无法说明收费项目",
+        "request": "核查门店明码标价和收费行为",
+        "department_id": "dept_market_regulation"
+      },
+      "workorder": {
+        "title": "关于南陵县某理发店群众在洗头进店时未看到价格结账时被要求支付1的问题",
+        "region": "南陵县",
+        "elements": {
+          "time": "2026年9月15日 13:45（按来电时间）",
+          "time_basis": "received_at",
+          "location": "南陵县某理发店",
+          "subjects": [],
+          "event": "群众在南陵县某理发店洗头，进店时未看到价格，结账时被要求支付100多元，询问收费项目时店员无法说明清楚。",
+          "request": "希望核查该理发店是否明码标价，以及该收费是否合理。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.7,
+          "overall": 0.94,
+          "warnings": [
+            "理发店具体名称或地址不明确",
+            "消费的具体时间不明确"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": true,
+          "request": true
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_market_regulation"
+        ],
+        "dept_names": [
+          "芜湖市市场监督管理局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_market_regulation"
+      },
+      "metrics": {
+        "asr_cer": 0.0829,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.1261,
+        "citizen_cer": 0.0366,
+        "field_completeness": 1.0,
+        "location_similarity": 1.0,
+        "event_similarity": 0.3908,
+        "request_similarity": 0.5,
+        "field_pass_rate": 1.0,
+        "content_support_precision": 0.3714,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-MR-003",
+      "category": "市场监管",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\市场监管\\SYN-MR-003.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\市场监管\\SYN-MR-003.txt",
+      "audio_duration_seconds": 55.535,
+      "runtime_seconds": 31.4248,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是12345 请问您遇到什么事情了?。我买的冰箱才用了不到一个月就不治了 报修三次了 每次都说师傅会来 结果一直没人上门 东西坏了一冰箫。请问购买门店在哪个区 发票和报修记录是否齐全?。鸠江区某家电门店 发票 聊天记录都有 希望明确到底什么时候修 修不好就按规定换一台。好的 我复述一下 您反映的是家电售后拖延 位置在鸠江区某家店销售门店 希望协调商家履行售后责任并明确维修或换货方案。我已经记录 会转交鸠将区政府 是市场监督管理局核实处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6191,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 这里是12345。 请问您遇到什么事情了?\n群众：我买的冰箱才用了不到一个月就不治了。 报修三次了。 每次都说师傅会来 结果一直没人上门 东西坏了一冰箫\n接线员：请问购买门店在哪个区。 发票和报修记录是否齐全?\n群众：鸠江区某家电门店 发票。 聊天记录都有。 希望明确到底什么时候修 修不好就按规定换一台\n接线员：好的 我复述一下 您反映的是家电售后拖延 位置在鸠江区某家店销售门店。 希望协调商家履行售后责任并明确维修或换货方案我已经记录 会转交鸠将区政府 是市场监督管理局核实处理 请您保持电话畅通。 感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "鸠江区",
+        "location": "鸠江区某家电销售门店",
+        "event": "消费者购买冰箱后一个月内多次出现不制冷故障，商家仅安排维修且迟迟不上门，不同意换货",
+        "request": "协调商家履行售后责任并明确维修或换货方案",
+        "department_id": "dept_market_regulation"
+      },
+      "workorder": {
+        "title": "关于鸠江区某家电门店冰箱使用不到一个月损坏报修三次后仍无人上门维的问题",
+        "region": "鸠江区",
+        "elements": {
+          "time": "2026年9月15日 13:45（按来电时间）",
+          "time_basis": "received_at",
+          "location": "鸠江区某家电门店",
+          "subjects": [],
+          "event": "冰箱使用不到一个月损坏，报修三次后仍无人上门维修，导致东西坏了一冰箫。",
+          "request": "希望明确到底什么时候修，修不好就按规定换一台。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.55,
+          "overall": 0.91,
+          "warnings": [
+            "冰箱具体购买日期不明确",
+            "报修的具体时间不明确",
+            "家电门店具体名称不明确"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_market_regulation"
+        ],
+        "dept_names": [
+          "芜湖市市场监督管理局"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_market_regulation"
+      },
+      "metrics": {
+        "asr_cer": 0.0507,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0593,
+        "citizen_cer": 0.0366,
+        "field_completeness": 1.0,
+        "location_similarity": 0.8889,
+        "event_similarity": 0.2254,
+        "request_similarity": 0.1951,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.6923,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-HH-001",
+      "category": "卫生健康",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\卫生健康\\SYN-HH-001.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\卫生健康\\SYN-HH-001.txt",
+      "audio_duration_seconds": 51.983,
+      "runtime_seconds": 45.6882,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是吴湖12345政务服务便民热线 请问有什么可以帮您。我今天去医院处理一个小伤口 结账的时候有材料费又有处置费 加起来比我想的高 问窗口他就让我自己看单子。请问是哪一个区的医院 您主要对哪些项目有疑问。鸠江区某医院就是材料費和处置費 希望把详细清单给我 也说明这些收费按什么标准来的。好的 我复述一下 您反映的是 门诊收费项目咨询 位置在鸠江区某医院门诈 希望核实收费依据并提供完整费用明细。我已经记录 会转交鸠将区政府 是卫生健康委员会核实处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6105,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 这里是吴湖12345政务服务便民热线 请问有什么可以帮您\n群众：我今天去医院处理一个小伤口 结账的时候有材料费又有处置费 加起来比我想的高 问窗口他就让我自己看单子\n接线员：请问是哪一个区的医院 您主要对哪些项目有疑问\n群众：鸠江区某医院就是材料費和处置費。 希望把详细清单给我 也说明这些收费按什么标准来的\n接线员：好的 我复述一下 您反映的是 门诊收费项目咨询。 位置在鸠江区某医院门诈。 希望核实收费依据并提供完整费用明细我已经记录 会转交鸠将区政府 是卫生健康委员会核实处理 请您保持电话畅通。 感谢您的来电。 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "鸠江区",
+        "location": "鸠江区某医院门诊",
+        "event": "市民在门诊接受伤口处理后对收费明细中的材料费和处置费存在疑问，窗口未作清楚解释",
+        "request": "核实收费依据并提供完整费用明细",
+        "department_id": "dept_health"
+      },
+      "workorder": {
+        "title": "关于鸠江区某医院群众去医院处理一个小伤口结账时发现材料费和处的问题",
+        "region": "鸠江区",
+        "elements": {
+          "time": "今天",
+          "time_basis": "stated",
+          "location": "鸠江区某医院",
+          "subjects": [
+            "我今天去医院",
+            "鸠江区某医院"
+          ],
+          "event": "群众今天去医院处理一个小伤口，结账时发现材料费和处置费加起来比预想的高，询问窗口时被要求自己看单子。",
+          "request": "希望把详细清单给我，也说明这些收费按什么标准来的。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.7,
+          "overall": 0.94,
+          "warnings": [
+            "医院具体名称不明确，原文仅称“鸠江区某医院”",
+            "“材料费”和“处置费”的具体金额及明细未提供"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_health"
+        ],
+        "dept_names": [
+          "芜湖市卫生健康委员会"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_health"
+      },
+      "metrics": {
+        "asr_cer": 0.0491,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0647,
+        "citizen_cer": 0.0235,
+        "field_completeness": 1.0,
+        "location_similarity": 0.8571,
+        "event_similarity": 0.2824,
+        "request_similarity": 0.1053,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.7536,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-HH-002",
+      "category": "卫生健康",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\卫生健康\\SYN-HH-002.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\卫生健康\\SYN-HH-002.txt",
+      "audio_duration_seconds": 54.719,
+      "runtime_seconds": 23.4714,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "你好 芜湖12345热线 请讲一下您要反应的问题。我给孩子约疫苗 连续几天小程序一点进去就没号 电话打过去也一直没人接 不晓得到底是没秒还是系统问题。请问 是哪家社区卫生服务中心 需要预约哪类疫苗。镜湖区某社区 卫生福务中间 儿童常规疫苗。希望告诉我什么时候放号 有没有苗 电话也安排人接一下。好的 我复述一下。您反映的是预防接种预约困难。位置在镜湖区某社区卫生服务中心。希望确认疫苗供应和可预纳时间并畅通咨询渠道。我已经记录 会转交进湖医政府市卫生健康委员会核实处理。请您保持电话畅通。感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6385,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：你好 五湖12345热线 请讲一下您要反应的问题我\n群众：给孩子约疫苗 连续几天小程序一点进去就没号 电话打过去也一直没人接 不晓得到底是没秒还是系统问题\n接线员：请问 是哪家社区卫生服务中心 需要预约哪类疫苗镜\n群众：湖区某社区 卫生福务中间 儿童常规疫苗希望告诉我什么时候放号 有没有苗 电话也安排人接一下\n接线员：好的 我复述一下您反映的是预防接种预约困难位置在镜湖区某社区卫生服务中心希望确认疫苗供应和可预纳时间并畅通咨询渠道我已经记录 会转交进湖医政府市卫生健康委员会核实处理请您保持电话畅通感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "镜湖区",
+        "location": "镜湖区某社区卫生服务中心",
+        "event": "家长连续多日在预约平台无法预约儿童疫苗，电话也长时间无人接听",
+        "request": "确认疫苗供应和可预约时间并畅通咨询渠道",
+        "department_id": "dept_health"
+      },
+      "workorder": {
+        "title": "关于镜湖区某社区卫生服务中心给孩子约疫苗连续几天小程序一点进去就没号电话的问题",
+        "region": "镜湖区",
+        "elements": {
+          "time": "2026年9月15日 13:45（按来电时间）",
+          "time_basis": "received_at",
+          "location": "镜湖区某社区卫生服务中心",
+          "subjects": [],
+          "event": "给孩子约疫苗，连续几天小程序一点进去就没号，电话打过去也一直没人接，不晓得到底是没秒还是系统问题。",
+          "request": "希望告诉我什么时候放号 有没有苗 电话也安排人接一下",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.7,
+          "overall": 0.94,
+          "warnings": [
+            "具体是哪个社区卫生服务中心不明确",
+            "“没秒”含义不明确"
+          ]
+        },
+        "field_passes": {
+          "location": true,
+          "event": false,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_health"
+        ],
+        "dept_names": [
+          "芜湖市卫生健康委员会"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_health"
+      },
+      "metrics": {
+        "asr_cer": 0.057,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0929,
+        "citizen_cer": 0.0568,
+        "field_completeness": 1.0,
+        "location_similarity": 1.0,
+        "event_similarity": 0.1892,
+        "request_similarity": 0.0465,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.9853,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    },
+    {
+      "id": "SYN-HH-003",
+      "category": "卫生健康",
+      "status": "ok",
+      "audio_file": "外部合成训练集\\双人通话\\卫生健康\\SYN-HH-003.wav",
+      "transcript_file": "外部合成训练集\\双人通话\\卫生健康\\SYN-HH-003.txt",
+      "audio_duration_seconds": 53.375,
+      "runtime_seconds": 53.2031,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "text": "您好 这里是12345 请问您遇到什么事情了。我咨询一家美容店的时候 他们说可以做注射还有激光项目。但是店里只看到生活美容的牌子 没看到医疗机构许可证 我有点不放心。门店位于哪个县区 您是否已经接受相关项目。在南陵县 我还没做 希望卫健部门先查一下他们有没有资质 这些项目到底能不能开展。好的 我复述一下 您反映的是疑似超范围开展医疗美容 位置在南陵县某生活美容门店 希望核查门店资质及项目是否超出许可范图。我已经记录会转交南陵线政府 使卫生健康委员会何时处理 请您保持电话畅通 感谢您的来电 再见",
+        "segment_count": 5,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.6235,
+        "diarization_reason": ""
+      },
+      "roles": {
+        "reference": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "predicted": [
+          "operator",
+          "citizen",
+          "operator",
+          "citizen",
+          "operator"
+        ],
+        "formatted_text": "接线员：您好 这里是12345 请问您遇到什么事情了\n群众：我咨询一家美容店的时候 他们说可以做注射还有激光项目但是店里只看到生活美容的牌子 没看到医疗机构许可证 我有点不放心门\n接线员：店位于哪个县区 您是否已经接受相关项目\n群众：在南陵县 我还没做。 希望卫健部门先查一下他们有没有资质 这些项目到底能不能开展\n接线员：好的 我复述一下 您反映的是疑似超范围开展医疗美容 位置在南陵县某生活美容门店 希望核查门店资质及项目是否超出许可范图我已经记录会转交南陵线政府 使卫生健康委员会何时处理 请您保持电话畅通。 感谢您的来电 再见",
+        "format_mode": "acoustic"
+      },
+      "expected": {
+        "region": "南陵县",
+        "location": "南陵县某生活美容门店",
+        "event": "生活美容门店向消费者宣传注射和激光类项目，但现场未公示医疗机构执业许可信息",
+        "request": "核查门店资质及项目是否超出许可范围",
+        "department_id": "dept_health"
+      },
+      "workorder": {
+        "title": "关于南陵县一家美容店时该店称可以做注射和激光项目但店内的问题",
+        "region": "南陵县",
+        "elements": {
+          "time": "2026年9月15日 13:45（按来电时间）",
+          "time_basis": "received_at",
+          "location": "南陵县",
+          "subjects": [
+            "一家美容店",
+            "卫健部门"
+          ],
+          "event": "群众咨询一家美容店时，该店称可以做注射和激光项目，但店内只看到生活美容的牌子，没看到医疗机构许可证，群众有点不放心，尚未做项目。",
+          "request": "希望卫健部门先查一下该美容店有没有资质，这些项目到底能不能开展。",
+          "contact_hint": ""
+        },
+        "generation_mode": "llm",
+        "generation_provider": "deepseek",
+        "generation_model": "deepseek-v4-flash",
+        "fallback_reason": "",
+        "quality": {
+          "completeness": 1.0,
+          "fidelity": 1.0,
+          "clarity": 0.85,
+          "overall": 0.97,
+          "warnings": [
+            "美容店的具体名称和地址未提供"
+          ]
+        },
+        "field_passes": {
+          "location": false,
+          "event": true,
+          "request": false
+        }
+      },
+      "routing": {
+        "dept_ids": [
+          "dept_health"
+        ],
+        "dept_names": [
+          "芜湖市卫生健康委员会"
+        ],
+        "matched_by": "keyword",
+        "expected_dept_id": "dept_health"
+      },
+      "metrics": {
+        "asr_cer": 0.0442,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "role_sequence_exact": 1.0,
+        "role_sequence_accuracy": 1.0,
+        "operator_cer": 0.0815,
+        "citizen_cer": 0.011,
+        "field_completeness": 1.0,
+        "location_similarity": 0.4615,
+        "event_similarity": 0.3617,
+        "request_similarity": 0.2553,
+        "field_pass_rate": 0.3333,
+        "content_support_precision": 0.7011,
+        "region_accuracy": 1.0,
+        "routing_top1": 1.0,
+        "routing_topk": 1.0
+      }
+    }
+  ]
+}

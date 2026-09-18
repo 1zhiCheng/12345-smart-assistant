@@ -1,14 +1,14 @@
-# 部门 Agent 模板化示例（教务处）。
+# 部门 Agent 模板化示例（城市管理局）。
 # 每部门独立 Deployment + HPA，按 QPS 自动伸缩（热门部门 maxReplicas 可到 20）。
 apiVersion: v1
 kind: Service
 metadata:
-  name: dept-agent-jwc
-  namespace: wenshu
+  name: dept-agent-city-management
+  namespace: wuhu-12345
 spec:
   selector:
     app: dept-agent
-    department: jwc
+    department: city-management
   ports:
     - port: 8000
       targetPort: 8000
@@ -16,22 +16,22 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dept-agent-jwc
-  namespace: wenshu
+  name: dept-agent-city-management
+  namespace: wuhu-12345
   labels:
     app: dept-agent
-    department: jwc
+    department: city-management
 spec:
   replicas: 2
   selector:
     matchLabels:
       app: dept-agent
-      department: jwc
+      department: city-management
   template:
     metadata:
       labels:
         app: dept-agent
-        department: jwc
+        department: city-management
     spec:
       affinity:
         podAntiAffinity:
@@ -42,16 +42,16 @@ spec:
                   matchExpressions:
                     - key: department
                       operator: In
-                      values: ["jwc"]
+                      values: ["city-management"]
                 topologyKey: kubernetes.io/hostname
       containers:
         - name: agent
-          image: school-doc-agent:v1.0
+          image: wuhu-12345-agent:v1.0
           ports:
             - containerPort: 8000
           env:
             - name: DEPT_ID
-              value: "dept_jwc"
+              value: "dept_city_management"
             - name: MODEL_NAME
               value: "deepseek-v4-flash"
             - name: STORAGE_MODE
@@ -61,33 +61,43 @@ spec:
             - name: DEPT_AGENTS_ENABLED
               value: "false"
             - name: PI_AGENT_ENABLED
-              value: "true"
+              value: "false"
+            - name: EMBEDDING_PROVIDER
+              value: "local"
+            - name: EMBEDDING_MODEL
+              value: "BAAI/bge-small-zh-v1.5"
+            - name: EMBEDDING_DIM
+              value: "512"
+            - name: SEED_DEMO_USERS
+              value: "false"
+            - name: SEED_OPERATIONAL_DEMO_DATA
+              value: "false"
             - name: PI_AGENT_URL
               value: "http://pi-agent:8100"
             - name: DEEPSEEK_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: wenshu-secrets
+                  name: wuhu-12345-secrets
                   key: DEEPSEEK_API_KEY
             - name: RELAY_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: wenshu-secrets
+                  name: wuhu-12345-secrets
                   key: RELAY_API_KEY
             - name: MONGODB_URI
               valueFrom:
                 secretKeyRef:
-                  name: wenshu-secrets
+                  name: wuhu-12345-secrets
                   key: MONGODB_URI
             - name: REDIS_ADDR
               valueFrom:
                 secretKeyRef:
-                  name: wenshu-secrets
+                  name: wuhu-12345-secrets
                   key: REDIS_ADDR
             - name: INTERNAL_API_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: wenshu-secrets
+                  name: wuhu-12345-secrets
                   key: INTERNAL_API_TOKEN
           resources:
             requests:
@@ -100,20 +110,20 @@ spec:
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: dept-agent-jwc-hpa
-  namespace: wenshu
+  name: dept-agent-city-management-hpa
+  namespace: wuhu-12345
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: dept-agent-jwc
+    name: dept-agent-city-management
   minReplicas: 2
-  maxReplicas: 20   # 教务处峰值扩容到 20 个 Pod
+  maxReplicas: 20   # 城市管理类热线高峰可扩容到 20 个 Pod
   metrics:
     - type: Pods
       pods:
         metric:
-          name: wenshu_dept_agent_inflight
+          name: wuhu12345_dept_agent_inflight
         target:
           type: AverageValue
           averageValue: "8"

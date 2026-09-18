@@ -1,7 +1,7 @@
 {
-  "name": "wenshu-pi-agent",
+  "name": "wuhu-12345-pi-agent",
   "version": "0.1.0",
-  "description": "文枢 pi 智能体服务：基于 @earendil-works/pi-agent-core 的多智能体协同与 Loop 进化层",
+  "description": "芜湖12345智慧助手 pi 智能体服务：多智能体协同与受控 Loop 进化层",
   "type": "module",
   "engines": {
     "node": ">=22.19.0"

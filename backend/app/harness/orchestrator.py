@@ -199,11 +199,13 @@ class Orchestrator:
         )
         answer = await self._enrich_citations(answer)
 
-        # 8. Verify（最多打回 2 次）
-        for _ in range(MAX_VERIFY_RETRY):
+        # 8. Verify（初稿校验 + 最多打回 2 次；最后一次重写也必须重新校验）
+        for attempt in range(MAX_VERIFY_RETRY + 1):
             verdict = await self.verifier_agent.verify(query, answer, chunks)
             answer.verification = verdict.to_dict()
             if verdict.passed:
+                break
+            if attempt >= MAX_VERIFY_RETRY:
                 break
             logger.info("答案校验未通过，打回重写: %s", verdict.issues)
             answer = await self.answer_agent.generate(
@@ -212,6 +214,20 @@ class Orchestrator:
                 memory_context=memory_prompt,
             )
             answer = await self._enrich_citations(answer)
+
+        # 生成答案多次语义校验仍失败时，改为逐来源原文摘录；该模式不产生新事实，
+        # 后续仍须经过确定性合规门禁和人工审核。
+        if not answer.verification.get("passed", False) and chunks:
+            logger.warning("生成答案连续校验失败，降级为官方原文摘录: %s", answer.verification.get("issues", []))
+            answer = Answer(
+                content=AnswerAgent._fallback_answer(query, chunks),
+                citations=answer.citations,
+                dept_ids=answer.dept_ids,
+                confidence=min(answer.confidence, 0.5),
+                generation_mode="official_text_fallback",
+            )
+            fallback_verdict = await self.verifier_agent.verify(query, answer, chunks)
+            answer.verification = fallback_verdict.to_dict()
 
         # 8.5 更新命中 Skill 的指标（触发次数 + 成功率）
         if matched_skills:
@@ -260,6 +276,7 @@ class Orchestrator:
         return Answer(
             content="\n\n".join(sections), citations=citations,
             dept_ids=sorted(set(dept_ids)), confidence=sum(scores) / len(scores) if scores else 0.0,
+            generation_mode="department_agents",
             verification={
                 "passed": bool(results), "partial": bool(failed),
                 "failed_departments": failed, "degraded_departments": degraded or [],
@@ -313,6 +330,7 @@ class Orchestrator:
             dept_ids=pi_result.get("deptIds", []),
             confidence=float(pi_result.get("confidence", 0.8)),
             verification=pi_result.get("verification", {}),
+            generation_mode="pi_agent",
         )
 
     async def _enrich_citations(self, answer: Answer) -> Answer:
@@ -404,6 +422,7 @@ class Orchestrator:
             "confidence": answer.confidence,
             "intent_type": intent_type,
             "verification": answer.verification,
+            "generation_mode": answer.generation_mode,
             "retrieved_count": len(chunks),
             "route": route,
         }

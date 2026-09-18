@@ -3,21 +3,21 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: prometheus-config
-  namespace: wenshu
+  namespace: wuhu-12345
 data:
   prometheus.yml: |
     global:
       scrape_interval: 15s
     scrape_configs:
-      - job_name: 'wenshu-backend'
+      - job_name: 'wuhu-12345-backend'
         metrics_path: /metrics
         static_configs:
-          - targets: ['backend.wenshu.svc.cluster.local:8000']
-      - job_name: 'wenshu-dept-agents'
+          - targets: ['backend.wuhu-12345.svc.cluster.local:8000']
+      - job_name: 'wuhu-12345-dept-agents'
         kubernetes_sd_configs:
           - role: pod
             namespaces:
-              names: ['wenshu']
+              names: ['wuhu-12345']
         relabel_configs:
           - source_labels: [__meta_kubernetes_pod_label_app]
             regex: dept-agent
@@ -36,7 +36,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: prometheus
-  namespace: wenshu
+  namespace: wuhu-12345
 spec:
   replicas: 1
   selector:
@@ -65,7 +65,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: prometheus
-  namespace: wenshu
+  namespace: wuhu-12345
 spec:
   selector:
     app: prometheus
@@ -77,7 +77,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: grafana
-  namespace: wenshu
+  namespace: wuhu-12345
 spec:
   replicas: 1
   selector:
@@ -98,7 +98,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grafana
-  namespace: wenshu
+  namespace: wuhu-12345
 spec:
   selector:
     app: grafana

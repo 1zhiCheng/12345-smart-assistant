@@ -62,6 +62,7 @@ class Answer:
     dept_ids: list[str] = field(default_factory=list)
     confidence: float = 0.5
     verification: dict[str, Any] = field(default_factory=dict)
+    generation_mode: str = "llm"
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -70,6 +71,7 @@ class Answer:
             "dept_ids": self.dept_ids,
             "confidence": self.confidence,
             "verification": self.verification,
+            "generation_mode": self.generation_mode,
         }
 
 

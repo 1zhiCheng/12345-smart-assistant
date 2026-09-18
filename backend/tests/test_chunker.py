@@ -28,7 +28,7 @@ def test_chunk_respects_size_bounds():
     blocks = [Block(type="paragraph", level=0, text="第X条 " + "很长的条款内容" * 300)]
     chunks = Chunker(min_chars=200, max_chars=600).chunk(_doc(blocks))
     assert len(chunks) >= 2
-    assert all(c["char_count"] <= 650 for c in chunks)
+    assert all(c["char_count"] <= 600 for c in chunks)
 
 
 def test_empty_document():

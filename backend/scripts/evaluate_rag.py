@@ -39,8 +39,24 @@ async def evaluate(dataset_path: Path, top_k: int = 5, ingest_base: Path | None 
 
     if ingest_base:
         suffixes = {".pdf", ".docx", ".md", ".markdown", ".txt", ".html", ".htm"}
-        for path in sorted(p for p in ingest_base.rglob("*") if p.is_file() and p.suffix.lower() in suffixes):
-            await container.indexer.ingest(path, resolve_dept(path), uploaded_by="evaluation")
+        manifest_path = ingest_base / "manifest.jsonl"
+        if manifest_path.exists():
+            accepted = [
+                json.loads(line)["relative_path"]
+                for line in manifest_path.read_text(encoding="utf-8").splitlines() if line.strip()
+            ]
+            paths = [ingest_base / relative for relative in sorted(accepted)]
+        else:
+            paths = sorted(
+                path for path in ingest_base.rglob("*")
+                if path.is_file() and path.suffix.lower() in suffixes and "_quarantine" not in path.parts
+            )
+        for path in paths:
+            # 评测关注已审定正文的切片、检索和回答，不应为每份文档额外调用
+            # 元数据 LLM；同时保证无 API Key 时日志干净且结果可复现。
+            await container.indexer.ingest(
+                path, resolve_dept(path), uploaded_by="evaluation", extract_metadata=False,
+            )
 
     active_chunks = await container.store.list_active_chunks()
     if not active_chunks:
@@ -63,7 +79,9 @@ async def evaluate(dataset_path: Path, top_k: int = 5, ingest_base: Path | None 
     answer_case_count = 0
 
     for case in cases:
-        hits = await container.retrieval_agent.retrieve([case["query"]], [case["dept_id"]], top_k=top_k)
+        # 与生产编排保持一致：先做查询改写，再执行多查询混合检索。
+        queries = await container.orchestrator.query_rewriter.rewrite(case["query"])
+        hits = await container.retrieval_agent.retrieve(queries, [case["dept_id"]], top_k=top_k)
         relevant_files = set(case.get("relevant_files") or [])
         relevant_titles = set(case.get("relevant_titles") or [])
         rank = next((i for i, hit in enumerate(hits, 1) if _source_file(hit, docs) in relevant_files or docs.get(hit.get("doc_id", ""), {}).get("title") in relevant_titles), 0)
@@ -95,9 +113,19 @@ async def evaluate(dataset_path: Path, top_k: int = 5, ingest_base: Path | None 
             consistency_scores.append(consistency)
         rows.append({
             "id": case["id"], "rank": rank, "hit_at_5": bool(rank and rank <= 5),
+            "rewritten_queries": queries,
             "citation_correctness": round(citation_score, 4) if not case.get("retrieval_only", False) else None,
             "answer_consistency": round(consistency, 4) if not case.get("retrieval_only", False) else None,
             "retrieved_titles": [docs.get(h.get("doc_id", ""), {}).get("title", "") for h in hits],
+            "retrieved_chunks": [
+                {
+                    "doc_id": h.get("doc_id", ""), "chunk_index": h.get("chunk_index", 0),
+                    "title": docs.get(h.get("doc_id", ""), {}).get("title", ""),
+                    "section_path": h.get("section_path", []), "content": h.get("content", "")[:500],
+                }
+                for h in hits
+            ],
+            "answer_preview": answer_content[:3000] if not case.get("retrieval_only", False) else "",
             "retrieval_branches": [h.get("retrieval_branches", []) for h in hits],
         })
 

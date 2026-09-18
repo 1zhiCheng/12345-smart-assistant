@@ -1,0 +1,44 @@
+{
+  "status": "passed",
+  "generated_at": "2026-09-15T18:01:40.199548+00:00",
+  "checks": {
+    "mongodb_ping": true,
+    "redis_ping": true,
+    "embedding": {
+      "configured_provider": "local",
+      "effective_provider": "local",
+      "model": "C:\\Users\\10415\\Desktop\\芜湖政务Agent\\models\\bge-small-zh-v1.5",
+      "dimension": 512,
+      "normalized": true,
+      "related_cosine": 0.6353,
+      "unrelated_cosine": 0.2858,
+      "semantic_ordering": true
+    },
+    "mongo_vector_roundtrip": true,
+    "vector_metadata": {
+      "provider": "local",
+      "model": "C:\\Users\\10415\\Desktop\\芜湖政务Agent\\models\\bge-small-zh-v1.5",
+      "dimension": 512
+    },
+    "redis_session_roundtrip": true,
+    "worker_heartbeat": true,
+    "worker_job_roundtrip": true,
+    "worker_job": {
+      "status": "completed",
+      "attempts": 1
+    },
+    "worker_retry_dead_letter": true,
+    "mongodb_indexes": {
+      "documents": true,
+      "chunks": true,
+      "vector_embeddings": true,
+      "async_jobs": true
+    }
+  },
+  "timings": {
+    "mongodb_connect_ms": 23.31,
+    "redis_connect_ms": 59.68,
+    "embedding_three_texts_ms": 6255.84
+  },
+  "errors": []
+}

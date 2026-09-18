@@ -46,7 +46,7 @@ def test_operator_cannot_publish_organization_memory():
 def test_admin_system_insights_and_department_scope():
     with TestClient(app) as client:
         admin = _login(client, "admin", "admin123")
-        dept_admin = _login(client, "cgj_admin", "admin123")
+        dept_admin = _login(client, "city_management_admin", "admin123")
 
         insights = client.get(
             "/api/v1/admin/system-insights",

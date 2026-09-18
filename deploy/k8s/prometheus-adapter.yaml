@@ -3,27 +3,27 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: prometheus-adapter-config
-  namespace: wenshu
+  namespace: wuhu-12345
 data:
   config.yaml: |
     rules:
-      - seriesQuery: 'wenshu_dept_agent_inflight{dept!=""}'
+      - seriesQuery: 'wuhu12345_dept_agent_inflight{dept!=""}'
         resources:
           overrides:
             namespace: {resource: namespace}
             pod: {resource: pod}
         name:
-          matches: '^wenshu_dept_agent_inflight$'
-          as: 'wenshu_dept_agent_inflight'
+          matches: '^wuhu12345_dept_agent_inflight$'
+          as: 'wuhu12345_dept_agent_inflight'
         metricsQuery: 'avg(<<.Series>>{<<.LabelMatchers>>}) by (<<.GroupBy>>)'
 ---
 apiVersion: v1
 kind: ServiceAccount
-metadata: {name: prometheus-adapter, namespace: wenshu}
+metadata: {name: prometheus-adapter, namespace: wuhu-12345}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
-metadata: {name: wenshu-prometheus-adapter}
+metadata: {name: wuhu-12345-prometheus-adapter}
 rules:
   - apiGroups: [""]
     resources: ["nodes", "nodes/stats", "namespaces", "pods", "services"]
@@ -37,19 +37,19 @@ rules:
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
-metadata: {name: wenshu-prometheus-adapter}
-roleRef: {apiGroup: rbac.authorization.k8s.io, kind: ClusterRole, name: wenshu-prometheus-adapter}
-subjects: [{kind: ServiceAccount, name: prometheus-adapter, namespace: wenshu}]
+metadata: {name: wuhu-12345-prometheus-adapter}
+roleRef: {apiGroup: rbac.authorization.k8s.io, kind: ClusterRole, name: wuhu-12345-prometheus-adapter}
+subjects: [{kind: ServiceAccount, name: prometheus-adapter, namespace: wuhu-12345}]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata: {name: prometheus-adapter-auth-reader, namespace: kube-system}
 roleRef: {apiGroup: rbac.authorization.k8s.io, kind: Role, name: extension-apiserver-authentication-reader}
-subjects: [{kind: ServiceAccount, name: prometheus-adapter, namespace: wenshu}]
+subjects: [{kind: ServiceAccount, name: prometheus-adapter, namespace: wuhu-12345}]
 ---
 apiVersion: apps/v1
 kind: Deployment
-metadata: {name: prometheus-adapter, namespace: wenshu}
+metadata: {name: prometheus-adapter, namespace: wuhu-12345}
 spec:
   replicas: 2
   selector: {matchLabels: {app: prometheus-adapter}}
@@ -60,7 +60,7 @@ spec:
       containers:
         - name: adapter
           image: registry.k8s.io/prometheus-adapter/prometheus-adapter:v0.12.0
-          args: ["--secure-port=6443", "--cert-dir=/tmp/cert", "--prometheus-url=http://prometheus.wenshu.svc.cluster.local:9090", "--metrics-relist-interval=30s", "--config=/etc/adapter/config.yaml"]
+          args: ["--secure-port=6443", "--cert-dir=/tmp/cert", "--prometheus-url=http://prometheus.wuhu-12345.svc.cluster.local:9090", "--metrics-relist-interval=30s", "--config=/etc/adapter/config.yaml"]
           ports: [{name: https, containerPort: 6443}]
           readinessProbe: {httpGet: {path: /healthz, port: https, scheme: HTTPS}}
           volumeMounts: [{name: config, mountPath: /etc/adapter}]
@@ -68,7 +68,7 @@ spec:
 ---
 apiVersion: v1
 kind: Service
-metadata: {name: prometheus-adapter, namespace: wenshu}
+metadata: {name: prometheus-adapter, namespace: wuhu-12345}
 spec:
   selector: {app: prometheus-adapter}
   ports: [{name: https, port: 443, targetPort: https}]
@@ -77,7 +77,7 @@ apiVersion: apiregistration.k8s.io/v1
 kind: APIService
 metadata: {name: v1beta1.custom.metrics.k8s.io}
 spec:
-  service: {name: prometheus-adapter, namespace: wenshu}
+  service: {name: prometheus-adapter, namespace: wuhu-12345}
   group: custom.metrics.k8s.io
   version: v1beta1
   groupPriorityMinimum: 100
@@ -86,11 +86,11 @@ spec:
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
-metadata: {name: wenshu-custom-metrics-reader}
+metadata: {name: wuhu-12345-custom-metrics-reader}
 rules: [{apiGroups: ["custom.metrics.k8s.io"], resources: ["*"], verbs: ["get", "list"]}]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
-metadata: {name: wenshu-hpa-custom-metrics}
-roleRef: {apiGroup: rbac.authorization.k8s.io, kind: ClusterRole, name: wenshu-custom-metrics-reader}
+metadata: {name: wuhu-12345-hpa-custom-metrics}
+roleRef: {apiGroup: rbac.authorization.k8s.io, kind: ClusterRole, name: wuhu-12345-custom-metrics-reader}
 subjects: [{kind: ServiceAccount, name: horizontal-pod-autoscaler, namespace: kube-system}]

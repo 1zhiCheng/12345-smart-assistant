@@ -13,6 +13,7 @@
 | `evaluate_intake.py` | 成员 A 工单评测：字段准确率 / 信息完整率 / 事实忠实度，支持规则与 LLM 模式 |
 | `migrate_memory.py` | 旧四层大文档记忆迁移到事实平面 + 五个记忆平面 |
 | `wait_for_deps.py` | 启动前等待 MongoDB/Redis 就绪（Docker） |
+| `audio_annotation_dataset.py` | 初始化/校验录音标注，使用本地 BGE 计算 CER、DER 与语义字段 F1 |
 
 用法：
 
@@ -25,6 +26,18 @@ python -m scripts.async_worker
 python -m scripts.evaluate_rag --output evaluation-report.json
 python -m scripts.evaluate_rag --dataset ../backend/evaluation/real_document_qa.json --output ../docs/competition/wuhu_rag_evaluation.json
 ```
+
+### 录音人工标注与语义评测
+
+```bash
+python -m scripts.audio_annotation_dataset init-synthetic
+python -m scripts.audio_annotation_dataset init-official
+python -m scripts.audio_annotation_dataset validate backend/evaluation/audio_annotations.synthetic.dev.json
+python -m scripts.audio_annotation_dataset score
+```
+
+离线图形标注工作台为 `audio_annotation_workbench.html`。真实录音模板只写入被 Git 忽略的
+`local_evaluation/`。完整说明见 `docs/competition/audio-annotation-guide.md`。
 ### 芜湖知识库增量采集与质检
 
 - `crawl_wuhu_knowledge.py`：仅采集 `*.wuhu.gov.cn` 官方页面，支持栏目增量发现和人工核验 URL 清单。

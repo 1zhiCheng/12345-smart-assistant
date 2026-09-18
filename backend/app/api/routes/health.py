@@ -16,10 +16,30 @@ async def healthz():
 async def readyz(request: Request):
     container = request.app.state.container
     issues = []
-    if container.mongo is not None and container.mongo.db is None:
-        issues.append("mongodb")
-    if container.session_store is not None and hasattr(container.session_store, "redis") and container.session_store._redis is None:
-        issues.append("redis")
+    details = {"storage_mode": container.settings.storage_mode}
+    if container.settings.storage_mode == "mongo":
+        mongo_ok = await container.mongo.ping()
+        redis_ok = await container.session_store.ping()
+        worker_ok = await container.job_queue.worker_is_alive()
+        vector_ok = container.embeddings.last_effective_provider not in {None, "hash", "hash-fallback"}
+        details.update({
+            "mongodb": mongo_ok,
+            "redis": redis_ok,
+            "worker": worker_ok,
+            "embedding_provider": container.embeddings.last_effective_provider,
+            "real_vectors": vector_ok,
+        })
+        if not mongo_ok:
+            issues.append("mongodb")
+        if not redis_ok:
+            issues.append("redis")
+        if container.settings.worker_readiness_required and not worker_ok:
+            issues.append("worker")
+        if not vector_ok:
+            issues.append("real_vectors")
     if issues:
-        return JSONResponse(status_code=503, content={"status": "not_ready", "issues": issues})
-    return {"status": "ready"}
+        return JSONResponse(
+            status_code=503,
+            content={"status": "not_ready", "issues": issues, "details": details},
+        )
+    return {"status": "ready", "details": details}

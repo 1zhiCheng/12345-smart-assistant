@@ -1,0 +1,410 @@
+{
+  "mode": "rules",
+  "dataset": "evaluation\\intake_cases.official.deidentified.json",
+  "cases": 18,
+  "metrics": {
+    "field_accuracy": 1.0,
+    "information_completeness": 1.0,
+    "fact_fidelity": 1.0,
+    "routing_top1": 1.0,
+    "routing_topk": 1.0
+  },
+  "details": [
+    {
+      "id": "official-transport-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback",
+      "expected_department": "dept_transportation",
+      "predicted_departments": [
+        "dept_transportation"
+      ],
+      "routing_top1": 1.0,
+      "routing_topk": 1.0,
+      "routing_matched_by": "keyword"
+    },
+    {
+      "id": "official-public-safety-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback",
+      "expected_department": "dept_public_security",
+      "predicted_departments": [
+        "dept_public_security"
+      ],
+      "routing_top1": 1.0,
+      "routing_topk": 1.0,
+      "routing_matched_by": "keyword"
+    },
+    {
+      "id": "official-public-service-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback",
+      "expected_department": "dept_public_services",
+      "predicted_departments": [
+        "dept_public_services"
+      ],
+      "routing_top1": 1.0,
+      "routing_topk": 1.0,
+      "routing_matched_by": "keyword"
+    },
+    {
+      "id": "official-agriculture-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback",
+      "expected_department": "dept_agriculture_forestry_water",
+      "predicted_departments": [
+        "dept_agriculture_forestry_water"
+      ],
+      "routing_top1": 1.0,
+      "routing_topk": 1.0,
+      "routing_matched_by": "keyword"
+    },
+    {
+      "id": "official-agriculture-002",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback",
+      "expected_department": "dept_agriculture_forestry_water",
+      "predicted_departments": [
+        "dept_agriculture_forestry_water"
+      ],
+      "routing_top1": 1.0,
+      "routing_topk": 1.0,
+      "routing_matched_by": "keyword"
+    },
+    {
+      "id": "official-labor-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback",
+      "expected_department": "dept_labor_social_security",
+      "predicted_departments": [
+        "dept_labor_social_security"
+      ],
+      "routing_top1": 1.0,
+      "routing_topk": 1.0,
+      "routing_matched_by": "keyword"
+    },
+    {
+      "id": "official-labor-002",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback",
+      "expected_department": "dept_labor_social_security",
+      "predicted_departments": [
+        "dept_labor_social_security"
+      ],
+      "routing_top1": 1.0,
+      "routing_topk": 1.0,
+      "routing_matched_by": "keyword"
+    },
+    {
+      "id": "official-health-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback",
+      "expected_department": "dept_health",
+      "predicted_departments": [
+        "dept_health"
+      ],
+      "routing_top1": 1.0,
+      "routing_topk": 1.0,
+      "routing_matched_by": "keyword"
+    },
+    {
+      "id": "official-health-002",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback",
+      "expected_department": "dept_health",
+      "predicted_departments": [
+        "dept_health"
+      ],
+      "routing_top1": 1.0,
+      "routing_topk": 1.0,
+      "routing_matched_by": "keyword"
+    },
+    {
+      "id": "official-construction-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback",
+      "expected_department": "dept_housing_construction",
+      "predicted_departments": [
+        "dept_housing_construction"
+      ],
+      "routing_top1": 1.0,
+      "routing_topk": 1.0,
+      "routing_matched_by": "keyword"
+    },
+    {
+      "id": "official-city-management-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback",
+      "expected_department": "dept_city_management",
+      "predicted_departments": [
+        "dept_city_management"
+      ],
+      "routing_top1": 1.0,
+      "routing_topk": 1.0,
+      "routing_matched_by": "keyword"
+    },
+    {
+      "id": "official-market-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback",
+      "expected_department": "dept_market_regulation",
+      "predicted_departments": [
+        "dept_market_regulation"
+      ],
+      "routing_top1": 1.0,
+      "routing_topk": 1.0,
+      "routing_matched_by": "keyword"
+    },
+    {
+      "id": "official-market-002",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback",
+      "expected_department": "dept_market_regulation",
+      "predicted_departments": [
+        "dept_market_regulation"
+      ],
+      "routing_top1": 1.0,
+      "routing_topk": 1.0,
+      "routing_matched_by": "keyword"
+    },
+    {
+      "id": "official-ecology-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback",
+      "expected_department": "dept_ecology_environment",
+      "predicted_departments": [
+        "dept_ecology_environment"
+      ],
+      "routing_top1": 1.0,
+      "routing_topk": 1.0,
+      "routing_matched_by": "keyword"
+    },
+    {
+      "id": "official-ecology-002",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback",
+      "expected_department": "dept_ecology_environment",
+      "predicted_departments": [
+        "dept_ecology_environment"
+      ],
+      "routing_top1": 1.0,
+      "routing_topk": 1.0,
+      "routing_matched_by": "keyword"
+    },
+    {
+      "id": "official-education-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback",
+      "expected_department": "dept_education_science_culture_sports",
+      "predicted_departments": [
+        "dept_education_science_culture_sports"
+      ],
+      "routing_top1": 1.0,
+      "routing_topk": 1.0,
+      "routing_matched_by": "keyword"
+    },
+    {
+      "id": "official-education-002",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback",
+      "expected_department": "dept_education_science_culture_sports",
+      "predicted_departments": [
+        "dept_education_science_culture_sports"
+      ],
+      "routing_top1": 1.0,
+      "routing_topk": 1.0,
+      "routing_matched_by": "keyword"
+    },
+    {
+      "id": "official-economy-001",
+      "field_accuracy": 1.0,
+      "information_completeness": 1.0,
+      "fact_fidelity": 1.0,
+      "correct_fields": [
+        "time",
+        "location",
+        "event",
+        "request"
+      ],
+      "incorrect_fields": [],
+      "missing_fields": [],
+      "generation_mode": "rule_fallback",
+      "expected_department": "dept_economy_trade",
+      "predicted_departments": [
+        "dept_economy_trade"
+      ],
+      "routing_top1": 1.0,
+      "routing_topk": 1.0,
+      "routing_matched_by": "keyword"
+    }
+  ]
+}

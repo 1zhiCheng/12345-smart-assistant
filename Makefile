@@ -1,13 +1,13 @@
 .PHONY: help up down logs build doctor ingest seed backend-run backend-test pi-run pi-doctor web-dev
 
 help:
-	@echo "文枢 · 常用命令"
+	@echo "芜湖12345智慧助手 · 常用命令"
 	@echo "  make up             docker compose 启动全栈"
 	@echo "  make down           docker compose 停止"
 	@echo "  make logs           跟踪日志"
 	@echo "  make doctor         模型连通性自检（Python）"
-	@echo "  make ingest         导入 department_files 示例文档"
-	@echo "  make seed           种子数据（部门/术语/校历/规则）"
+	@echo "  make ingest         导入已质检芜湖官方文档"
+	@echo "  make seed           种子数据（部门/术语/政务服务时间/规则）"
 	@echo "  make backend-run    本地运行后端"
 	@echo "  make backend-test   运行后端单元测试"
 	@echo "  make pi-run         本地运行 pi 智能体服务"
@@ -27,7 +27,7 @@ doctor:
 	docker compose exec backend python -m scripts.doctor
 
 ingest:
-	docker compose exec backend python -m scripts.ingest_department_files --base /app/department_files
+	docker compose exec backend python -m scripts.ingest_department_files --base /app/wuhu_knowledge_base --skip-conflicts --skip-metadata-llm
 
 seed:
 	docker compose exec backend python -m scripts.seed_data

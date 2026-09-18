@@ -64,3 +64,74 @@ async def test_retrieval_hydrates_vector_only_hit_and_filters_archived(embedding
     assert len(hits) == 1
     assert hits[0]["doc_id"] == "active-doc"
     assert hits[0]["content"]
+
+
+@pytest.mark.asyncio
+async def test_multi_query_retrieval_rewards_chunks_confirmed_by_multiple_queries(embeddings):
+    from app.harness.agents.retrieval_agent import RetrievalAgent
+
+    class FakeHybrid:
+        async def retrieve(self, query, query_vec, dept_id=None):
+            if query == "原问题":
+                return [{"id": "c1", "_rrf": 0.5}, {"id": "c2", "_rrf": 0.8}]
+            return [{"id": "c1", "_rrf": 0.5}]
+
+    store = MemoryStore()
+    await store.insert_document({"_id": "d1", "dept_id": "dept_city_management", "title": "条例", "status": "active"})
+    await store.insert_chunks([
+        {"_id": "c1", "doc_id": "d1", "dept_id": "dept_city_management", "chunk_index": 0, "content": "共同命中"},
+        {"_id": "c2", "doc_id": "d1", "dept_id": "dept_city_management", "chunk_index": 1, "content": "单次命中"},
+    ])
+    agent = RetrievalAgent(FakeHybrid(), embeddings, store)
+
+    hits = await agent.retrieve(["原问题", "扩展问题"], ["dept_city_management"], top_k=2)
+
+    assert hits[0]["id"] == "c1"
+    assert hits[0]["matched_queries"] == ["原问题", "扩展问题"]
+
+
+@pytest.mark.asyncio
+async def test_multi_query_retrieval_reserves_one_hit_per_subquestion(embeddings):
+    from app.harness.agents.retrieval_agent import RetrievalAgent
+
+    class FakeHybrid:
+        async def retrieve(self, query, query_vec, dept_id=None):
+            if query == "主题一":
+                return [{"id": "c1", "_rrf": 0.9}, {"id": "c2", "_rrf": 0.8}]
+            return [{"id": "c3", "_rrf": 0.3}, {"id": "c1", "_rrf": 0.9}]
+
+    store = MemoryStore()
+    await store.insert_document({"_id": "d1", "dept_id": "dept_health", "title": "政策", "status": "active"})
+    await store.insert_chunks([
+        {"_id": key, "doc_id": "d1", "dept_id": "dept_health", "chunk_index": index, "content": key}
+        for index, key in enumerate(("c1", "c2", "c3"))
+    ])
+    hits = await RetrievalAgent(FakeHybrid(), embeddings, store).retrieve(
+        ["主题一", "主题二"], ["dept_health"], top_k=2
+    )
+
+    assert [item["id"] for item in hits] == ["c1", "c3"]
+
+
+@pytest.mark.asyncio
+async def test_multi_query_retrieval_rewards_chunks_confirmed_by_multiple_queries(embeddings):
+    from app.harness.agents.retrieval_agent import RetrievalAgent
+
+    class FakeHybrid:
+        async def retrieve(self, query, query_vec, dept_id=None):
+            if query == "原问题":
+                return [{"id": "c1", "_rrf": 0.5}, {"id": "c2", "_rrf": 0.8}]
+            return [{"id": "c1", "_rrf": 0.5}]
+
+    store = MemoryStore()
+    await store.insert_document({"_id": "d1", "dept_id": "dept_city_management", "title": "条例", "status": "active"})
+    await store.insert_chunks([
+        {"_id": "c1", "doc_id": "d1", "dept_id": "dept_city_management", "chunk_index": 0, "content": "共同命中"},
+        {"_id": "c2", "doc_id": "d1", "dept_id": "dept_city_management", "chunk_index": 1, "content": "单次命中"},
+    ])
+    agent = RetrievalAgent(FakeHybrid(), embeddings, store)
+
+    hits = await agent.retrieve(["原问题", "扩展问题"], ["dept_city_management"], top_k=2)
+
+    assert hits[0]["id"] == "c1"
+    assert hits[0]["matched_queries"] == ["原问题", "扩展问题"]

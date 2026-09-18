@@ -1,4 +1,4 @@
-# 文枢 pi 智能体服务（Node + TypeScript）
+# 芜湖12345智慧助手 pi 智能体服务（Node + TypeScript）
 FROM node:24-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json* ./

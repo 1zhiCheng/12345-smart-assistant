@@ -18,6 +18,16 @@ class ChatRequest(BaseModel):
     dept_ids: Optional[list[str]] = None
 
 
+class CitizenChatRequest(BaseModel):
+    query: str = Field(..., min_length=2, max_length=3000)
+    session_id: Optional[str] = Field(default=None, max_length=100)
+
+
+class CitizenSubmissionRequest(BaseModel):
+    text: str = Field(..., min_length=2, max_length=5000)
+    session_id: Optional[str] = Field(default=None, max_length=100)
+
+
 class FeedbackRequest(BaseModel):
     session_id: str = ""
     query: str = ""

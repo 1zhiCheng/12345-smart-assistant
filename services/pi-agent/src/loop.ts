@@ -6,12 +6,12 @@ import type { AgentTool } from "@earendil-works/pi-agent-core";
 import type { Config } from "./config.js";
 import { runAgentJson, type AgentRuntime } from "./agents.js";
 
-const LOOP_PROMPT = `你是"文枢"系统的 Loop 进化智能体（反馈驱动的自优化循环）。
+const LOOP_PROMPT = `你是芜湖市 12345 智慧助手的 Loop 进化智能体（反馈驱动的自优化循环）。
 
 按以下步骤执行：
 1. 调用 list_pending_feedback 工具读取待处理反馈。
 2. 分析 bad case（signal 为 down/correction/verifier_fail 的反馈），归因到：retrieval（检索）、intent（意图）、generation（生成）、knowledge_gap（知识缺口）。
-3. 对高频可复用模式，通过工具沉淀：
+3. 对高频可复用模式，通过工具生成待审核草稿，不得自行发布到生产：
    - save_skill：某类问题反复出现且有稳定解法 → 沉淀为 Skill
    - save_hook：特定条件下触发额外动作 → 沉淀为 Hook
    - save_rule：必须遵守的硬约束 → 沉淀为 Rule

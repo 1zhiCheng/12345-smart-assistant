@@ -64,7 +64,7 @@ async def test_rewriter_falls_back_to_local_when_pi_unavailable():
     local = FakeLLM(json_result={"queries": ["本地改写"]})
     pi = FakePi(json_result=None)
     queries = await QueryRewriter(local, store, pi, 1.0).rewrite("住房补贴")
-    assert queries == ["本地改写"]
+    assert queries == ["住房补贴", "本地改写"]
     assert local.calls == 1
 
 
@@ -79,6 +79,7 @@ async def test_answer_and_verifier_use_pi_outputs():
     pi_answer = FakePi(text_result="住房补贴截止第八周。[来源1]")
     answer = await AnswerAgent(local, store, pi_answer, 5.0).generate("何时住房补贴", [chunk])
     assert answer.content.startswith("住房补贴截止第八周")
+    assert answer.generation_mode == "llm"
     assert local.calls == 0
 
     pi_verify = FakePi(json_result={"passed": True, "score": 0.95, "issues": []})

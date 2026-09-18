@@ -1,5 +1,7 @@
 # 架构与模块划分
 
+![芜湖12345智慧政务Agent系统架构](assets/system-architecture.svg)
+
 ## 1. 服务拓扑（前后端分离 + 模块分离）
 
 ```

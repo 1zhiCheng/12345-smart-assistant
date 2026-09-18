@@ -19,7 +19,13 @@ class MongoDB:
     async def connect(self) -> None:
         if self.settings.storage_mode != "mongo":
             return
-        self.client = AsyncIOMotorClient(self.settings.mongodb_uri)
+        self.client = AsyncIOMotorClient(
+            self.settings.mongodb_uri,
+            serverSelectionTimeoutMS=self.settings.mongodb_server_selection_timeout_ms,
+            appname="wuhu-12345-agent",
+        )
+        # Motor 构造客户端是惰性的；必须主动 ping，不能把“创建了对象”误报为已连接。
+        await self.client.admin.command("ping")
         self.db = self.client[self.settings.mongodb_db]
         await self._ensure_indexes()
         logger.info("MongoDB 已连接: %s", self.settings.mongodb_db)
@@ -27,6 +33,17 @@ class MongoDB:
     async def close(self) -> None:
         if self.client is not None:
             self.client.close()
+        self.client = None
+        self.db = None
+
+    async def ping(self) -> bool:
+        if self.client is None or self.db is None:
+            return False
+        try:
+            await self.client.admin.command("ping")
+            return True
+        except Exception:  # noqa: BLE001 - readiness 只返回布尔状态
+            return False
 
     async def _ensure_indexes(self) -> None:
         assert self.db is not None
@@ -66,7 +83,10 @@ class MongoDB:
             "vector_embeddings": [
                 ([("dept_id", 1)], {}), ([("doc_id", 1)], {}),
             ],
-            "async_jobs": [([("status", 1), ("created_at", 1)], {})],
+            "async_jobs": [
+                ([("status", 1), ("created_at", 1)], {}),
+                ([("type", 1), ("status", 1), ("updated_at", -1)], {}),
+            ],
             "conversation_events": [
                 ([("session_id", 1), ("seq", 1)], {"unique": True}),
                 ([("user_id", 1), ("created_at", -1)], {}),

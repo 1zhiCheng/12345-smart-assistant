@@ -1,0 +1,371 @@
+{
+  "dataset": "backend\\evaluation\\routing_holdout.frozen.json",
+  "frozen_metadata": {
+    "frozen_at": "2026-09-15T04:58:28.341906+00:00",
+    "source": "wuhu_knowledge_base",
+    "sampling": "sha256(wuhu-routing-holdout-v1:relative_path)",
+    "per_category": 2,
+    "rules": "生成后冻结；不得根据本集失败样本继续修改路由词表。"
+  },
+  "cases": 24,
+  "top1_accuracy": 0.625,
+  "topk_accuracy": 0.9167,
+  "by_category": {
+    "交通运输": {
+      "cases": 2,
+      "top1_accuracy": 0.5,
+      "topk_accuracy": 1.0
+    },
+    "公共安全": {
+      "cases": 2,
+      "top1_accuracy": 0.5,
+      "topk_accuracy": 0.5
+    },
+    "公共服务": {
+      "cases": 2,
+      "top1_accuracy": 0.5,
+      "topk_accuracy": 1.0
+    },
+    "农林水土": {
+      "cases": 2,
+      "top1_accuracy": 0.5,
+      "topk_accuracy": 1.0
+    },
+    "劳动和社会保障": {
+      "cases": 2,
+      "top1_accuracy": 0.5,
+      "topk_accuracy": 1.0
+    },
+    "卫生健康": {
+      "cases": 2,
+      "top1_accuracy": 1.0,
+      "topk_accuracy": 1.0
+    },
+    "城乡建设": {
+      "cases": 2,
+      "top1_accuracy": 0.0,
+      "topk_accuracy": 0.5
+    },
+    "城市管理": {
+      "cases": 2,
+      "top1_accuracy": 1.0,
+      "topk_accuracy": 1.0
+    },
+    "市场监管": {
+      "cases": 2,
+      "top1_accuracy": 1.0,
+      "topk_accuracy": 1.0
+    },
+    "生态环境": {
+      "cases": 2,
+      "top1_accuracy": 0.5,
+      "topk_accuracy": 1.0
+    },
+    "科教文体": {
+      "cases": 2,
+      "top1_accuracy": 0.5,
+      "topk_accuracy": 1.0
+    },
+    "经济财贸": {
+      "cases": 2,
+      "top1_accuracy": 1.0,
+      "topk_accuracy": 1.0
+    }
+  },
+  "details": [
+    {
+      "id": "holdout-city_management-01",
+      "category": "城市管理",
+      "expected_department": "dept_city_management",
+      "predicted_departments": [
+        "dept_city_management"
+      ],
+      "top1": 1.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-city_management-02",
+      "category": "城市管理",
+      "expected_department": "dept_city_management",
+      "predicted_departments": [
+        "dept_city_management",
+        "dept_housing_construction",
+        "dept_public_services",
+        "dept_economy_trade",
+        "dept_labor_social_security",
+        "dept_market_regulation"
+      ],
+      "top1": 1.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-housing_construction-01",
+      "category": "城乡建设",
+      "expected_department": "dept_housing_construction",
+      "predicted_departments": [
+        "dept_city_management",
+        "dept_housing_construction",
+        "dept_public_security",
+        "dept_public_services",
+        "dept_transportation",
+        "dept_economy_trade",
+        "dept_agriculture_forestry_water",
+        "dept_ecology_environment"
+      ],
+      "top1": 0.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-housing_construction-02",
+      "category": "城乡建设",
+      "expected_department": "dept_housing_construction",
+      "predicted_departments": [
+        "dept_public_services",
+        "dept_health"
+      ],
+      "top1": 0.0,
+      "topk": 0.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-public_security-01",
+      "category": "公共安全",
+      "expected_department": "dept_public_security",
+      "predicted_departments": [
+        "dept_market_regulation"
+      ],
+      "top1": 0.0,
+      "topk": 0.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-public_security-02",
+      "category": "公共安全",
+      "expected_department": "dept_public_security",
+      "predicted_departments": [
+        "dept_public_security",
+        "dept_agriculture_forestry_water"
+      ],
+      "top1": 1.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-public_services-01",
+      "category": "公共服务",
+      "expected_department": "dept_public_services",
+      "predicted_departments": [
+        "dept_public_services",
+        "dept_education_science_culture_sports"
+      ],
+      "top1": 1.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-public_services-02",
+      "category": "公共服务",
+      "expected_department": "dept_public_services",
+      "predicted_departments": [
+        "dept_public_security",
+        "dept_public_services"
+      ],
+      "top1": 0.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-transportation-01",
+      "category": "交通运输",
+      "expected_department": "dept_transportation",
+      "predicted_departments": [
+        "dept_transportation"
+      ],
+      "top1": 1.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-transportation-02",
+      "category": "交通运输",
+      "expected_department": "dept_transportation",
+      "predicted_departments": [
+        "dept_public_services",
+        "dept_transportation",
+        "dept_ecology_environment",
+        "dept_health"
+      ],
+      "top1": 0.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-economy_trade-01",
+      "category": "经济财贸",
+      "expected_department": "dept_economy_trade",
+      "predicted_departments": [
+        "dept_economy_trade"
+      ],
+      "top1": 1.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-economy_trade-02",
+      "category": "经济财贸",
+      "expected_department": "dept_economy_trade",
+      "predicted_departments": [
+        "dept_economy_trade"
+      ],
+      "top1": 1.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-education_science_culture_sports-01",
+      "category": "科教文体",
+      "expected_department": "dept_education_science_culture_sports",
+      "predicted_departments": [
+        "dept_housing_construction",
+        "dept_economy_trade",
+        "dept_education_science_culture_sports",
+        "dept_labor_social_security"
+      ],
+      "top1": 0.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-education_science_culture_sports-02",
+      "category": "科教文体",
+      "expected_department": "dept_education_science_culture_sports",
+      "predicted_departments": [
+        "dept_education_science_culture_sports",
+        "dept_agriculture_forestry_water"
+      ],
+      "top1": 1.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-labor_social_security-01",
+      "category": "劳动和社会保障",
+      "expected_department": "dept_labor_social_security",
+      "predicted_departments": [
+        "dept_public_services",
+        "dept_labor_social_security",
+        "dept_market_regulation",
+        "dept_health"
+      ],
+      "top1": 0.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-labor_social_security-02",
+      "category": "劳动和社会保障",
+      "expected_department": "dept_labor_social_security",
+      "predicted_departments": [
+        "dept_labor_social_security"
+      ],
+      "top1": 1.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-agriculture_forestry_water-01",
+      "category": "农林水土",
+      "expected_department": "dept_agriculture_forestry_water",
+      "predicted_departments": [
+        "dept_agriculture_forestry_water"
+      ],
+      "top1": 1.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-agriculture_forestry_water-02",
+      "category": "农林水土",
+      "expected_department": "dept_agriculture_forestry_water",
+      "predicted_departments": [
+        "dept_housing_construction",
+        "dept_public_security",
+        "dept_agriculture_forestry_water",
+        "dept_health"
+      ],
+      "top1": 0.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-ecology_environment-01",
+      "category": "生态环境",
+      "expected_department": "dept_ecology_environment",
+      "predicted_departments": [
+        "dept_housing_construction",
+        "dept_ecology_environment"
+      ],
+      "top1": 0.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-ecology_environment-02",
+      "category": "生态环境",
+      "expected_department": "dept_ecology_environment",
+      "predicted_departments": [
+        "dept_ecology_environment"
+      ],
+      "top1": 1.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-market_regulation-01",
+      "category": "市场监管",
+      "expected_department": "dept_market_regulation",
+      "predicted_departments": [
+        "dept_market_regulation"
+      ],
+      "top1": 1.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-market_regulation-02",
+      "category": "市场监管",
+      "expected_department": "dept_market_regulation",
+      "predicted_departments": [
+        "dept_market_regulation"
+      ],
+      "top1": 1.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-health-01",
+      "category": "卫生健康",
+      "expected_department": "dept_health",
+      "predicted_departments": [
+        "dept_health"
+      ],
+      "top1": 1.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    },
+    {
+      "id": "holdout-health-02",
+      "category": "卫生健康",
+      "expected_department": "dept_health",
+      "predicted_departments": [
+        "dept_health"
+      ],
+      "top1": 1.0,
+      "topk": 1.0,
+      "matched_by": "keyword"
+    }
+  ]
+}

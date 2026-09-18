@@ -118,12 +118,12 @@ export async function answer(
   }
   const chunks = [...seen.values()].slice(0, 8);
 
-  // 4. Answer（pi Agent + 工具；可补充检索/查校历）
+  // 4. Answer（pi Agent + 工具；可补充检索/查政务服务日历）
   let answerText = await runAgent(
     runtime,
     ANSWER_PROMPT.replace("{chunks}", formatChunks(chunks) || "（无参考条款）"),
     input.query,
-    pickTools(allTools, ["lookup_calendar", "retrieve_documents"]),
+    pickTools(allTools, ["lookup_service_calendar", "retrieve_documents"]),
   );
 
   // 5. Verify（最多打回 2 次）
@@ -154,7 +154,7 @@ export async function answer(
       ANSWER_PROMPT.replace("{chunks}", formatChunks(chunks)) +
         `\n\n上次回答存在以下问题，请修正：${verification.issues.join("；")}`,
       input.query,
-      pickTools(allTools, ["lookup_calendar", "retrieve_documents"]),
+      pickTools(allTools, ["lookup_service_calendar", "retrieve_documents"]),
     );
   }
 

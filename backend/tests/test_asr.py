@@ -3,8 +3,9 @@ import numpy as np
 import pytest
 
 from app.config import Settings
+from app.intake import asr as asr_module
 from app.intake.asr import AsrError, AsrService, _normalize_wuhu_terms, _resolve_local_model_path
-from app.intake.diarization import TimedText, _viterbi_labels
+from app.intake.diarization import DiarizationResult, TimedText, _viterbi_labels
 
 
 @pytest.mark.asyncio
@@ -63,3 +64,46 @@ def test_diarization_viterbi_removes_short_speaker_flicker():
     labels = _viterbi_labels(votes, segments)
     assert labels[:5] == [0, 0, 0, 0, 0]
     assert labels[-3:] == [1, 1, 1]
+
+
+def test_local_asr_remembers_cuda_runtime_fallback(monkeypatch, tmp_path):
+    model_path = tmp_path / "model"
+    model_path.mkdir()
+    calls = []
+
+    class FakeWord:
+        start, end, word = 0.0, 0.5, "测试"
+
+    class FakeSegment:
+        start, end, text, words = 0.0, 0.5, "测试", [FakeWord()]
+
+    class CudaModel:
+        def transcribe(self, *_args, **_kwargs):
+            raise RuntimeError("missing cudnn runtime")
+
+    class CpuModel:
+        def transcribe(self, *_args, **_kwargs):
+            return iter([FakeSegment()]), None
+
+    def fake_load(_path, device, compute_type):
+        calls.append((device, compute_type))
+        if device == "auto":
+            return CudaModel(), "cuda", "float16"
+        return CpuModel(), "cpu", "int8"
+
+    monkeypatch.setattr(asr_module, "_load_local_model", fake_load)
+    monkeypatch.setattr(
+        asr_module,
+        "diarize_phone_call",
+        lambda *_args, **_kwargs: DiarizationResult((), 0.0, False, "test"),
+    )
+    service = AsrService(Settings(
+        asr_provider="faster_whisper",
+        asr_local_model_path=str(model_path),
+        asr_local_device="auto",
+        asr_local_compute_type="auto",
+    ))
+
+    assert service._transcribe_local(b"fake", "case.wav").text == "测试"
+    assert service._transcribe_local(b"fake", "case.wav").text == "测试"
+    assert calls == [("auto", "auto"), ("cpu", "int8"), ("cpu", "int8")]

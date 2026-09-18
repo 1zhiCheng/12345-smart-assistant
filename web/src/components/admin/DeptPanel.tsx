@@ -100,7 +100,7 @@ export default function DeptPanel({ data, refresh, user }: { data: Dashboard; re
 
   return (
     <div>
-      <div className={styles.sectionHead}><div><span className={styles.eyebrow}>KNOWLEDGE ASSETS</span><h2>部门与制度事实治理</h2><p>{isSuper ? "创建部门、导入制度并观察从解析到关系发现的完整链路。" : "当前空间只显示和操作本部门资产，跨部门数据由后端强制隔离。"}</p></div></div>
+      <div className={styles.sectionHead}><div><span className={styles.eyebrow}>KNOWLEDGE ASSETS</span><h2>部门与政策事实治理</h2><p>{isSuper ? "创建部门、导入官方政务文件并观察从解析到关系发现的完整链路。" : "当前空间只显示和操作本部门资产，跨部门数据由后端强制隔离。"}</p></div></div>
       <div className={styles.grid}>
         {isSuper && <div className={styles.card}>
           <h3>新建部门</h3>
@@ -130,7 +130,7 @@ export default function DeptPanel({ data, refresh, user }: { data: Dashboard; re
               ))}
             </select>
           </div>
-          <label className={styles.filePicker}><input type="file" accept=".pdf,.docx,.md,.txt,.html" onChange={onUpload} disabled={busy || !deptId} /><span>选择制度文件</span></label>
+          <label className={styles.filePicker}><input type="file" accept=".pdf,.docx,.md,.txt,.html" onChange={onUpload} disabled={busy || !deptId} /><span>选择政务文件</span></label>
           <div className={styles.muted} style={{ marginTop: 8 }}>
             支持 PDF / Word / Markdown / TXT。上传后自动走 3.2 数据处理 Pipeline，并自动出题发起审核单。
           </div>

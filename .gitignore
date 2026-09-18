@@ -26,16 +26,19 @@ out/
 .env
 models/
 .env.local
+values-private.yaml
 *.pem
 
 # Local toolchains
 .tools/
+.runtime/
 
 # Data / runtime
 data/
 volumes/
 chroma_data/
 /backups/
+/local_evaluation/
 *.log
 *.smoke.json
 

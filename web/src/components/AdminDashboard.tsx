@@ -10,10 +10,12 @@ import ReviewPanel from "./admin/ReviewPanel";
 import LoopPanel from "./admin/LoopPanel";
 import AgentPanel from "./admin/AgentPanel";
 import InsightsPanel from "./admin/InsightsPanel";
+import HandoffPanel from "./admin/HandoffPanel";
 
-type Tab = "overview" | "dept" | "review" | "loop" | "insights" | "agent";
+type Tab = "overview" | "handoff" | "dept" | "review" | "loop" | "insights" | "agent";
 const TABS: { key: Tab; label: string; sub: string; icon: IconName }[] = [
   { key: "overview", label: "态势总览", sub: "全局运行与审核阶段", icon: "grid" },
+  { key: "handoff", label: "工单处置", sub: "分类转派与政策回复", icon: "chat" },
   { key: "dept", label: "知识资产", sub: "部门与文档事实治理", icon: "building" },
   { key: "review", label: "可信审核", sub: "人工校验与渐进退出", icon: "review" },
   { key: "loop", label: "进化 Loop", sub: "反馈、反思与策略部署", icon: "loop" },
@@ -58,6 +60,7 @@ export default function AdminDashboard({ user, onLogout }: { user: User; onLogou
         {error && <div className={styles.errorBanner}><Icon name="shield" size={17}/>{error}</div>}
         {loading || !data ? <div className={styles.loading}><span/><b>正在同步控制平面</b><small>读取事实、记忆与策略状态</small></div> : <>
           {tab === "overview" && <OverviewPanel data={data} refresh={refresh}/>}
+          {tab === "handoff" && <HandoffPanel data={data} user={user}/>}
           {tab === "dept" && <DeptPanel data={data} refresh={refresh} user={user}/>}
           {tab === "review" && <ReviewPanel data={data} refresh={refresh}/>}
           {tab === "loop" && <LoopPanel data={data} refresh={refresh} user={user}/>}

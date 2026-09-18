@@ -2,7 +2,8 @@
 
 基于 Next.js 15（App Router）+ React 19 + TypeScript 的聊天界面，与后端（Python FastAPI）**前后端分离**。
 
-三种角色的完整页面操作流程、权限差异与核心概念说明见：[文枢前端页面使用指南](../design_files/文枢-前端页面使用指南.md)。
+三种角色的运行方式、权限边界和比赛链路见项目根目录 `README.md` 与
+`docs/competition/intake-contract.md`；`design_files/` 仅保留为历史原型，不代表当前界面。
 
 ## 功能
 

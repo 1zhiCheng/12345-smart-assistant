@@ -82,9 +82,10 @@
 | POST | `/api/v1/intake/confirm` | A 人工确认并送入 B 的待分派队列 |
 | GET | `/api/v1/intake/handoffs?status=...` | B 查询交接队列（管理员） |
 | POST | `/api/v1/intake/handoffs/{case_id}/claim` | B 领取待处理工单（管理员） |
+| POST | `/api/v1/intake/handoffs/{case_id}/recommend` | B 智能分类、部门 Top-K、政策检索与待审核回复草稿 |
 | POST | `/api/v1/intake/handoffs/{case_id}/result` | B 回写分类、转派与回复结果（管理员） |
 
-交接状态依次为 `pending → processing → completed`。草稿不会出现在交接队列中，成员 B 必须先领取才能回写结果。
+交接状态依次为 `pending → processing → completed`。草稿不会出现在交接队列中，处置人员必须先领取才能回写结果。
 
 ### 文档入库
 

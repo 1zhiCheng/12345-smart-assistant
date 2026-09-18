@@ -1,0 +1,1181 @@
+{
+  "metadata": {
+    "created_at": "2026-09-15T20:48:09+08:00",
+    "dataset_type": "official_real_audio_with_deidentified_excel_labels",
+    "intake_mode": "rules",
+    "asr_provider": "faster_whisper",
+    "field_similarity_thresholds": {
+      "location": 0.6,
+      "event": 0.35,
+      "request": 0.4
+    },
+    "privacy": "public_safe_no_original_ids_paths_transcripts_or_appeal_text",
+    "notes": [
+      "Excel 内容是整理后的工单，不是逐字转写，因此不计算 CER/WER。",
+      "Excel 没有说话人时间戳，因此不计算 DER；角色指标只表示系统是否检出双角色。",
+      "official_content_bigram_* 衡量 ASR 文本与脱敏官方工单内容的字符二元组覆盖，不等价于转写准确率。",
+      "category_top* 以比赛 12 类对应的规范承办部门为标签。",
+      "official_handling_unit_topk 只做名称别名匹配；区县政府、中心和局委层级不同会被判为未命中。",
+      "rules 模式全程本地运行，不调用外部 LLM；production 模式必须显式授权。"
+    ]
+  },
+  "summary": {
+    "expected_cases": 18,
+    "evaluated_cases": 18,
+    "successful_cases": 18,
+    "failed_cases": 0,
+    "failed_ids": [],
+    "recognized_speech_span_minutes": 112.4215,
+    "runtime_minutes": 24.7885,
+    "asr": {
+      "success_rate": 1.0,
+      "official_content_bigram_recall_mean": 0.422,
+      "official_content_bigram_f1_mean": 0.0654,
+      "recognized_chars_median": 1341.0
+    },
+    "speaker_roles": {
+      "acoustic_diarization_accept_rate": 0.9444,
+      "both_roles_present_rate": 0.9444,
+      "diarization_confidence_mean": 0.4206
+    },
+    "workorder": {
+      "field_accuracy": 0.0694,
+      "information_completeness": 0.9722,
+      "fact_fidelity": 0.0787,
+      "location_similarity": 0.3398,
+      "event_similarity": 0.0603,
+      "request_similarity": 0.0311,
+      "field_pass_rate": 0.0555,
+      "workorder_support_precision": 0.9783,
+      "region_accuracy": 0.3333
+    },
+    "routing": {
+      "category_top1_accuracy": 0.3333,
+      "category_topk_accuracy": 0.5,
+      "official_handling_unit_topk_accuracy": 0.0556,
+      "matched_by": {
+        "keyword": 11,
+        "all": 7
+      }
+    },
+    "generation_mode_counts": {
+      "rule_fallback": 18
+    },
+    "runtime_seconds_p95": 106.656,
+    "by_category": {
+      "交通运输": {
+        "cases": 1,
+        "field_accuracy": 0.0,
+        "category_top1_accuracy": 0.0,
+        "category_topk_accuracy": 1.0
+      },
+      "公共安全": {
+        "cases": 1,
+        "field_accuracy": 0.25,
+        "category_top1_accuracy": 0.0,
+        "category_topk_accuracy": 0.0
+      },
+      "公共服务": {
+        "cases": 1,
+        "field_accuracy": 0.0,
+        "category_top1_accuracy": 0.0,
+        "category_topk_accuracy": 0.0
+      },
+      "农林水土": {
+        "cases": 2,
+        "field_accuracy": 0.125,
+        "category_top1_accuracy": 0.0,
+        "category_topk_accuracy": 0.0
+      },
+      "劳动和社会保障": {
+        "cases": 2,
+        "field_accuracy": 0.125,
+        "category_top1_accuracy": 1.0,
+        "category_topk_accuracy": 1.0
+      },
+      "卫生健康": {
+        "cases": 2,
+        "field_accuracy": 0.125,
+        "category_top1_accuracy": 0.0,
+        "category_topk_accuracy": 0.5
+      },
+      "城乡建设": {
+        "cases": 1,
+        "field_accuracy": 0.25,
+        "category_top1_accuracy": 1.0,
+        "category_topk_accuracy": 1.0
+      },
+      "城市管理": {
+        "cases": 1,
+        "field_accuracy": 0.0,
+        "category_top1_accuracy": 0.0,
+        "category_topk_accuracy": 0.0
+      },
+      "市场监管": {
+        "cases": 2,
+        "field_accuracy": 0.0,
+        "category_top1_accuracy": 0.0,
+        "category_topk_accuracy": 0.5
+      },
+      "生态环境": {
+        "cases": 2,
+        "field_accuracy": 0.0,
+        "category_top1_accuracy": 0.5,
+        "category_topk_accuracy": 0.5
+      },
+      "科教文体": {
+        "cases": 2,
+        "field_accuracy": 0.0,
+        "category_top1_accuracy": 0.5,
+        "category_topk_accuracy": 0.5
+      },
+      "经济财贸": {
+        "cases": 1,
+        "field_accuracy": 0.0,
+        "category_top1_accuracy": 1.0,
+        "category_topk_accuracy": 1.0
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "official-transport-001",
+      "category": "交通运输",
+      "status": "ok",
+      "runtime_seconds": 110.6502,
+      "recognized_speech_span_seconds": 360.56,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "recognized_chars": 1793,
+        "segment_count": 40,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.3403,
+        "diarization_reason_code": "accepted"
+      },
+      "roles": {
+        "operator_turns": 20,
+        "citizen_turns": 20,
+        "unknown_turns": 0,
+        "both_roles_present": true,
+        "format_mode": "acoustic"
+      },
+      "workorder": {
+        "generation_mode": "rule_fallback",
+        "fallback_reason": "",
+        "field_passes": {
+          "location_pass": false,
+          "event_pass": false,
+          "request_pass": false
+        },
+        "missing_field_names": []
+      },
+      "routing": {
+        "predicted_department_ids": [
+          "dept_public_security",
+          "dept_transportation"
+        ],
+        "expected_department_id": "dept_transportation",
+        "matched_by": "keyword"
+      },
+      "metrics": {
+        "official_content_bigram_recall": 0.5238,
+        "official_content_bigram_f1": 0.0711,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "field_accuracy": 0.0,
+        "information_completeness": 1.0,
+        "fact_fidelity": 0.0,
+        "location_similarity": 0.0,
+        "event_similarity": 0.1488,
+        "request_similarity": 0.0562,
+        "field_pass_rate": 0.0,
+        "workorder_support_precision": 0.9961,
+        "region_accuracy": 0.0,
+        "category_routing_top1": 0.0,
+        "category_routing_topk": 1.0,
+        "official_handling_unit_topk": 1.0
+      }
+    },
+    {
+      "id": "official-public-safety-001",
+      "category": "公共安全",
+      "status": "ok",
+      "runtime_seconds": 72.649,
+      "recognized_speech_span_seconds": 347.18,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "recognized_chars": 805,
+        "segment_count": 16,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.3875,
+        "diarization_reason_code": "accepted"
+      },
+      "roles": {
+        "operator_turns": 8,
+        "citizen_turns": 8,
+        "unknown_turns": 0,
+        "both_roles_present": true,
+        "format_mode": "acoustic"
+      },
+      "workorder": {
+        "generation_mode": "rule_fallback",
+        "fallback_reason": "",
+        "field_passes": {
+          "location_pass": true,
+          "event_pass": false,
+          "request_pass": false
+        },
+        "missing_field_names": []
+      },
+      "routing": {
+        "predicted_department_ids": [],
+        "expected_department_id": "dept_public_security",
+        "matched_by": "all"
+      },
+      "metrics": {
+        "official_content_bigram_recall": 0.5048,
+        "official_content_bigram_f1": 0.1225,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "field_accuracy": 0.25,
+        "information_completeness": 1.0,
+        "fact_fidelity": 0.25,
+        "location_similarity": 1.0,
+        "event_similarity": 0.0842,
+        "request_similarity": 0.0,
+        "field_pass_rate": 0.3333,
+        "workorder_support_precision": 0.8478,
+        "region_accuracy": 1.0,
+        "category_routing_top1": 0.0,
+        "category_routing_topk": 0.0,
+        "official_handling_unit_topk": 0.0
+      }
+    },
+    {
+      "id": "official-public-service-001",
+      "category": "公共服务",
+      "status": "ok",
+      "runtime_seconds": 91.3424,
+      "recognized_speech_span_seconds": 479.02,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "recognized_chars": 1397,
+        "segment_count": 45,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.3442,
+        "diarization_reason_code": "accepted"
+      },
+      "roles": {
+        "operator_turns": 23,
+        "citizen_turns": 22,
+        "unknown_turns": 0,
+        "both_roles_present": true,
+        "format_mode": "acoustic"
+      },
+      "workorder": {
+        "generation_mode": "rule_fallback",
+        "fallback_reason": "",
+        "field_passes": {
+          "location_pass": false,
+          "event_pass": false,
+          "request_pass": false
+        },
+        "missing_field_names": []
+      },
+      "routing": {
+        "predicted_department_ids": [
+          "dept_housing_construction",
+          "dept_economy_trade",
+          "dept_agriculture_forestry_water"
+        ],
+        "expected_department_id": "dept_public_services",
+        "matched_by": "keyword"
+      },
+      "metrics": {
+        "official_content_bigram_recall": 0.6344,
+        "official_content_bigram_f1": 0.0831,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "field_accuracy": 0.0,
+        "information_completeness": 1.0,
+        "fact_fidelity": 0.0,
+        "location_similarity": 0.4167,
+        "event_similarity": 0.037,
+        "request_similarity": 0.0,
+        "field_pass_rate": 0.0,
+        "workorder_support_precision": 0.9972,
+        "region_accuracy": 1.0,
+        "category_routing_top1": 0.0,
+        "category_routing_topk": 0.0,
+        "official_handling_unit_topk": 0.0
+      }
+    },
+    {
+      "id": "official-agriculture-001",
+      "category": "农林水土",
+      "status": "ok",
+      "runtime_seconds": 77.0717,
+      "recognized_speech_span_seconds": 309.99,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "recognized_chars": 1196,
+        "segment_count": 17,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.5256,
+        "diarization_reason_code": "accepted"
+      },
+      "roles": {
+        "operator_turns": 9,
+        "citizen_turns": 8,
+        "unknown_turns": 0,
+        "both_roles_present": true,
+        "format_mode": "acoustic"
+      },
+      "workorder": {
+        "generation_mode": "rule_fallback",
+        "fallback_reason": "",
+        "field_passes": {
+          "location_pass": false,
+          "event_pass": false,
+          "request_pass": false
+        },
+        "missing_field_names": [
+          "location"
+        ]
+      },
+      "routing": {
+        "predicted_department_ids": [],
+        "expected_department_id": "dept_agriculture_forestry_water",
+        "matched_by": "all"
+      },
+      "metrics": {
+        "official_content_bigram_recall": 0.5327,
+        "official_content_bigram_f1": 0.0906,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "field_accuracy": 0.25,
+        "information_completeness": 0.75,
+        "fact_fidelity": 0.3333,
+        "location_similarity": 0.0,
+        "event_similarity": 0.1905,
+        "request_similarity": 0.0,
+        "field_pass_rate": 0.0,
+        "workorder_support_precision": 0.9895,
+        "region_accuracy": 0.0,
+        "category_routing_top1": 0.0,
+        "category_routing_topk": 0.0,
+        "official_handling_unit_topk": 0.0
+      }
+    },
+    {
+      "id": "official-agriculture-002",
+      "category": "农林水土",
+      "status": "ok",
+      "runtime_seconds": 100.8371,
+      "recognized_speech_span_seconds": 471.36,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "recognized_chars": 1618,
+        "segment_count": 37,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.5021,
+        "diarization_reason_code": "accepted"
+      },
+      "roles": {
+        "operator_turns": 19,
+        "citizen_turns": 18,
+        "unknown_turns": 0,
+        "both_roles_present": true,
+        "format_mode": "acoustic"
+      },
+      "workorder": {
+        "generation_mode": "rule_fallback",
+        "fallback_reason": "",
+        "field_passes": {
+          "location_pass": false,
+          "event_pass": false,
+          "request_pass": false
+        },
+        "missing_field_names": []
+      },
+      "routing": {
+        "predicted_department_ids": [],
+        "expected_department_id": "dept_agriculture_forestry_water",
+        "matched_by": "all"
+      },
+      "metrics": {
+        "official_content_bigram_recall": 0.2308,
+        "official_content_bigram_f1": 0.0189,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "field_accuracy": 0.0,
+        "information_completeness": 1.0,
+        "fact_fidelity": 0.0,
+        "location_similarity": 0.4211,
+        "event_similarity": 0.0385,
+        "request_similarity": 0.0,
+        "field_pass_rate": 0.0,
+        "workorder_support_precision": 0.9961,
+        "region_accuracy": 0.0,
+        "category_routing_top1": 0.0,
+        "category_routing_topk": 0.0,
+        "official_handling_unit_topk": 0.0
+      }
+    },
+    {
+      "id": "official-labor-001",
+      "category": "劳动和社会保障",
+      "status": "ok",
+      "runtime_seconds": 41.3186,
+      "recognized_speech_span_seconds": 328.46,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "recognized_chars": 555,
+        "segment_count": 23,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.4322,
+        "diarization_reason_code": "accepted"
+      },
+      "roles": {
+        "operator_turns": 12,
+        "citizen_turns": 11,
+        "unknown_turns": 0,
+        "both_roles_present": true,
+        "format_mode": "acoustic"
+      },
+      "workorder": {
+        "generation_mode": "rule_fallback",
+        "fallback_reason": "",
+        "field_passes": {
+          "location_pass": false,
+          "event_pass": false,
+          "request_pass": false
+        },
+        "missing_field_names": []
+      },
+      "routing": {
+        "predicted_department_ids": [
+          "dept_labor_social_security"
+        ],
+        "expected_department_id": "dept_labor_social_security",
+        "matched_by": "keyword"
+      },
+      "metrics": {
+        "official_content_bigram_recall": 0.3407,
+        "official_content_bigram_f1": 0.101,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "field_accuracy": 0.25,
+        "information_completeness": 1.0,
+        "fact_fidelity": 0.25,
+        "location_similarity": 0.1333,
+        "event_similarity": 0.1034,
+        "request_similarity": 0.0,
+        "field_pass_rate": 0.0,
+        "workorder_support_precision": 0.8729,
+        "region_accuracy": 0.0,
+        "category_routing_top1": 1.0,
+        "category_routing_topk": 1.0,
+        "official_handling_unit_topk": 0.0
+      }
+    },
+    {
+      "id": "official-labor-002",
+      "category": "劳动和社会保障",
+      "status": "ok",
+      "runtime_seconds": 72.7206,
+      "recognized_speech_span_seconds": 324.15,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "recognized_chars": 1304,
+        "segment_count": 40,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.5,
+        "diarization_reason_code": "accepted"
+      },
+      "roles": {
+        "operator_turns": 20,
+        "citizen_turns": 20,
+        "unknown_turns": 0,
+        "both_roles_present": true,
+        "format_mode": "acoustic"
+      },
+      "workorder": {
+        "generation_mode": "rule_fallback",
+        "fallback_reason": "",
+        "field_passes": {
+          "location_pass": false,
+          "event_pass": false,
+          "request_pass": false
+        },
+        "missing_field_names": []
+      },
+      "routing": {
+        "predicted_department_ids": [
+          "dept_labor_social_security"
+        ],
+        "expected_department_id": "dept_labor_social_security",
+        "matched_by": "keyword"
+      },
+      "metrics": {
+        "official_content_bigram_recall": 0.5467,
+        "official_content_bigram_f1": 0.0622,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "field_accuracy": 0.0,
+        "information_completeness": 1.0,
+        "fact_fidelity": 0.0,
+        "location_similarity": 0.4286,
+        "event_similarity": 0.0899,
+        "request_similarity": 0.1043,
+        "field_pass_rate": 0.0,
+        "workorder_support_precision": 1.0,
+        "region_accuracy": 1.0,
+        "category_routing_top1": 1.0,
+        "category_routing_topk": 1.0,
+        "official_handling_unit_topk": 0.0
+      }
+    },
+    {
+      "id": "official-health-001",
+      "category": "卫生健康",
+      "status": "ok",
+      "runtime_seconds": 93.6115,
+      "recognized_speech_span_seconds": 407.58,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "recognized_chars": 1549,
+        "segment_count": 1193,
+        "diarization_mode": "none",
+        "diarization_confidence": 0.2478,
+        "diarization_reason_code": "not_accepted"
+      },
+      "roles": {
+        "operator_turns": 0,
+        "citizen_turns": 1,
+        "unknown_turns": 0,
+        "both_roles_present": false,
+        "format_mode": "unsegmented"
+      },
+      "workorder": {
+        "generation_mode": "rule_fallback",
+        "fallback_reason": "",
+        "field_passes": {
+          "location_pass": true,
+          "event_pass": false,
+          "request_pass": false
+        },
+        "missing_field_names": []
+      },
+      "routing": {
+        "predicted_department_ids": [],
+        "expected_department_id": "dept_health",
+        "matched_by": "all"
+      },
+      "metrics": {
+        "official_content_bigram_recall": 0.3309,
+        "official_content_bigram_f1": 0.0583,
+        "acoustic_diarization_accepted": 0.0,
+        "both_roles_present": 0.0,
+        "field_accuracy": 0.25,
+        "information_completeness": 1.0,
+        "fact_fidelity": 0.25,
+        "location_similarity": 0.8276,
+        "event_similarity": 0.0,
+        "request_similarity": 0.0229,
+        "field_pass_rate": 0.3333,
+        "workorder_support_precision": 1.0,
+        "region_accuracy": 1.0,
+        "category_routing_top1": 0.0,
+        "category_routing_topk": 0.0,
+        "official_handling_unit_topk": 0.0
+      }
+    },
+    {
+      "id": "official-health-002",
+      "category": "卫生健康",
+      "status": "ok",
+      "runtime_seconds": 77.978,
+      "recognized_speech_span_seconds": 326.42,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "recognized_chars": 1296,
+        "segment_count": 25,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.3954,
+        "diarization_reason_code": "accepted"
+      },
+      "roles": {
+        "operator_turns": 13,
+        "citizen_turns": 12,
+        "unknown_turns": 0,
+        "both_roles_present": true,
+        "format_mode": "acoustic"
+      },
+      "workorder": {
+        "generation_mode": "rule_fallback",
+        "fallback_reason": "",
+        "field_passes": {
+          "location_pass": false,
+          "event_pass": false,
+          "request_pass": false
+        },
+        "missing_field_names": []
+      },
+      "routing": {
+        "predicted_department_ids": [
+          "dept_economy_trade",
+          "dept_health"
+        ],
+        "expected_department_id": "dept_health",
+        "matched_by": "keyword"
+      },
+      "metrics": {
+        "official_content_bigram_recall": 0.124,
+        "official_content_bigram_f1": 0.0221,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "field_accuracy": 0.0,
+        "information_completeness": 1.0,
+        "fact_fidelity": 0.0,
+        "location_similarity": 0.4762,
+        "event_similarity": 0.0909,
+        "request_similarity": 0.0238,
+        "field_pass_rate": 0.0,
+        "workorder_support_precision": 0.9951,
+        "region_accuracy": 0.0,
+        "category_routing_top1": 0.0,
+        "category_routing_topk": 1.0,
+        "official_handling_unit_topk": 0.0
+      }
+    },
+    {
+      "id": "official-construction-001",
+      "category": "城乡建设",
+      "status": "ok",
+      "runtime_seconds": 84.4238,
+      "recognized_speech_span_seconds": 465.1,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "recognized_chars": 1377,
+        "segment_count": 33,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.4456,
+        "diarization_reason_code": "accepted"
+      },
+      "roles": {
+        "operator_turns": 17,
+        "citizen_turns": 16,
+        "unknown_turns": 0,
+        "both_roles_present": true,
+        "format_mode": "acoustic"
+      },
+      "workorder": {
+        "generation_mode": "rule_fallback",
+        "fallback_reason": "",
+        "field_passes": {
+          "location_pass": false,
+          "event_pass": false,
+          "request_pass": false
+        },
+        "missing_field_names": [
+          "location"
+        ]
+      },
+      "routing": {
+        "predicted_department_ids": [
+          "dept_housing_construction"
+        ],
+        "expected_department_id": "dept_housing_construction",
+        "matched_by": "keyword"
+      },
+      "metrics": {
+        "official_content_bigram_recall": 0.4043,
+        "official_content_bigram_f1": 0.0542,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "field_accuracy": 0.25,
+        "information_completeness": 0.75,
+        "fact_fidelity": 0.3333,
+        "location_similarity": 0.0,
+        "event_similarity": 0.1034,
+        "request_similarity": 0.0,
+        "field_pass_rate": 0.0,
+        "workorder_support_precision": 0.9921,
+        "region_accuracy": 0.0,
+        "category_routing_top1": 1.0,
+        "category_routing_topk": 1.0,
+        "official_handling_unit_topk": 0.0
+      }
+    },
+    {
+      "id": "official-city-management-001",
+      "category": "城市管理",
+      "status": "ok",
+      "runtime_seconds": 105.9511,
+      "recognized_speech_span_seconds": 437.83,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "recognized_chars": 1486,
+        "segment_count": 28,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.4664,
+        "diarization_reason_code": "accepted"
+      },
+      "roles": {
+        "operator_turns": 14,
+        "citizen_turns": 14,
+        "unknown_turns": 0,
+        "both_roles_present": true,
+        "format_mode": "acoustic"
+      },
+      "workorder": {
+        "generation_mode": "rule_fallback",
+        "fallback_reason": "",
+        "field_passes": {
+          "location_pass": false,
+          "event_pass": false,
+          "request_pass": false
+        },
+        "missing_field_names": []
+      },
+      "routing": {
+        "predicted_department_ids": [],
+        "expected_department_id": "dept_city_management",
+        "matched_by": "all"
+      },
+      "metrics": {
+        "official_content_bigram_recall": 0.5063,
+        "official_content_bigram_f1": 0.0531,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "field_accuracy": 0.0,
+        "information_completeness": 1.0,
+        "fact_fidelity": 0.0,
+        "location_similarity": 0.2286,
+        "event_similarity": 0.0323,
+        "request_similarity": 0.0255,
+        "field_pass_rate": 0.0,
+        "workorder_support_precision": 0.9897,
+        "region_accuracy": 0.0,
+        "category_routing_top1": 0.0,
+        "category_routing_topk": 0.0,
+        "official_handling_unit_topk": 0.0
+      }
+    },
+    {
+      "id": "official-market-001",
+      "category": "市场监管",
+      "status": "ok",
+      "runtime_seconds": 97.4269,
+      "recognized_speech_span_seconds": 388.48,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "recognized_chars": 1576,
+        "segment_count": 45,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.3636,
+        "diarization_reason_code": "accepted"
+      },
+      "roles": {
+        "operator_turns": 23,
+        "citizen_turns": 22,
+        "unknown_turns": 0,
+        "both_roles_present": true,
+        "format_mode": "acoustic"
+      },
+      "workorder": {
+        "generation_mode": "rule_fallback",
+        "fallback_reason": "",
+        "field_passes": {
+          "location_pass": false,
+          "event_pass": false,
+          "request_pass": false
+        },
+        "missing_field_names": []
+      },
+      "routing": {
+        "predicted_department_ids": [
+          "dept_economy_trade",
+          "dept_market_regulation"
+        ],
+        "expected_department_id": "dept_market_regulation",
+        "matched_by": "keyword"
+      },
+      "metrics": {
+        "official_content_bigram_recall": 0.5432,
+        "official_content_bigram_f1": 0.0569,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "field_accuracy": 0.0,
+        "information_completeness": 1.0,
+        "fact_fidelity": 0.0,
+        "location_similarity": 0.3158,
+        "event_similarity": 0.0377,
+        "request_similarity": 0.0122,
+        "field_pass_rate": 0.0,
+        "workorder_support_precision": 0.996,
+        "region_accuracy": 1.0,
+        "category_routing_top1": 0.0,
+        "category_routing_topk": 1.0,
+        "official_handling_unit_topk": 0.0
+      }
+    },
+    {
+      "id": "official-market-002",
+      "category": "市场监管",
+      "status": "ok",
+      "runtime_seconds": 83.2482,
+      "recognized_speech_span_seconds": 346.78,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "recognized_chars": 1349,
+        "segment_count": 39,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.4795,
+        "diarization_reason_code": "accepted"
+      },
+      "roles": {
+        "operator_turns": 20,
+        "citizen_turns": 19,
+        "unknown_turns": 0,
+        "both_roles_present": true,
+        "format_mode": "acoustic"
+      },
+      "workorder": {
+        "generation_mode": "rule_fallback",
+        "fallback_reason": "",
+        "field_passes": {
+          "location_pass": false,
+          "event_pass": false,
+          "request_pass": false
+        },
+        "missing_field_names": []
+      },
+      "routing": {
+        "predicted_department_ids": [],
+        "expected_department_id": "dept_market_regulation",
+        "matched_by": "all"
+      },
+      "metrics": {
+        "official_content_bigram_recall": 0.3458,
+        "official_content_bigram_f1": 0.0542,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "field_accuracy": 0.0,
+        "information_completeness": 1.0,
+        "fact_fidelity": 0.0,
+        "location_similarity": 0.1905,
+        "event_similarity": 0.0278,
+        "request_similarity": 0.0146,
+        "field_pass_rate": 0.0,
+        "workorder_support_precision": 0.9885,
+        "region_accuracy": 0.0,
+        "category_routing_top1": 0.0,
+        "category_routing_topk": 0.0,
+        "official_handling_unit_topk": 0.0
+      }
+    },
+    {
+      "id": "official-ecology-001",
+      "category": "生态环境",
+      "status": "ok",
+      "runtime_seconds": 95.1814,
+      "recognized_speech_span_seconds": 432.73,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "recognized_chars": 1517,
+        "segment_count": 29,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.4059,
+        "diarization_reason_code": "accepted"
+      },
+      "roles": {
+        "operator_turns": 15,
+        "citizen_turns": 14,
+        "unknown_turns": 0,
+        "both_roles_present": true,
+        "format_mode": "acoustic"
+      },
+      "workorder": {
+        "generation_mode": "rule_fallback",
+        "fallback_reason": "",
+        "field_passes": {
+          "location_pass": false,
+          "event_pass": false,
+          "request_pass": false
+        },
+        "missing_field_names": []
+      },
+      "routing": {
+        "predicted_department_ids": [
+          "dept_ecology_environment"
+        ],
+        "expected_department_id": "dept_ecology_environment",
+        "matched_by": "keyword"
+      },
+      "metrics": {
+        "official_content_bigram_recall": 0.2315,
+        "official_content_bigram_f1": 0.0321,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "field_accuracy": 0.0,
+        "information_completeness": 1.0,
+        "fact_fidelity": 0.0,
+        "location_similarity": 0.3158,
+        "event_similarity": 0.0165,
+        "request_similarity": 0.0,
+        "field_pass_rate": 0.0,
+        "workorder_support_precision": 0.9922,
+        "region_accuracy": 1.0,
+        "category_routing_top1": 1.0,
+        "category_routing_topk": 1.0,
+        "official_handling_unit_topk": 0.0
+      }
+    },
+    {
+      "id": "official-ecology-002",
+      "category": "生态环境",
+      "status": "ok",
+      "runtime_seconds": 88.7464,
+      "recognized_speech_span_seconds": 355.28,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "recognized_chars": 1333,
+        "segment_count": 26,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.478,
+        "diarization_reason_code": "accepted"
+      },
+      "roles": {
+        "operator_turns": 13,
+        "citizen_turns": 13,
+        "unknown_turns": 0,
+        "both_roles_present": true,
+        "format_mode": "acoustic"
+      },
+      "workorder": {
+        "generation_mode": "rule_fallback",
+        "fallback_reason": "",
+        "field_passes": {
+          "location_pass": false,
+          "event_pass": false,
+          "request_pass": false
+        },
+        "missing_field_names": []
+      },
+      "routing": {
+        "predicted_department_ids": [
+          "dept_city_management"
+        ],
+        "expected_department_id": "dept_ecology_environment",
+        "matched_by": "keyword"
+      },
+      "metrics": {
+        "official_content_bigram_recall": 0.3902,
+        "official_content_bigram_f1": 0.0471,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "field_accuracy": 0.0,
+        "information_completeness": 1.0,
+        "fact_fidelity": 0.0,
+        "location_similarity": 0.0909,
+        "event_similarity": 0.0233,
+        "request_similarity": 0.0238,
+        "field_pass_rate": 0.0,
+        "workorder_support_precision": 0.9957,
+        "region_accuracy": 0.0,
+        "category_routing_top1": 0.0,
+        "category_routing_topk": 0.0,
+        "official_handling_unit_topk": 0.0
+      }
+    },
+    {
+      "id": "official-education-001",
+      "category": "科教文体",
+      "status": "ok",
+      "runtime_seconds": 72.2779,
+      "recognized_speech_span_seconds": 315.5,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "recognized_chars": 1182,
+        "segment_count": 33,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.4641,
+        "diarization_reason_code": "accepted"
+      },
+      "roles": {
+        "operator_turns": 17,
+        "citizen_turns": 16,
+        "unknown_turns": 0,
+        "both_roles_present": true,
+        "format_mode": "acoustic"
+      },
+      "workorder": {
+        "generation_mode": "rule_fallback",
+        "fallback_reason": "",
+        "field_passes": {
+          "location_pass": true,
+          "event_pass": false,
+          "request_pass": false
+        },
+        "missing_field_names": []
+      },
+      "routing": {
+        "predicted_department_ids": [
+          "dept_education_science_culture_sports"
+        ],
+        "expected_department_id": "dept_education_science_culture_sports",
+        "matched_by": "keyword"
+      },
+      "metrics": {
+        "official_content_bigram_recall": 0.6023,
+        "official_content_bigram_f1": 0.0902,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "field_accuracy": 0.0,
+        "information_completeness": 1.0,
+        "fact_fidelity": 0.0,
+        "location_similarity": 0.6,
+        "event_similarity": 0.0435,
+        "request_similarity": 0.1429,
+        "field_pass_rate": 0.3333,
+        "workorder_support_precision": 0.9789,
+        "region_accuracy": 0.0,
+        "category_routing_top1": 1.0,
+        "category_routing_topk": 1.0,
+        "official_handling_unit_topk": 0.0
+      }
+    },
+    {
+      "id": "official-education-002",
+      "category": "科教文体",
+      "status": "ok",
+      "runtime_seconds": 63.1109,
+      "recognized_speech_span_seconds": 321.55,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "recognized_chars": 968,
+        "segment_count": 40,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.342,
+        "diarization_reason_code": "accepted"
+      },
+      "roles": {
+        "operator_turns": 20,
+        "citizen_turns": 20,
+        "unknown_turns": 0,
+        "both_roles_present": true,
+        "format_mode": "acoustic"
+      },
+      "workorder": {
+        "generation_mode": "rule_fallback",
+        "fallback_reason": "",
+        "field_passes": {
+          "location_pass": false,
+          "event_pass": false,
+          "request_pass": false
+        },
+        "missing_field_names": []
+      },
+      "routing": {
+        "predicted_department_ids": [],
+        "expected_department_id": "dept_education_science_culture_sports",
+        "matched_by": "all"
+      },
+      "metrics": {
+        "official_content_bigram_recall": 0.3474,
+        "official_content_bigram_f1": 0.0683,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "field_accuracy": 0.0,
+        "information_completeness": 1.0,
+        "fact_fidelity": 0.0,
+        "location_similarity": 0.4615,
+        "event_similarity": 0.0,
+        "request_similarity": 0.0301,
+        "field_pass_rate": 0.0,
+        "workorder_support_precision": 0.9939,
+        "region_accuracy": 0.0,
+        "category_routing_top1": 0.0,
+        "category_routing_topk": 0.0,
+        "official_handling_unit_topk": 0.0
+      }
+    },
+    {
+      "id": "official-economy-001",
+      "category": "经济财贸",
+      "status": "ok",
+      "runtime_seconds": 58.7671,
+      "recognized_speech_span_seconds": 327.32,
+      "asr": {
+        "provider": "faster_whisper",
+        "model": "turbo (cpu/int8)",
+        "recognized_chars": 1000,
+        "segment_count": 37,
+        "diarization_mode": "acoustic",
+        "diarization_confidence": 0.4505,
+        "diarization_reason_code": "accepted"
+      },
+      "roles": {
+        "operator_turns": 19,
+        "citizen_turns": 18,
+        "unknown_turns": 0,
+        "both_roles_present": true,
+        "format_mode": "acoustic"
+      },
+      "workorder": {
+        "generation_mode": "rule_fallback",
+        "fallback_reason": "",
+        "field_passes": {
+          "location_pass": false,
+          "event_pass": false,
+          "request_pass": false
+        },
+        "missing_field_names": []
+      },
+      "routing": {
+        "predicted_department_ids": [
+          "dept_economy_trade"
+        ],
+        "expected_department_id": "dept_economy_trade",
+        "matched_by": "keyword"
+      },
+      "metrics": {
+        "official_content_bigram_recall": 0.4563,
+        "official_content_bigram_f1": 0.0919,
+        "acoustic_diarization_accepted": 1.0,
+        "both_roles_present": 1.0,
+        "field_accuracy": 0.0,
+        "information_completeness": 1.0,
+        "fact_fidelity": 0.0,
+        "location_similarity": 0.2105,
+        "event_similarity": 0.0177,
+        "request_similarity": 0.1026,
+        "field_pass_rate": 0.0,
+        "workorder_support_precision": 0.9878,
+        "region_accuracy": 0.0,
+        "category_routing_top1": 1.0,
+        "category_routing_topk": 1.0,
+        "official_handling_unit_topk": 0.0
+      }
+    }
+  ]
+}

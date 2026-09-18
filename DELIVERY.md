@@ -1,55 +1,46 @@
-# 文枢源码交付包说明
+# 芜湖12345智慧助手源码交付说明
 
-本交付包包含完整源码、设计资料、样例部门文件、测试、评测集以及 Docker/Kubernetes/Helm 部署文件。
+本项目面向“12345热线工单智能生成与转派辅助智能体”比赛场景，交付受理、转派、政策检索、回复审核、评测和部署所需源码。
 
 ## 已包含
 
-- `backend/`：FastAPI 控制平面、事实/记忆、RAG、Loop、测试和脚本
-- `services/pi-agent/`：pi Agent Runtime 源码及 npm 锁文件
-- `web/`：Next.js 前端源码及 npm 锁文件
-- `deploy/`：Docker、Kubernetes、Helm、HPA 和监控配置
-- `department_files/`：项目附带的样例部门 PDF/DOCX
-- `design_files/`：技术方案、代码解读文档、参考 PDF 和架构图片
-- `docs/`、`loadtest/`：说明文档和 k6 压测脚本
-- `.env.example`、`services/pi-agent/.env.example`：配置模板，不含真实密钥
-- `design_files/文枢-前端页面使用指南.md`：学生、部门管理员和超级管理员逐步操作说明
+- `backend/`：FastAPI API、ASR/说话人处理、工单生成、分类转派、RAG、评测与测试
+- `web/`：营业员、部门管理员、系统管理员三类工作台
+- `services/pi-agent/`：可选概率性 Agent Runtime，默认关闭
+- `wuhu_knowledge_base/`：经过质量门禁的芜湖官方政务文档
+- `docs/competition/`：比赛契约、路线图和可重复运行的评测报告
+- `deploy/`：芜湖12345命名空间的 Docker、Kubernetes、Helm、HPA 和监控配置
+- `loadtest/`：生产联调阶段使用的负载测试脚本
+- `.env.example`：不含真实密钥的生产配置模板
 
-## 未包含（均可重新生成）
+## 数据与模型边界
 
-- Python 虚拟环境：`backend/.venv/`、`venv/`
-- Node 依赖：`node_modules/`
-- Next.js/TypeScript 构建结果：`.next/`、`dist/`、`build/`、`out/`、`*.tsbuildinfo`
-- 测试和语言缓存：`__pycache__/`、`.pytest_cache/`、`.mypy_cache/`、`.ruff_cache/`
-- 本机运行数据和缓存：`data/`、`volumes/`、`chroma_data/`、`.cache/`、日志
-- 本机真实配置：`.env`、`.env.local`、私钥和证书
-- macOS/IDE 文件：`.DS_Store`、`.idea/`、`.vscode/`
-- 本项目以前生成的交付 ZIP 与校验文件：`wenshu-project-source-*.zip*`
+- 比赛原始录音、Excel 和网页资料仅保存在本地，不应提交到公开仓库。
+- 外部 LLM 调用默认关闭；只有在完成授权和脱敏后才能设置 `INTAKE_LLM_ENABLED=true`。
+- 默认使用本地 Embedding。启用外部 Embedding、重排或 pi Runtime 前必须确认数据外发范围。
+- `SEED_DEMO_USERS` 和 `SEED_OPERATIONAL_DEMO_DATA` 在生产模板中均为 `false`。
 
-## 接收方快速启动
-
-### Docker
+## Docker 快速启动
 
 ```bash
 cp .env.example .env
-# 编辑 .env，填写模型 API Key、数据库口令和内部服务令牌
+# 设置强数据库口令、AUTH_SECRET、INTERNAL_API_TOKEN，
+# 并临时配置 BOOTSTRAP_ADMIN_USERNAME/BOOTSTRAP_ADMIN_PASSWORD。
+docker compose config
 docker compose up --build -d
 docker compose exec backend python -m scripts.seed_data
-docker compose exec backend python -m scripts.ingest_department_files --base /app/department_files
+docker compose exec backend python -m scripts.ingest_department_files \
+  --base /app/wuhu_knowledge_base --skip-conflicts --skip-metadata-llm
 ```
 
-### 本地安装依赖
+默认命令不启动可选 pi Runtime；只有在完成数据外发授权并配置模型后，才使用
+`docker compose --profile pi up --build -d`。
 
-```bash
-cd backend
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+首次管理员创建成功后，应清空引导管理员密码并轮换部署 Secret。完整步骤见 `README.md` 和 `docs/deployment.md`。
 
-cd ../web
-npm ci
+## 不应打包
 
-cd ../services/pi-agent
-npm ci
-```
-
-更多说明见根目录 `README.md`、`docs/` 及各模块 README。
+- `.env`、密钥、证书、真实群众录音和未脱敏工单
+- `.venv/`、`node_modules/`、`.next/`、缓存和本地日志
+- `data/`、MongoDB/Redis 数据卷和本地模型大文件
+- 旧交付 ZIP、临时截图和测试浏览器缓存

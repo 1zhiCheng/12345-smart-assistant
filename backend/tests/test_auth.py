@@ -4,8 +4,11 @@ from __future__ import annotations
 import asyncio
 import time
 
+from fastapi.testclient import TestClient
+
 from app.auth import AuthService
 from app.config import Settings
+from app.main import app
 from app.storage.store import MemoryStore
 
 
@@ -41,5 +44,40 @@ def test_register_operator_hashes_password_and_rejects_duplicate():
         assert "password" not in stored
         assert await auth.authenticate("NEW_OPERATOR", "password123") is not None
         assert await auth.register_operator("new_operator", "another123", "重复账号") is None
+
+    asyncio.run(scenario())
+
+
+def test_register_validation_returns_actionable_chinese_error():
+    """注册页不应再把输入格式问题笼统展示为 HTTP 422。"""
+    with TestClient(app) as client:
+        response = client.post(
+            "/api/v1/auth/register",
+            json={"username": "a!", "password": "123", "name": "张"},
+        )
+
+    assert response.status_code == 422
+    detail = response.json()["detail"]
+    assert detail["message"] == "注册信息不符合要求"
+    assert "账号至少需要 3 位" in detail["issues"]
+    assert "密码至少需要 8 位" in detail["issues"]
+    assert "姓名至少需要 2 位" in detail["issues"]
+
+
+def test_bootstrap_admin_works_without_demo_accounts():
+    async def scenario():
+        store = MemoryStore()
+        settings = Settings(
+            storage_mode="memory", seed_demo_users=False,
+            bootstrap_admin_username="competition_admin",
+            bootstrap_admin_password="strong-password-123",
+        )
+        auth = AuthService(store, settings)
+        await auth.seed_users()
+
+        assert await store.get("users", "operator") is None
+        user = await auth.authenticate("competition_admin", "strong-password-123")
+        assert user is not None
+        assert user["role"] == "system_admin"
 
     asyncio.run(scenario())

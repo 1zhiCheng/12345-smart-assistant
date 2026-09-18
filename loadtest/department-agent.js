@@ -20,10 +20,10 @@ export const options = {
 
 export default function () {
   const base = __ENV.BASE_URL || 'http://localhost:8000';
-  const dept = __ENV.DEPT_ID || 'dept_jwc';
+  const dept = __ENV.DEPT_ID || 'dept_city_management';
   const token = __ENV.INTERNAL_API_TOKEN || '';
   const response = http.post(`${base}/api/v1/internal/dept/answer`, JSON.stringify({
-    query: '研究生开题报告的字数要求是多少？', dept_id: dept,
+    query: '小区沿街商铺夜间占道经营并产生噪声，应由哪个部门处理？', dept_id: dept,
     session_id: `load-${__VU}-${__ITER}`, user_id: 'loadtest',
   }), { headers: { 'Content-Type': 'application/json', 'X-Internal-Token': token } });
   check(response, { 'status 200': (r) => r.status === 200 });

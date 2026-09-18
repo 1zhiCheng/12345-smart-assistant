@@ -92,7 +92,12 @@ EXCLUDE_WORDS = (
     "竞赛", "比赛", "评选", "获奖", "名单", "公示", "审查意见", "审批结果", "验收结果", "征集作品", "项目申报",
     "预算", "决算", "三公经费", "财政拨款", "招标", "采购", "询价", "竞争性磋商", "成交结果", "服务项目",
 )
-CONTENT_SELECTORS = (".v_news_content", "#vsb_content", "#vsb_content_2", ".wp_articlecontent", ".article-content", ".article_content", ".articleContent", ".TRS_Editor", ".guestbook-show", ".ls-message-info", ".content", "article")
+CONTENT_SELECTORS = (
+    ".j-fontContent", ".gkdhb_contnet", ".xxgkcontent",
+    ".v_news_content", "#vsb_content", "#vsb_content_2", ".wp_articlecontent",
+    ".article-content", ".article_content", ".articleContent", ".TRS_Editor",
+    ".guestbook-show", ".ls-message-info", ".content", "article",
+)
 
 
 @dataclass(frozen=True)
@@ -248,10 +253,13 @@ def page_title(soup: BeautifulSoup) -> str:
 
 
 def extract_content(soup: BeautifulSoup, title: str) -> str:
+    # 芜湖政务公开“机构职能”页把正文放在 j-fontContent 中，外围
+    # xxgkcontent 更长但以索引元数据为主，不能再用“最大容器”覆盖它。
+    preferred = soup.select_one(".j-fontContent, .gkdhb_contnet")
     candidates: list[Tag] = []
     for selector in CONTENT_SELECTORS:
         candidates.extend(node for node in soup.select(selector) if isinstance(node, Tag))
-    container = max(candidates, key=lambda node: len(node.get_text(" ", strip=True))) if candidates else soup.body
+    container = preferred or (max(candidates, key=lambda node: len(node.get_text(" ", strip=True))) if candidates else soup.body)
     if container is None:
         return ""
     for node in container.select("script,style,noscript,nav,footer,form,iframe"):
@@ -269,7 +277,9 @@ def extract_content(soup: BeautifulSoup, title: str) -> str:
             lines.append(value)
     if not lines:
         lines = [clean_space(line) for line in container.get_text("\n").splitlines() if clean_space(line)]
-    return "\n\n".join(lines)
+    # 部分站点表格单元内部带 CRLF；Windows 文本写入会再次转换 LF，
+    # 若不先统一会形成 CRCRLF，导致落盘正文与清单哈希不一致。
+    return "\n\n".join(lines).replace("\r\n", "\n").replace("\r", "\n")
 
 
 def published_at(soup: BeautifulSoup) -> str:

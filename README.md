@@ -1,29 +1,40 @@
 # 芜湖政务 Agent · 12345热线工单智能生成与转派辅助系统
 
-面向芜湖市12345热线受理、审核与转派人员的政务智能体比赛项目。在原“文枢”跨部门知识处理能力基础上，改造为 **诉求受理 → 要素提取 → 标准工单 → 事项分类 → 部门转派 → 回复辅助 → 人工确认** 的完整闭环。
+面向芜湖市12345热线受理、审核与转派人员的政务智能体比赛项目，实现 **诉求受理 → 要素提取 → 标准工单 → 事项分类 → 部门转派 → 回复辅助 → 人工确认** 的完整闭环。
 
-当前第一迭代聚焦成员 A 子系统：文本/录音转写输入、敏感信息脱敏、诉求要素提取、缺失信息追问、标准工单生成与人工确认。成员 A 的输出通过统一 `StandardWorkOrder` 契约交给成员 B 的分类转派与回复子系统。
+项目现按一条端到端责任链统一维护：文本/录音输入、敏感信息脱敏、诉求要素提取、缺失信息追问、标准工单生成、事项分类、部门 Top-K、政策混合检索、回复草稿和人工审核。各阶段通过统一 `StandardWorkOrder` 契约衔接，不再按人员拆分功能归属。
 
 工单生成支持 **大模型主链路、规则降级**：经人工校对的诉求先脱敏，再交给大模型输出结构化工单和逐字段原文证据；证据不足、格式异常、服务超时或未配置密钥时自动使用规则基线，并在审核界面明确标注。出于政务数据保护考虑，外部模型调用默认关闭；确认模型服务的数据合规要求后，配置 `DEEPSEEK_API_KEY` 并显式设置 `INTAKE_LLM_ENABLED=true`。原始录音与未经整理的原始转写不会发送给模型。两种结果都必须人工确认。
 
 > 比赛参考 HTML 与官方示例音频/Excel 仅保留在本地，默认不进入公开 Git 历史。项目数据使用必须遵守比赛授权和个人信息保护要求。
 
-> 详细技术方案见 [`design_files/文枢-跨部门自进化文档处理与问答助手技术方案.md`](design_files/文枢-跨部门自进化文档处理与问答助手技术方案.md)
+> 当前架构、比赛契约和路线图分别见 [`docs/architecture.md`](docs/architecture.md)、[`docs/competition/intake-contract.md`](docs/competition/intake-contract.md) 和 [`docs/competition/roadmap.md`](docs/competition/roadmap.md)。`design_files/` 仅保存历史设计输入，不作为当前产品说明。
 
-## 架构（前后端分离 + 模块分离）
+> 复赛交付材料已整理在 `docs/competition/`：比赛方案、要求映射、5 分钟演示脚本、答辩问答、
+> 提交清单和 [`12345智慧助手-复赛答辩.pptx`](docs/competition/12345智慧助手-复赛答辩.pptx)。
 
-```
-┌────────────┐   REST    ┌──────────────────────────┐
-│ Next.js     │ ───────► │ Python Orchestrator/API  │
-└────────────┘           └────────────┬─────────────┘
-                                      │ 并行部门路由
-                         ┌────────────┼────────────┐
-                         ▼            ▼            ▼
-                    dept-agent   dept-agent   dept-agent
-                         └────────────┬────────────┘
-                                      ▼
-                        MongoDB + Redis Stream + Worker
-```
+> 录音质量增强已增加离线人工标注工作台及 CER、角色序列、DER、语义字段 F1 评测，使用方法见
+> [`audio-annotation-guide.md`](docs/competition/audio-annotation-guide.md)。
+
+> 面向营业员、部门管理员、系统管理员、标注人员和运维人员的操作步骤见
+> [`docs/user-manual.md`](docs/user-manual.md)。
+
+> Windows 工作人员可直接双击根目录 [`启动芜湖政务助手.cmd`](启动芜湖政务助手.cmd) 启动系统；关闭其
+> 图形窗口会同步停止本次启动的前端和后端服务。
+
+## 项目界面
+
+![芜湖12345智慧政务Agent前端首页](docs/assets/frontend-home.png)
+
+前端面向市民、营业员、部门管理员和系统管理员提供不同入口；登录后分别进入自助咨询、诉求受理、
+部门办理或系统治理工作台。
+
+## 系统架构
+
+![芜湖12345智慧政务Agent系统架构](docs/assets/system-architecture.svg)
+
+架构以 FastAPI 作为唯一治理控制平面，通过固定 Agent DAG 连接本地语音识别、标准工单、部门路由、
+可信 RAG、合规校验与人工终审；MongoDB、Redis Stream、独立 Worker 和可观测性组件提供生产同构支撑。
 
 | 服务 | 目录 | 职责 |
 |---|---|---|
@@ -37,7 +48,7 @@
 ## 目录结构
 
 ```
-program/
+wuhu-12345-agent/
 ├── README.md                 # 本文件
 ├── docker-compose.yml        # 全栈编排（MongoDB/Redis/backend/worker/pi-agent/web）
 ├── .env.example              # 环境变量样例
@@ -60,11 +71,14 @@ program/
 # 1. 进入项目目录
 cd program
 
-# 2. 复制环境变量并填写真实密钥（或直接用已提供的 .env）
+# 2. 复制环境变量，设置数据库口令、内部令牌及首次管理员
 cp .env.example .env
 
 # 3. 一键构建并启动全栈（首次会下载镜像，较慢）
 docker compose up --build -d
+
+# 仅在已获数据外发授权且配置好模型密钥时，额外启动 pi Runtime
+docker compose --profile pi up --build -d
 
 # 4. 查看各服务状态与日志
 docker compose ps
@@ -77,7 +91,7 @@ docker compose logs -f
 |---|---|
 | 前端聊天界面 | http://localhost:8080 |
 | 后端 API / OpenAPI 文档 | http://localhost:8000/docs |
-| pi 智能体服务 | http://localhost:8100/health |
+| pi 智能体服务（显式启用时） | http://localhost:8100/health |
 | MongoDB | `localhost:27017`（账号密码见 `.env`） |
 
 ### 首次建立芜湖政务知识库
@@ -125,7 +139,7 @@ pip install -r requirements.txt
 export STORAGE_MODE=memory   # 无 MongoDB/Redis 时用内存模式
 uvicorn app.main:app --reload --port 8000
 
-# 2) pi 智能体服务（另开终端）
+# 2) 可选 pi 智能体服务（仅在已配置模型且需要实验运行时，另开终端）
 cd services/pi-agent
 npm install
 npm run dev                  # :8100
@@ -141,29 +155,28 @@ BACKEND_URL=http://localhost:8000 npm run dev   # :3000
 | 变量 | 说明 | 默认 |
 |---|---|---|
 | `DEEPSEEK_API_KEY` / `DEEPSEEK_MODEL` | 主力对话模型 | `deepseek-v4-flash` |
-| `RELAY_API_KEY` / `RELAY_BASE_URL` | 中转站（非 DeepSeek 模型） | `https://yunwu.ai/v1` |
-| `EMBEDDING_MODEL` | 向量模型（经中转站） | `text-embedding-3-large` |
-| `RERANKER_MODEL` | bge 重排模型（经中转站） | `BAAI/bge-reranker-v2-m3` |
-| `PI_AGENT_ENABLED` | 是否使用 pi 统一执行概率性 Agent；失败时自动回退 Python 本地实现 | `true` |
+| `RELAY_API_KEY` / `RELAY_BASE_URL` | 可选外部兼容服务；默认不配置、不外发 | 空 |
+| `EMBEDDING_PROVIDER` / `EMBEDDING_MODEL` | 默认本地中文向量模型 | `local` / `BAAI/bge-small-zh-v1.5` |
+| `RERANKER_ENABLED` / `RERANKER_MODEL` | 可选重排；外部服务需另行授权 | `false` / `BAAI/bge-reranker-v2-m3` |
+| `PI_AGENT_ENABLED` | 是否使用 pi 概率性 Agent；默认关闭，启用前确认模型数据边界 | `false` |
 | `PI_RUNTIME_TIMEOUT_*` | pi Intent/Rewrite/Answer/Verify/Reflect 分阶段超时 | `8/10/45/20/45s` |
 | `DEPT_AGENTS_ENABLED` / `DEPT_ID` | 全局部门路由开关 / 部门 Pod 强制范围 | `false` / 空 |
-| `VECTOR_BACKEND` | 向量存储；K8s 使用共享 `mongo` | `memory` |
+| `VECTOR_BACKEND` | 向量存储；生产模板使用共享 `mongo` | `mongo` |
 | `STORAGE_MODE` | `mongo` / `memory` | `mongo` |
 | `AUTH_SECRET` | Token 签名密钥（**生产必须改为强随机值**） | dev 占位值 |
 | `INTERNAL_API_TOKEN` | 内部接口 `/internal/*` 共享令牌（backend 与 pi-agent 一致） | 空（未配置则内部接口不可用） |
-| `SEED_DEMO_USERS` | 是否创建演示账号（生产设 `false`） | `true` |
+| `SEED_DEMO_USERS` | 是否创建固定口令演示账号 | `false` |
+| `BOOTSTRAP_ADMIN_USERNAME` / `BOOTSTRAP_ADMIN_PASSWORD` | 首次部署系统管理员；密码至少12位，创建后从 Secret 移除 | 空 |
 | `MAX_UPLOAD_MB` | 文档上传大小上限 | `20` |
 | `ASR_PROVIDER` | 录音转写适配器：`openai_compatible` 或 `faster_whisper` | `disabled` |
 | `ASR_API_KEY` / `ASR_BASE_URL` / `ASR_MODEL` | OpenAI 兼容语音转写服务配置 | 空 / OpenAI / `whisper-1` |
 | `LOGIN_MAX_ATTEMPTS` / `LOGIN_WINDOW_SECONDS` | 登录失败限流 | `5` / `300` |
 | `MEMORY_SESSION_TTL_SECONDS` | Redis 工作记忆 TTL | `1800` |
 | `MEMORY_EVENT_RETENTION_DAYS` / `MEMORY_SUMMARY_RETENTION_DAYS` | 情景事件/摘要保留期 | `90` / `180` |
-| `MONGO_INITDB_ROOT_USERNAME` / `MONGO_INITDB_ROOT_PASSWORD` | MongoDB 根账号（compose 初始化） | `wenshu_admin` / 强随机 |
+| `MONGO_INITDB_ROOT_USERNAME` / `MONGO_INITDB_ROOT_PASSWORD` | MongoDB 根账号（compose 初始化） | `wuhu12345_admin` / 强随机 |
 | `REDIS_PASSWORD` | Redis 口令（compose requirepass） | 强随机 |
 
-> 已通过 `scripts/doctor.py` 实测：DeepSeek `deepseek-v4-flash` ✅、中转站 `gpt-5.5` ✅、
-> `text-embedding-3-large` ✅、bge 重排 `BAAI/bge-reranker-v2-m3` ✅。
-> 注意：该中转站**不提供** `bge-m3` embedding 与 `gpt-5.5-pro`（这两个名字无效）。
+> 外部 LLM、Embedding 或重排服务均应在明确数据授权后配置；默认生产模板仅使用本地 Embedding，并关闭诉求外发与 pi Runtime。
 
 ### 启用录音自动转写
 
@@ -213,7 +226,7 @@ ASR_MODEL=whisper-1
 
 Python 3.11 · FastAPI · MongoDB(motor) · Redis · Next.js 15 · React 19 · TypeScript ·
 [pi](https://github.com/earendil-works/pi)（pi-agent-core + pi-ai）· DeepSeek（对话）·
-text-embedding-3-large / bge-reranker-v2-m3（经中转站）· Docker · Kubernetes · Helm
+本地 BGE 中文 Embedding · 可选重排 · Docker · Kubernetes · Helm
 
 ## 验证
 

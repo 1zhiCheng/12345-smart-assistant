@@ -30,12 +30,33 @@ class Chunker:
         chunks: list[dict[str, Any]] = []
         for section in sections:
             chunks.extend(self._chunk_section(section))
+        chunks = self._enforce_max_size(chunks)
         # 全局重排 index
         for i, c in enumerate(chunks):
             c["chunk_index"] = i
             c["content_hash"] = hashlib.sha256(c["content"].encode("utf-8")).hexdigest()
             c["char_count"] = len(c["content"])
         return chunks
+
+    def _enforce_max_size(self, chunks: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        """最终硬门禁：任何解析/合并组合都不得产生超长检索切片。"""
+        bounded: list[dict[str, Any]] = []
+        for chunk in chunks:
+            content = chunk["content"]
+            if len(content) <= self.max_chars:
+                bounded.append(chunk)
+                continue
+            for offset in range(0, len(content), self.max_chars):
+                piece = content[offset:offset + self.max_chars].strip()
+                if not piece:
+                    continue
+                bounded.append({
+                    **chunk,
+                    "content": piece,
+                    "char_count": len(piece),
+                    "metadata": dict(chunk.get("metadata") or {}),
+                })
+        return bounded
 
     def _build_sections(self, blocks: list[Block]) -> list[dict[str, Any]]:
         """把块按标题层级组装成 section（带 section_path）。"""

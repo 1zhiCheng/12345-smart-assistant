@@ -54,3 +54,18 @@ async def test_mongo_vector_store_is_shared():
     assert hits and hits[0]["id"] == "c1"
     await reader.delete_by_doc("d1")
     assert await writer.count() == 0
+
+
+@pytest.mark.asyncio
+async def test_mongo_vector_store_skips_incompatible_legacy_dimensions():
+    store = MemoryStore()
+    vectors = MongoVectorStore(store, embedding_provider="local", embedding_model="bge")
+    await vectors.add("good", [1.0, 0.0], {"doc_id": "d1", "dept_id": "dept_city_management"})
+    await store.upsert("vector_embeddings", {
+        "_id": "legacy", "vector": [1.0, 0.0, 0.0], "doc_id": "d2", "dept_id": "dept_city_management",
+    })
+    hits = await vectors.search([1.0, 0.0], dept_id="dept_city_management")
+    assert [hit["id"] for hit in hits] == ["good"]
+    stored = await store.get("vector_embeddings", "good")
+    assert stored["embedding_provider"] == "local"
+    assert stored["embedding_dim"] == 2

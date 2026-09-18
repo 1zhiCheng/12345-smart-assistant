@@ -17,7 +17,9 @@ VERIFY_PROMPT = """你是答案校验助手。检查答案是否可靠，仅输�
 1. 每个关键结论是否有条款支撑（引用来源）
 2. 是否与原文矛盾
 3. 是否遗漏关键信息
-4. 引用格式是否正确
+4. 引用格式是否为 [来源1]、[来源2]，且编号对应参考条款
+issues 只能填写会导致答案不可靠、确实需要修改的问题；解释“无错误”“引用一致”的文字不得放入 issues。
+若 passed 为 true，issues 必须是空数组。
 
 参考条款：
 {chunks}
@@ -39,8 +41,20 @@ class VerifierAgent:
 
     async def verify(self, query: str, answer: Answer, chunks: list[dict[str, Any]]) -> VerificationResult:
         if not chunks:
-            return VerificationResult(passed=True, score=0.9, issues=[])
-        chunks_text = "\n\n".join(f"[{i+1}] {c.get('content', '')[:500]}" for i, c in enumerate(chunks[:8]))
+            return (
+                VerificationResult(passed=True, score=0.9, issues=[])
+                if answer.content.strip()
+                else VerificationResult(passed=False, score=0.0, issues=["答案为空"])
+            )
+        hard_verdict = self._heuristic(answer, chunks)
+        if not hard_verdict.passed:
+            return hard_verdict
+        # 官方原文兜底没有生成性事实，只需执行确定性结构校验，避免再次调用失败的模型。
+        if answer.generation_mode == "official_text_fallback":
+            return hard_verdict
+        chunks_text = "\n\n".join(
+            f"[来源{i+1}] {c.get('content', '')}" for i, c in enumerate(chunks[:8])
+        )
         try:
             prompt = VERIFY_PROMPT.format(chunks=chunks_text, answer=answer.content, query=query)
             data = None
@@ -52,7 +66,16 @@ class VerifierAgent:
             if not isinstance(data, dict):
                 messages = [ChatMessage.system("你是严谨的答案校验助手。"), ChatMessage.user(prompt)]
                 data = await self.llm.complete_json(messages, temperature=0.0)
-            return VerificationResult.from_dict(data)
+            result = VerificationResult.from_dict(data)
+            non_issue_markers = ("不构成错误", "引用本身与原文一致", "无需修改", "无明显问题")
+            result.issues = [
+                issue for issue in result.issues
+                if not any(marker in issue for marker in non_issue_markers)
+            ]
+            # JSON 自相矛盾时以问题列表为准，防止 passed=true 绕过重写。
+            if result.issues and result.passed:
+                result.passed = False
+            return result
         except Exception as exc:  # noqa: BLE001
             logger.warning("答案校验 LLM 失败(%s)，使用启发式校验", exc)
             return self._heuristic(answer, chunks)

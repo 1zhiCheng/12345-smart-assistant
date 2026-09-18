@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -56,13 +57,69 @@ async def dashboard(request: Request, user: dict = Depends(require_admin)):
     skills = _scoped(await store.list_skills(), scope, include_global=True)
     hooks = _scoped(await store.list_hooks(), scope, include_global=True)
     rules = _scoped(await store.list_rules(), scope, include_global=True)
-    feedback = await container.feedback_collector.stats()
     traces = await store.list_recent_traces(limit=300)
+    if scope:
+        traces = [t for t in traces if scope in (t.get("intent") or {}).get("depts", [])]
+    feedback_rows = await store.find("feedback")
+    if scope:
+        trace_ids = {t.get("_id") for t in traces}
+        feedback_rows = [
+            row for row in feedback_rows
+            if row.get("trace_id") in trace_ids
+            or scope in row.get("dept_ids", [])
+            or (row.get("detail") or {}).get("dept_id") == scope
+        ]
+    feedback_up = sum(1 for row in feedback_rows if row.get("signal") == "up")
+    feedback_down = sum(1 for row in feedback_rows if row.get("signal") == "down")
+    feedback = {
+        "total": len(feedback_rows), "up": feedback_up, "down": feedback_down,
+        "adoption_rate": feedback_up / max(feedback_up + feedback_down, 1),
+    }
     pending_reviews = _scoped(await store.list_review_orders(status="pending"), scope)
     test_questions = _scoped(await store.list_test_questions(), scope)
     relations = await store.list_relations()
     if scope:
         relations = [r for r in relations if r.get("from_dept") == scope or r.get("to_dept") == scope]
+
+    # 运行态只暴露可验证的非敏感信息，方便管理员分辨当前是桌面演示还是生产同构部署。
+    # 不返回连接串、Token、模型 API Key 等配置内容。
+    vector_count: int | None
+    try:
+        vector_count = await container.vector_store.count()
+    except Exception as exc:  # noqa: BLE001 - 状态面板不能因可选指标失败而不可用
+        logger.warning("读取向量数量失败: %s", exc)
+        vector_count = None
+    cache_path = Path(settings.desktop_embedding_cache_path)
+    configured_provider = settings.embedding_provider.lower()
+    desktop_bge_cache_ready = (
+        settings.storage_mode == "memory"
+        and configured_provider == "local"
+        and cache_path.exists()
+        and (vector_count or 0) > 0
+    )
+    # 缓存命中时启动阶段不会再次调用 SentenceTransformer，
+    # last_effective_provider 会保持 None；但缓存中的向量正是由本地 BGE 构建的，
+    # 不能因此误报为 hash 降级。生产模式仍要求本次启动实际探测到真实 provider。
+    effective_provider = container.embeddings.last_effective_provider or configured_provider
+    uses_real_vectors = (
+        effective_provider not in {"hash", "hash-fallback"}
+        and (container.embeddings.last_effective_provider is not None or desktop_bge_cache_ready)
+    )
+    runtime = {
+        "mode": "production_like" if settings.storage_mode == "mongo" else "desktop_demo",
+        "storage_mode": settings.storage_mode,
+        "vector_backend": settings.vector_backend,
+        "embedding_provider": effective_provider,
+        "embedding_model": settings.embedding_model,
+        "uses_real_vectors": uses_real_vectors,
+        "vector_count": vector_count,
+        "official_chunk_count": len(chunks),
+        "desktop_vector_cache": {
+            "enabled": settings.storage_mode == "memory" and configured_provider == "local",
+            "ready": desktop_bge_cache_ready,
+        },
+        "async_worker_required": settings.storage_mode == "mongo" and settings.worker_readiness_required,
+    }
 
     dept_rows = []
     for d in departments:
@@ -108,6 +165,7 @@ async def dashboard(request: Request, user: dict = Depends(require_admin)):
             "trace_count": len(traces),
             "pending_review_count": len(pending_reviews),
             "test_question_count": len(test_questions),
+            "runtime": runtime,
         }
     )
 

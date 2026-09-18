@@ -1,5 +1,5 @@
 [project]
-name = "wenshu-backend"
+name = "wuhu-12345-backend"
 version = "0.1.0"
 description = "芜湖政务 Agent · 12345热线工单与知识辅助后端"
 requires-python = ">=3.9"

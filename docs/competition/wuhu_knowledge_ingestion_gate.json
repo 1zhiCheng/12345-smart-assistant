@@ -1,0 +1,43 @@
+{
+  "status": "passed",
+  "manifest_documents": 264,
+  "indexed_documents": 264,
+  "chunks": 1884,
+  "vectors": 1884,
+  "minimum_per_category": 20,
+  "minimum_chars": 180,
+  "official_only": true,
+  "unique_urls": true,
+  "unique_content_hashes": true,
+  "content_hashes_verified": true,
+  "required_12315_duties_verified": true,
+  "documents_by_category": {
+    "交通运输": 20,
+    "公共安全": 24,
+    "公共服务": 24,
+    "农林水土": 21,
+    "劳动和社会保障": 20,
+    "卫生健康": 21,
+    "城乡建设": 25,
+    "城市管理": 21,
+    "市场监管": 22,
+    "生态环境": 24,
+    "科教文体": 22,
+    "经济财贸": 20
+  },
+  "chunks_by_category": {
+    "交通运输": 168,
+    "公共安全": 326,
+    "公共服务": 186,
+    "农林水土": 147,
+    "劳动和社会保障": 162,
+    "卫生健康": 115,
+    "城乡建设": 139,
+    "城市管理": 109,
+    "市场监管": 88,
+    "生态环境": 158,
+    "科教文体": 162,
+    "经济财贸": 124
+  },
+  "errors": []
+}

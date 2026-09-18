@@ -64,13 +64,29 @@ class RedisSessionStore(SessionStore):
     async def connect(self) -> None:
         import redis.asyncio as aioredis  # 延迟导入
 
-        self._redis = aioredis.from_url(self.settings.redis_addr, db=self.settings.redis_db, decode_responses=True)
+        self._redis = aioredis.from_url(
+            self.settings.redis_addr,
+            db=self.settings.redis_db,
+            decode_responses=True,
+            socket_connect_timeout=self.settings.redis_socket_timeout_seconds,
+            socket_timeout=self.settings.redis_socket_timeout_seconds,
+            health_check_interval=30,
+        )
         await self._redis.ping()
         logger.info("Redis 已连接: %s", _redact_redis_addr(self.settings.redis_addr))
 
     async def close(self) -> None:
         if self._redis is not None:
             await self._redis.aclose()
+        self._redis = None
+
+    async def ping(self) -> bool:
+        if self._redis is None:
+            return False
+        try:
+            return bool(await self._redis.ping())
+        except Exception:  # noqa: BLE001 - readiness 只返回布尔状态
+            return False
 
     @property
     def redis(self):

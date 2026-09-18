@@ -27,23 +27,34 @@ class EmbeddingClient:
         self.dim = settings.embedding_dim
         self.relay = relay
         self._local_model = None
+        self.last_effective_provider: Optional[str] = None
 
     async def embed(self, texts: list[str]) -> list[list[float]]:
         if not texts:
             return []
         if self.provider == "relay":
             if self.relay is None or not self.settings.relay_api_key:
-                logger.warning("未配置中转站 key，回退到 hash 向量（仅开发用）")
-                return [self._hash_embed(t) for t in texts]
+                return self._fallback_or_raise(texts, "relay 向量服务未配置 API key")
             try:
                 vecs = await self.relay.embed(texts, model=self.model)
+                self._validate_vectors(vecs, len(texts))
                 self.dim = len(vecs[0])
+                self.last_effective_provider = "relay"
                 return vecs
             except Exception as exc:  # noqa: BLE001 - 向量失败不应阻断入库主流程
-                logger.warning("中转站向量失败(%s)，回退 hash 向量", exc)
-                return [self._hash_embed(t) for t in texts]
+                return self._fallback_or_raise(texts, f"中转站向量失败: {exc}")
         if self.provider == "local":
-            return self._local_embed(texts)
+            try:
+                vecs = self._local_embed(texts)
+                self._validate_vectors(vecs, len(texts))
+                self.dim = len(vecs[0])
+                self.last_effective_provider = "local"
+                return vecs
+            except Exception as exc:  # noqa: BLE001 - 是否降级由显式配置决定
+                return self._fallback_or_raise(texts, f"本地向量模型失败: {exc}")
+        if self.provider != "hash":
+            raise RuntimeError(f"不支持的 EMBEDDING_PROVIDER: {self.provider}")
+        self.last_effective_provider = "hash"
         return [self._hash_embed(t) for t in texts]
 
     async def embed_query(self, text: str) -> list[float]:
@@ -53,13 +64,31 @@ class EmbeddingClient:
     def _local_embed(self, texts: list[str]) -> list[list[float]]:
         try:
             from sentence_transformers import SentenceTransformer  # 延迟导入，可选依赖
-        except ImportError:
-            logger.warning("未安装 sentence-transformers，回退 hash 向量")
-            return [self._hash_embed(t) for t in texts]
+        except ImportError as exc:
+            raise RuntimeError("未安装 sentence-transformers") from exc
         if self._local_model is None:
-            self._local_model = SentenceTransformer(self.model)
+            # 比赛运行时必须可断网复现；模型未预下载时由上层安全降级，
+            # 不在请求过程中临时访问 Hugging Face。
+            self._local_model = SentenceTransformer(self.model, local_files_only=True)
         vecs = self._local_model.encode(texts, normalize_embeddings=True)
         return [v.tolist() for v in vecs]
+
+    def _fallback_or_raise(self, texts: list[str], reason: str) -> list[list[float]]:
+        if not self.settings.embedding_allow_hash_fallback:
+            raise RuntimeError(f"{reason}；生产配置禁止静默降级到 hash 向量")
+        logger.warning("%s，按 EMBEDDING_ALLOW_HASH_FALLBACK=true 降级 hash 向量", reason)
+        self.last_effective_provider = "hash-fallback"
+        return [self._hash_embed(t) for t in texts]
+
+    @staticmethod
+    def _validate_vectors(vectors: list[list[float]], expected_count: int) -> None:
+        if len(vectors) != expected_count or not vectors:
+            raise RuntimeError(f"向量数量异常: expected={expected_count}, actual={len(vectors)}")
+        dimension = len(vectors[0])
+        if dimension <= 0 or any(len(vector) != dimension for vector in vectors):
+            raise RuntimeError("向量维度为空或不一致")
+        if any(not math.isfinite(value) for vector in vectors for value in vector):
+            raise RuntimeError("向量包含 NaN/Inf")
 
     def _hash_embed(self, text: str) -> list[float]:
         """确定性哈希向量：对字符 n-gram 做 hashing 得到稀疏向量，再归一化。

@@ -48,6 +48,7 @@ COLLECTIONS = (
     "memory_topics",
     "memory_sequences",
     "workorders",
+    "citizen_submissions",
 )
 
 

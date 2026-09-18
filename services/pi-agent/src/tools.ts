@@ -48,9 +48,9 @@ export function buildTools(config: Config): AgentTool[] {
       },
     },
     {
-      name: "lookup_calendar",
-      label: "查询校历",
-      description: "查询当前学期校历（开学/放假/选课周等时间节点）。",
+      name: "lookup_service_calendar",
+      label: "查询政务服务日历",
+      description: "查询政务服务工作日、节假日和已配置的办理时限节点。",
       parameters: Type.Object({}),
       execute: async () => {
         const data = await getCalendar(config);

@@ -1,4 +1,4 @@
-"""成员 A 与成员 B 之间共享的标准工单数据契约。"""
+"""贯穿 12345 受理、转派、检索与回复阶段的标准工单数据契约。"""
 from __future__ import annotations
 
 from datetime import datetime, timezone

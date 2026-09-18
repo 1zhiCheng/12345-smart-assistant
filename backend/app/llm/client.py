@@ -70,6 +70,7 @@ class LLMClient(ABC):
         temperature: Optional[float] = None,
         max_tokens: Optional[int] = None,
         response_format: Optional[dict[str, Any]] = None,
+        thinking: Optional[dict[str, str]] = None,
     ) -> str:
         """非流式补全，返回文本。"""
         if not self.api_key:
@@ -83,6 +84,8 @@ class LLMClient(ABC):
         }
         if response_format is not None:
             payload["response_format"] = response_format
+        if thinking is not None:
+            payload["thinking"] = thinking
 
         try:
             async with httpx.AsyncClient(timeout=self.timeout) as client:
@@ -114,6 +117,10 @@ class LLMClient(ABC):
             temperature=temperature,
             max_tokens=max_tokens,
             response_format={"type": "json_object"},
+            # DeepSeek v4 默认启用高强度思考。结构化抽取不需要长推理，
+            # 关闭后可避免有限输出预算全部消耗在 reasoning_content，
+            # 导致最终 content 为空而触发规则降级。
+            thinking={"type": "disabled"},
         )
         return self._extract_json(text)
 

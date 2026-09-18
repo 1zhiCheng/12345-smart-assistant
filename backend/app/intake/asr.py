@@ -46,6 +46,11 @@ class Transcript:
 class AsrService:
     def __init__(self, settings: Settings):
         self.settings = settings
+        # Some Windows hosts expose a CUDA device to ctranslate2 while the
+        # required CUDA/cuDNN runtime is incomplete.  Once a real inference
+        # fails, remember the fallback for this service instance instead of
+        # retrying the same unstable GPU path for every recording.
+        self._force_local_cpu = False
 
     @property
     def enabled(self) -> bool:
@@ -95,9 +100,9 @@ class AsrService:
             with NamedTemporaryFile(suffix=suffix, delete=False) as temp_file:
                 temp_file.write(content)
                 temp_path = temp_file.name
-            model, device, compute_type = _load_local_model(
-                str(model_path), self.settings.asr_local_device, self.settings.asr_local_compute_type
-            )
+            requested_device = "cpu" if self._force_local_cpu else self.settings.asr_local_device
+            requested_compute = "int8" if self._force_local_cpu else self.settings.asr_local_compute_type
+            model, device, compute_type = _load_local_model(str(model_path), requested_device, requested_compute)
             try:
                 hotwords = _load_hotwords()
                 segments, _ = model.transcribe(
@@ -118,6 +123,7 @@ class AsrService:
                 if device != "cuda":
                     raise
                 # CUDA/cuDNN 运行库不完整时保证演示仍可用。
+                self._force_local_cpu = True
                 model, device, compute_type = _load_local_model(str(model_path), "cpu", "int8")
                 segments, _ = model.transcribe(
                     temp_path,

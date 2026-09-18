@@ -36,7 +36,7 @@ class Settings(BaseSettings):
 
     # ---- 中转站（非 DeepSeek 模型，OpenAI 兼容） ----
     relay_api_key: str = ""
-    relay_base_url: str = "https://yunwu.ai/v1"
+    relay_base_url: str = ""
     relay_model: str = "gpt-5.5"
 
     # ---- Embedding ----
@@ -45,18 +45,37 @@ class Settings(BaseSettings):
     embedding_provider: str = "local"
     embedding_model: str = "BAAI/bge-small-zh-v1.5"
     embedding_dim: int = 512
+    # 生产链路禁止在真实向量不可用时悄悄切换到 hash。测试应显式设置 provider=hash。
+    embedding_allow_hash_fallback: bool = False
+    # 仅桌面 memory 模式使用：缓存已公开官方 Chunk 的本地 BGE 向量，避免每次重启重复嵌入。
+    desktop_embedding_cache_path: str = "data/desktop_bge_vectors.npz"
+
+    # ---- 部门语义路由 ----
+    routing_semantic_enabled: bool = True
+    routing_prototype_path: str = "backend/resources/routing_prototypes.bge-small-zh-v1.5.json"
+    routing_semantic_top_k: int = 3
+    routing_keyword_bonus: float = 0.08
 
     # ---- 存储 ----
     storage_mode: str = "mongo"  # mongo | memory
     mongodb_uri: str = "mongodb://localhost:27017"
-    mongodb_db: str = "wenshu"
+    mongodb_db: str = "wuhu_12345"
+    mongodb_server_selection_timeout_ms: int = 5000
     redis_addr: str = "redis://localhost:6379"
     redis_db: int = 0
-    async_stream_name: str = "wenshu:jobs"
-    upload_storage_dir: str = "/tmp/wenshu-uploads"
+    redis_socket_timeout_seconds: float = 5.0
+    async_stream_name: str = "wuhu12345:jobs"
+    async_job_max_attempts: int = 3
+    async_job_reclaim_idle_ms: int = 60_000
+    async_worker_heartbeat_seconds: int = 10
+    async_worker_stale_seconds: int = 30
+    worker_readiness_required: bool = True
+    dependency_fail_fast: bool = True
+    upload_storage_dir: str = "/tmp/wuhu-12345-uploads"
 
     # ---- 检索 ----
     vector_backend: str = "mongo"  # memory | mongo | chroma | milvus
+    vector_cache_ttl_seconds: float = 30.0  # Mongo 共享向量在进程内的只读快照 TTL
     hybrid_topk: int = 5
     bm25_top: int = 20
     vector_top: int = 20
@@ -65,7 +84,7 @@ class Settings(BaseSettings):
 
     # ---- pi 智能体服务（Harness + Loop 深度整合） ----
     # Python Harness 是唯一生产问答运行时；pi-agent 保留为实验服务，默认不接主链。
-    pi_agent_enabled: bool = True
+    pi_agent_enabled: bool = False
     pi_agent_url: str = "http://localhost:8100"
     pi_agent_timeout: float = 120.0
     pi_runtime_timeout_intent: float = 8.0
@@ -104,12 +123,18 @@ class Settings(BaseSettings):
     memory_org_limit: int = 8
 
     # ---- 鉴权 ----
-    auth_secret: str = "wenshu-dev-secret-change-me"
+    auth_secret: str = "wuhu-12345-dev-secret-change-me"
     auth_token_ttl_hours: int = 24
     # 内部接口（/internal/*）共享 Token：为空则内部接口不可用（fail-closed）
     internal_api_token: str = ""
     # 演示种子账号开关：生产务必 SEED_DEMO_USERS=false（并删除已创建的演示账号）
     seed_demo_users: bool = True
+    # memory 演示模式下，以本地官方文档与脱敏评测结果填充管理看板；Mongo 生产模式不生效
+    seed_operational_demo_data: bool = True
+    # 生产首次启动可通过 Secret 注入一次性系统管理员；为空则不创建。
+    bootstrap_admin_username: str = ""
+    bootstrap_admin_password: str = ""
+    bootstrap_admin_name: str = "系统管理员"
     # 登录限流（内存版，单进程有效）
     login_max_attempts: int = 5
     login_window_seconds: int = 300

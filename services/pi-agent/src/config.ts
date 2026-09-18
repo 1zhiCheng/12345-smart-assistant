@@ -1,6 +1,6 @@
 /**
  * 集中配置：从环境变量读取（Docker 由 compose 注入，本地可配 .env）。
- * DeepSeek 为主力对话模型；中转站（OpenAI 兼容）用于非 DeepSeek 模型（bge reranker 等）。
+ * DeepSeek 为可选对话模型；中转站仅在显式配置并授权时使用。
  */
 
 function str(name: string, fallback: string): string {
@@ -46,8 +46,8 @@ export function loadConfig(): Config {
     deepseekModel: str("DEEPSEEK_MODEL", "deepseek-v4-flash"),
 
     relayApiKey: str("RELAY_API_KEY", ""),
-    relayBaseUrl: str("RELAY_BASE_URL", "https://yunwu.ai/v1"),
-    relayModel: str("RELAY_MODEL", "gpt-5.5"),
+    relayBaseUrl: str("RELAY_BASE_URL", ""),
+    relayModel: str("RELAY_MODEL", "zai-org/GLM-5.2"),
 
     loopEnabled: str("LOOP_ENABLED", "true") === "true",
     loopPhase: (str("LOOP_PHASE", "human_on_loop") as Config["loopPhase"]),

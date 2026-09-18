@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "generated_at": "2026-09-15T18:00:23.072399+00:00",
+  "embedding": {
+    "provider": "local",
+    "model": "C:\\Users\\10415\\Desktop\\芜湖政务Agent\\models\\bge-small-zh-v1.5",
+    "dimension": 512
+  },
+  "metrics": {
+    "vector_count": 1884,
+    "search": {
+      "requests": 100,
+      "concurrency": 20,
+      "cold_start_ms": 72.54,
+      "throughput_per_second": 1173.04,
+      "error_rate": 0.0,
+      "p50_ms": 0.82,
+      "p95_ms": 1.02,
+      "p99_ms": 1.2
+    },
+    "worker": {
+      "jobs": 100,
+      "throughput_per_second": 77.92,
+      "error_rate": 0.0,
+      "p50_ms": 672.52,
+      "p95_ms": 1215.41,
+      "p99_ms": 1219.44,
+      "timed_out": 0
+    }
+  },
+  "gates": {
+    "search_error_rate_lt_1pct": true,
+    "search_p95_lt_2000ms": true,
+    "worker_error_rate_lt_1pct": true,
+    "worker_p95_lt_5000ms": true
+  }
+}

@@ -1,11 +1,16 @@
-"""成员 A：诉求理解与标准工单生成测试。"""
+"""12345 端到端工单理解、生成与转派测试。"""
+from unittest.mock import AsyncMock
+
 import pytest
 from fastapi.testclient import TestClient
 
 from app.config import Settings
+from app.domain.wuhu import seed_wuhu_departments
+from app.harness.agents.dept_router import DeptRouter
 from app.intake.llm_service import LLMIntakeService
 from app.intake.service import IntakeService
 from app.main import app
+from app.storage.store import MemoryStore
 
 
 class FakeLLM:
@@ -15,10 +20,13 @@ class FakeLLM:
     def __init__(self, payload):
         self.payload = payload
         self.messages = []
+        self.calls = 0
 
     async def complete_json(self, messages, **kwargs):
         self.messages = messages
-        return self.payload
+        payload = self.payload[min(self.calls, len(self.payload) - 1)] if isinstance(self.payload, list) else self.payload
+        self.calls += 1
+        return payload
 
     def name(self):
         return "fake"
@@ -180,7 +188,7 @@ def test_confirmed_workorder_handoff_can_be_claimed_and_completed_by_member_b():
 
         operator = login("operator", "operator123")
         admin = login("admin", "admin123")
-        department_admin = login("cgj_admin", "admin123")
+        department_admin = login("city_management_admin", "admin123")
         draft = IntakeService().analyze("镜湖区某小区夜间施工噪声扰民，希望相关部门核查处理。")
 
         confirmed = client.post(
@@ -227,6 +235,104 @@ def test_confirmed_workorder_handoff_can_be_claimed_and_completed_by_member_b():
         assert result["classification"]["category"] == "生态环境"
         assert result["routing"]["dept_ids"] == ["dept_ecology_environment"]
         assert result["completed_at"]
+
+
+def test_member_b_can_generate_grounded_recommendation_before_result_review():
+    with TestClient(app) as client:
+        def login(username: str, password: str) -> dict[str, str]:
+            response = client.post("/api/v1/auth/login", json={"username": username, "password": password})
+            return {"Authorization": f"Bearer {response.json()['data']['token']}"}
+
+        operator = login("operator", "operator123")
+        admin = login("admin", "admin123")
+        draft = IntakeService().analyze(
+            "镜湖区某小区夜间施工噪声影响居民休息，希望核查施工时间并处理。"
+        )
+        client.post("/api/v1/intake/confirm", headers=operator, json={"workorder": draft.model_dump()})
+        citation = {
+            "doc_id": "doc-noise", "doc_title": "芜湖市噪声污染防治资料",
+            "dept_id": "dept_ecology_environment", "chunk_index": 0,
+            "section_path": ["施工噪声"], "snippet": "施工单位应采取噪声污染防治措施。",
+        }
+        import asyncio
+        asyncio.run(client.app.state.container.store.upsert("chunks", {
+            "_id": "doc-noise:0", "doc_id": "doc-noise", "chunk_index": 0,
+            "content": "施工单位应采取噪声污染防治措施。",
+        }))
+        client.app.state.container.orchestrator.answer = AsyncMock(return_value={
+            "answer": "施工单位应采取噪声污染防治措施。[来源1]建议转交主管部门核查。",
+            "citations": [citation], "dept_ids": ["dept_ecology_environment"],
+            "confidence": 0.91, "verification": {"passed": True, "score": 0.95, "issues": []},
+            "retrieved_count": 5,
+        })
+
+        response = client.post(f"/api/v1/intake/handoffs/{draft.case_id}/recommend", headers=admin)
+
+        assert response.status_code == 200
+        data = response.json()["data"]
+        assert data["classification"]["category"] == "生态环境"
+        assert data["routing"]["dept_ids"] == ["dept_ecology_environment"]
+        assert data["policy_basis"]["citations"][0]["doc_id"] == "doc-noise"
+        assert data["reply"]["status"] == "pending_review"
+        assert data["release_gate"]["automated_passed"] is True
+        assert data["release_gate"]["can_auto_publish"] is False
+        assert data["requires_human_review"] is True
+
+
+def test_handoff_result_rejects_reply_that_fails_compliance_gate():
+    with TestClient(app) as client:
+        def login(username: str, password: str) -> dict[str, str]:
+            response = client.post("/api/v1/auth/login", json={"username": username, "password": password})
+            return {"Authorization": f"Bearer {response.json()['data']['token']}"}
+
+        operator = login("operator", "operator123")
+        admin = login("admin", "admin123")
+        draft = IntakeService().analyze("镜湖区某小区存在施工噪声，希望相关部门处理。")
+        client.post("/api/v1/intake/confirm", headers=operator, json={"workorder": draft.model_dump()})
+        client.post(f"/api/v1/intake/handoffs/{draft.case_id}/claim", headers=admin)
+
+        response = client.post(
+            f"/api/v1/intake/handoffs/{draft.case_id}/result",
+            headers=admin,
+            json={
+                "classification": {"category": "生态环境"},
+                "routing": {"dept_ids": ["dept_ecology_environment"]},
+                "reply": {"draft": "根据政策规定，我们保证解决，并在7日内办结。", "citations": []},
+            },
+        )
+
+        assert response.status_code == 422
+        detail = response.json()["detail"]
+        assert detail["message"] == "回复未通过合规门禁，请修改后重试"
+        assert detail["compliance"]["status"] == "blocked"
+
+
+@pytest.mark.asyncio
+async def test_market_pricing_phrase_overrides_generic_fee_routing():
+    store = MemoryStore()
+    await seed_wuhu_departments(store)
+    route = await DeptRouter(FakeLLM({}), store).route(
+        "消费者反映理发店未明码标价，结账时收费远高于价目表，希望核查处理。"
+    )
+    assert route["dept_ids"] == ["dept_market_regulation"]
+    assert "未明码标价" in route["reasons"][0]
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(("query", "expected"), [
+    ("小区消防通道被占，救护车无法进入", "dept_public_security"),
+    ("家中频繁停电和跳闸，希望检修供电设施", "dept_public_services"),
+    ("幼升小报名平台异常，材料无法提交", "dept_education_science_culture_sports"),
+    ("咨询企业技术改造补贴申报条件", "dept_economy_trade"),
+    ("村里水库水位上涨，需要防汛排查", "dept_agriculture_forestry_water"),
+    ("医美机构开展注射项目但未公示执业许可", "dept_health"),
+])
+async def test_distinctive_12345_matters_route_without_llm(query, expected):
+    store = MemoryStore()
+    await seed_wuhu_departments(store)
+    route = await DeptRouter(FakeLLM({}), store).route(query)
+    assert route["dept_ids"][0] == expected
+    assert route["matched_by"] == "keyword"
 
 
 @pytest.mark.asyncio
@@ -306,3 +412,108 @@ async def test_llm_requires_explicit_data_transfer_switch():
     assert result.generation.mode == "rule_fallback"
     assert result.generation.fallback_reason == "大模型工单生成未授权启用"
     assert llm.messages == []
+
+
+def test_audio_generalizes_location_and_event_beyond_legacy_cases():
+    transcript = """接线员：您好，请讲。
+群众：我在镜湖区某社区卫生服务中心预约，一直显示没有号，电话也没人接。
+接线员：您的诉求是什么？
+群众：希望核实放号安排，并把咨询电话接通。"""
+
+    result = IntakeService().analyze(transcript, source_type="audio")
+
+    assert result.elements.location == "镜湖区某社区卫生服务中心"
+    assert "预约" in result.elements.event
+    assert "没有号" in result.elements.event
+    assert "接线员" not in result.elements.event
+    assert "核实放号安排" in result.elements.request
+
+
+@pytest.mark.parametrize(("spoken", "expected"), [
+    ("静湖区某社区 卫生福务中间", "镜湖区某社区卫生服务中心"),
+    ("弯制区某安置小區地下车库", "湾沚区某安置小区地下车库"),
+    ("经开区某制造企业", "经开区某制造企业"),
+    ("为市某村农田灌溉渠", "无为市某村农田灌溉渠"),
+    ("一江区某小区燃气用户", "弋江区某小区燃气用户"),
+])
+def test_location_normalizes_common_wuhu_asr_variants(spoken, expected):
+    assert IntakeService()._extract_location(spoken) == expected
+
+
+@pytest.mark.parametrize(("spoken", "expected"), [
+    ("静湖区某小区", "镜湖区"),
+    ("异江区某医院", "弋江区"),
+    ("芜湖市某公交站", "市本级"),
+])
+def test_region_returns_canonical_administrative_area(spoken, expected):
+    assert IntakeService()._extract_region(spoken) == expected
+
+
+@pytest.mark.parametrize(("left", "right", "expected"), [
+    ("请问是哪个区经", "开区系统没有提示", "经开区系统没有提示"),
+    ("扬尘什么时候严重异", "江区某工地白天最严重", "异江区某工地白天最严重"),
+    ("是哪家机构镜", "湖区某社区卫生服务中心", "镜湖区某社区卫生服务中心"),
+])
+def test_labeled_turns_repair_region_split_across_speaker_boundary(left, right, expected):
+    formatted = IntakeService.format_audio_dialogue(f"接线员：{left}\n群众：{right}")
+
+    assert expected in formatted.citizen_text
+    assert not formatted.turns[0].text.endswith(left[-1])
+
+
+@pytest.mark.parametrize(("spoken", "expected_term"), [
+    ("场馆周末总是临时闭馆。最好公众号提前发通知。", "最好公众号提前发通知"),
+    ("工伤怎么报一直没人讲。想问清楚申报时限和所需材料。", "想问清楚申报时限"),
+    ("燃气充值没有到账。麻烦帮我核对充值记录。", "麻烦帮我核对充值记录"),
+])
+def test_request_extracts_colloquial_action_markers(spoken, expected_term):
+    assert expected_term in IntakeService()._extract_request(spoken)
+
+
+@pytest.mark.asyncio
+async def test_llm_ungrounded_field_cannot_overwrite_grounded_rule_field():
+    text = "镜湖区某社区卫生服务中心一直预约不到号，希望核实放号安排。"
+    llm = FakeLLM({
+        "title": "关于预约的问题", "summary": "预约问题。", "time": "",
+        "location": "虚构医院", "subjects": [], "event": "一直预约不到号",
+        "request": "希望核实放号安排", "ambiguities": [], "clarification_questions": [],
+        "evidence": [
+            {"field": "event", "quote": "一直预约不到号"},
+            {"field": "request", "quote": "希望核实放号安排"},
+        ],
+    })
+    settings = Settings(
+        intake_llm_enabled=True, deepseek_api_key="test-key", intake_llm_min_evidence_ratio=0.6
+    )
+
+    result = await LLMIntakeService(llm, settings).analyze(text)
+
+    assert result.generation.mode == "llm"
+    assert result.elements.location == "镜湖区某社区卫生服务中心"
+    assert "虚构医院" not in result.title
+    assert "虚构医院" not in result.summary
+
+
+@pytest.mark.asyncio
+async def test_llm_retries_once_when_evidence_schema_is_invalid():
+    valid = {
+        "title": "关于噪声的问题", "summary": "小区噪声扰民。", "time": "",
+        "location": "镜湖区某小区", "subjects": [], "event": "噪声扰民",
+        "request": "希望处理", "ambiguities": [], "clarification_questions": [],
+        "evidence": [
+            {"field": "location", "quote": "镜湖区某小区"},
+            {"field": "event", "quote": "噪声扰民"},
+            {"field": "request", "quote": "希望处理"},
+        ],
+    }
+    invalid = {**valid, "evidence": [{"field": "ambiguities", "quote": "信息不明"}]}
+    llm = FakeLLM([invalid, valid])
+
+    result = await LLMIntakeService(
+        llm, Settings(intake_llm_enabled=True, deepseek_api_key="test-key")
+    ).analyze("静湖区某小区噪声扰民，希望处理。", source_type="audio")
+
+    assert llm.calls == 2
+    assert result.generation.mode == "llm"
+    assert result.elements.location == "镜湖区某小区"
+    assert any("镜湖区某小区" in message["content"] for message in llm.messages)

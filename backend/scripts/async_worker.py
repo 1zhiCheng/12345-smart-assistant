@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+from contextlib import suppress
 from pathlib import Path
 
 from app.config import get_settings
@@ -38,6 +39,8 @@ async def process(container, job):
         result = await container.loop_engine.run_cycle(progress_callback=progress)
         result["memory_retention"] = await container.memory_retention.prune_expired()
         return result
+    if job["type"] == "health_probe":
+        return {"nonce": payload.get("nonce"), "worker": container.job_queue.consumer_name}
     raise ValueError(f"未知作业类型: {job['type']}")
 
 
@@ -49,14 +52,33 @@ async def main():
         await container.mongo.connect()
     if hasattr(container.session_store, "connect"):
         await container.session_store.connect()
-    while True:
-        for job in await container.job_queue.next_jobs():
-            try:
-                result = await process(container, job)
-                await container.job_queue.finish(job, "completed", result)
-            except Exception as exc:
-                await container.job_queue.finish(job, "failed", {"error": str(exc)})
-        await asyncio.sleep(0.1)
+    if settings.storage_mode == "mongo":
+        await container.embeddings.embed(["芜湖市12345异步任务真实向量健康检查"])
+        if container.embeddings.last_effective_provider in {None, "hash", "hash-fallback"}:
+            raise RuntimeError("worker 未使用真实 embedding provider")
+    async def keep_heartbeat() -> None:
+        while True:
+            await container.job_queue.heartbeat(settings.async_worker_stale_seconds)
+            await asyncio.sleep(settings.async_worker_heartbeat_seconds)
+
+    heartbeat_task = asyncio.create_task(keep_heartbeat())
+    try:
+        while True:
+            for job in await container.job_queue.next_jobs():
+                try:
+                    result = await process(container, job)
+                    await container.job_queue.finish(job, "completed", result)
+                except Exception as exc:  # noqa: BLE001 - 失败交给队列重试/死信策略
+                    await container.job_queue.fail(job, str(exc))
+            await asyncio.sleep(0.1)
+    finally:
+        heartbeat_task.cancel()
+        with suppress(asyncio.CancelledError):
+            await heartbeat_task
+        if container.mongo is not None:
+            await container.mongo.close()
+        if hasattr(container.session_store, "close"):
+            await container.session_store.close()
 
 
 if __name__ == "__main__":

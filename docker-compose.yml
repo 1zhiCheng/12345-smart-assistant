@@ -1,31 +1,31 @@
 # 芜湖政务 Agent · 全栈编排（MongoDB + Redis + Python 后端 + pi 智能体服务 + Next.js 前端）
-# 用法：docker compose up --build
-name: wenshu
+# 默认用法：docker compose up --build；显式启用 pi：docker compose --profile pi up --build
+name: wuhu-12345
 
 services:
   mongodb:
     image: mongo:7.0
-    container_name: wenshu-mongodb
+    container_name: wuhu-12345-mongodb
     restart: unless-stopped
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-wenshu}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-wenshu}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-wuhu12345_admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-change-me-strong-mongo-password}
     ports:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
     healthcheck:
-      test: ["CMD", "mongosh", "--quiet", "-u", "${MONGO_INITDB_ROOT_USERNAME:-wenshu}", "-p", "${MONGO_INITDB_ROOT_PASSWORD:-wenshu}", "--authenticationDatabase", "admin", "--eval", "db.runCommand('ping').ok"]
+      test: ["CMD", "mongosh", "--quiet", "-u", "${MONGO_INITDB_ROOT_USERNAME:-wuhu12345_admin}", "-p", "${MONGO_INITDB_ROOT_PASSWORD:-change-me-strong-mongo-password}", "--authenticationDatabase", "admin", "--eval", "db.runCommand('ping').ok"]
       interval: 10s
       timeout: 5s
       retries: 5
 
   redis:
     image: redis:7-alpine
-    container_name: wenshu-redis
+    container_name: wuhu-12345-redis
     restart: unless-stopped
     environment:
-      REDIS_PASSWORD: ${REDIS_PASSWORD:-wenshu}
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-change-me-strong-redis-password}
     command: ["sh", "-c", "redis-server --requirepass \"$$REDIS_PASSWORD\""]
     ports:
       - "6379:6379"
@@ -40,16 +40,25 @@ services:
   backend:
     build:
       context: ./backend
-    container_name: wenshu-backend
+    container_name: wuhu-12345-backend
     restart: unless-stopped
     env_file:
       - .env
     environment:
-      MONGODB_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME:-wenshu}:${MONGO_INITDB_ROOT_PASSWORD:-wenshu}@mongodb:27017/${MONGODB_DB:-wenshu}?authSource=admin
-      REDIS_ADDR: redis://:${REDIS_PASSWORD:-wenshu}@redis:6379
+      MONGODB_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME:-wuhu12345_admin}:${MONGO_INITDB_ROOT_PASSWORD:-change-me-strong-mongo-password}@mongodb:27017/${MONGODB_DB:-wuhu_12345}?authSource=admin
+      REDIS_ADDR: redis://:${REDIS_PASSWORD:-change-me-strong-redis-password}@redis:6379
+      STORAGE_MODE: mongo
       PI_AGENT_URL: http://pi-agent:8100
-      PI_AGENT_ENABLED: "true"
+      PI_AGENT_ENABLED: ${PI_AGENT_ENABLED:-false}
       VECTOR_BACKEND: mongo
+      EMBEDDING_PROVIDER: local
+      EMBEDDING_MODEL: /app/models/bge-small-zh-v1.5
+      EMBEDDING_ALLOW_HASH_FALLBACK: "false"
+      DEPENDENCY_FAIL_FAST: "true"
+      SEED_DEMO_USERS: "false"
+      SEED_OPERATIONAL_DEMO_DATA: "false"
+      ASR_LOCAL_MODEL_PATH: /app/models/faster-whisper-turbo
+      ASR_SPEAKER_MODEL_PATH: /app/models/speaker-diarization/campplus.onnx
       HOST: 0.0.0.0
       PORT: 8000
       UPLOAD_STORAGE_DIR: /data/uploads
@@ -62,21 +71,34 @@ services:
         condition: service_healthy
     volumes:
       - ./wuhu_knowledge_base:/app/wuhu_knowledge_base:ro
+      - ./models:/app/models:ro
       - upload_data:/data/uploads
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/readyz', timeout=5)"]
+      interval: 15s
+      timeout: 8s
+      retries: 12
+      start_period: 60s
 
   worker:
     build:
       context: ./backend
-    container_name: wenshu-worker
+    container_name: wuhu-12345-worker
     restart: unless-stopped
     command: ["python", "-m", "scripts.async_worker"]
     env_file:
       - .env
     environment:
-      MONGODB_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME:-wenshu}:${MONGO_INITDB_ROOT_PASSWORD:-wenshu}@mongodb:27017/${MONGODB_DB:-wenshu}?authSource=admin
-      REDIS_ADDR: redis://:${REDIS_PASSWORD:-wenshu}@redis:6379
+      MONGODB_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME:-wuhu12345_admin}:${MONGO_INITDB_ROOT_PASSWORD:-change-me-strong-mongo-password}@mongodb:27017/${MONGODB_DB:-wuhu_12345}?authSource=admin
+      REDIS_ADDR: redis://:${REDIS_PASSWORD:-change-me-strong-redis-password}@redis:6379
       STORAGE_MODE: mongo
       VECTOR_BACKEND: mongo
+      EMBEDDING_PROVIDER: local
+      EMBEDDING_MODEL: /app/models/bge-small-zh-v1.5
+      EMBEDDING_ALLOW_HASH_FALLBACK: "false"
+      DEPENDENCY_FAIL_FAST: "true"
+      SEED_DEMO_USERS: "false"
+      SEED_OPERATIONAL_DEMO_DATA: "false"
       UPLOAD_STORAGE_DIR: /data/uploads
     depends_on:
       mongodb:
@@ -84,12 +106,21 @@ services:
       redis:
         condition: service_healthy
     volumes:
+      - ./wuhu_knowledge_base:/app/wuhu_knowledge_base:ro
+      - ./models:/app/models:ro
       - upload_data:/data/uploads
+    healthcheck:
+      test: ["CMD", "python", "-m", "scripts.worker_healthcheck"]
+      interval: 15s
+      timeout: 8s
+      retries: 6
+      start_period: 60s
 
   pi-agent:
+    profiles: ["pi"]
     build:
       context: ./services/pi-agent
-    container_name: wenshu-pi-agent
+    container_name: wuhu-12345-pi-agent
     restart: unless-stopped
     env_file:
       - .env
@@ -100,7 +131,8 @@ services:
     ports:
       - "8100:8100"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://localhost:8100/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
       interval: 10s
@@ -112,7 +144,7 @@ services:
       context: ./web
       args:
         BACKEND_URL: http://backend:8000
-    container_name: wenshu-web
+    container_name: wuhu-12345-web
     restart: unless-stopped
     environment:
       BACKEND_URL: http://backend:8000
@@ -120,7 +152,8 @@ services:
     ports:
       - "8080:3000"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
 
 volumes:
   mongodb_data:

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "city-garbage",
+    "dept_id": "dept_city_management",
+    "query": "小区个人不按规定分类投放生活垃圾会被责令改正吗，罚款标准是多少？",
+    "expected_terms": ["责令改正", "五十元以上二百元以下"]
+  },
+  {
+    "id": "gas-price",
+    "dept_id": "dept_economy_trade",
+    "query": "市区居民管道天然气价格调整的政策依据是什么？",
+    "expected_terms": ["上下游价格联动机制", "2024年9月1日"]
+  },
+  {
+    "id": "birth-policy",
+    "dept_id": "dept_health",
+    "query": "芜湖市一对夫妻可以生育几个子女，当前国家基础育儿补贴每孩每年标准是多少？",
+    "expected_terms": ["一对夫妻可以生育三个子女", "每孩每年3600元"]
+  }
+]

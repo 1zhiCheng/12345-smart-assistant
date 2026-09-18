@@ -125,6 +125,33 @@ export interface StandardWorkOrder {
   reply?: Record<string, unknown> | null;
 }
 
+export interface HandoffRecommendation {
+  case_id: string;
+  classification: { category: string; confidence: number; source: string; reasons: string[] };
+  routing: DeptRoute & { top_k: Array<{ dept_id: string; dept_name: string; rank: number }> };
+  policy_basis: {
+    citations: Citation[];
+    verification: { passed?: boolean; score?: number; issues?: string[] };
+    retrieved_count: number;
+  };
+  reply: { draft: string; status: string; citations: Citation[]; confidence: number; compliance: ReplyCompliance };
+  release_gate: ReplyCompliance;
+  requires_human_review: boolean;
+}
+
+export interface ReplyCompliance {
+  version: string;
+  status: "review_required" | "blocked";
+  automated_passed: boolean;
+  can_submit_for_review: boolean;
+  can_auto_publish: false;
+  requires_human_review: true;
+  score: number;
+  checks: Array<{ name: string; passed: boolean; detail: string }>;
+  issues: string[];
+  fingerprint: string;
+}
+
 export interface PipelineStage {
   key: string;
   name: string;
@@ -299,6 +326,18 @@ export interface Dashboard {
   trace_count: number;
   pending_review_count: number;
   test_question_count: number;
+  runtime?: {
+    mode: "desktop_demo" | "production_like";
+    storage_mode: string;
+    vector_backend: string;
+    embedding_provider: string;
+    embedding_model: string;
+    uses_real_vectors: boolean;
+    vector_count: number | null;
+    official_chunk_count: number;
+    desktop_vector_cache: { enabled: boolean; ready: boolean };
+    async_worker_required: boolean;
+  };
 }
 
 interface ApiResponse<T> {
@@ -308,7 +347,7 @@ interface ApiResponse<T> {
 }
 
 // ==================== 鉴权 token 存取 ====================
-const TOKEN_KEY = "wenshu_token";
+const TOKEN_KEY = "wuhu_12345_token";
 
 export function getToken(): string | null {
   if (typeof window === "undefined") return null;
@@ -331,15 +370,22 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
   const resp = await fetch(path, { ...options, headers });
-  let json: ApiResponse<T> | { detail?: string } = { code: -1, message: "请求失败", data: null as unknown as T };
+  let json: ApiResponse<T> | { detail?: unknown } = { code: -1, message: "请求失败", data: null as unknown as T };
   try {
     json = (await resp.json()) as ApiResponse<T>;
   } catch {
     /* ignore parse error */
   }
   if (!resp.ok) {
-    const detail = (json as { detail?: string }).detail;
-    throw new Error(detail || `HTTP ${resp.status}`);
+    const detail = (json as { detail?: unknown }).detail;
+    if (typeof detail === "string") throw new Error(detail);
+    if (detail && typeof detail === "object") {
+      const structured = detail as { message?: unknown; issues?: unknown };
+      const message = typeof structured.message === "string" ? structured.message : `HTTP ${resp.status}`;
+      const issues = Array.isArray(structured.issues) ? structured.issues.filter(item => typeof item === "string") : [];
+      throw new Error(issues.length ? `${message}：${issues.join("；")}` : message);
+    }
+    throw new Error(`HTTP ${resp.status}`);
   }
   if (json && typeof json === "object" && "code" in json && (json as ApiResponse<T>).code !== 0) {
     throw new Error((json as ApiResponse<T>).message || "请求失败");
@@ -411,14 +457,94 @@ export interface TranscriptionResult {
   generation: StandardWorkOrder["generation"];
 }
 
+export interface CitizenChatResult extends ChatResult {
+  public_history: Array<{ case_id: string; title: string; summary: string; location: string; status: string; reply_summary: string }>;
+  requires_operator_review: boolean;
+  review_hint: string;
+}
+
+export interface CitizenSubmission {
+  submission_id: string;
+  text: string;
+  status: "pending_operator_review" | "claimed";
+  created_at: string;
+  claimed_at?: string | null;
+  claimed_by?: string | null;
+}
+
+async function publicRequest<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const response = await fetch(path, {
+    ...options,
+    headers: { "Content-Type": "application/json", ...(options.headers as Record<string, string> | undefined) },
+  });
+  let payload: ApiResponse<T> | { detail?: unknown } = { code: -1, message: "请求失败", data: null as unknown as T };
+  try { payload = await response.json() as ApiResponse<T>; } catch { /* ignore */ }
+  if (!response.ok) {
+    const detail = (payload as { detail?: unknown }).detail;
+    if (typeof detail === "string") throw new Error(detail);
+    if (detail && typeof detail === "object") {
+      const structured = detail as { message?: unknown; issues?: unknown };
+      const issues = Array.isArray(structured.issues) ? structured.issues.filter(item => typeof item === "string") : [];
+      throw new Error(issues.length ? `${structured.message || "请求失败"}：${issues.join("；")}` : String(structured.message || "请求失败"));
+    }
+    throw new Error(`HTTP ${response.status}`);
+  }
+  if (!("code" in payload) || payload.code !== 0) throw new Error((payload as ApiResponse<T>).message || "请求失败");
+  return (payload as ApiResponse<T>).data;
+}
+
+export async function askCitizenQuestion(query: string, sessionId: string | null): Promise<CitizenChatResult> {
+  return publicRequest<CitizenChatResult>("/api/v1/citizen/chat", { method: "POST", body: JSON.stringify({ query, session_id: sessionId }) });
+}
+
+export interface CitizenTranscriptionResult {
+  text: string;
+  raw_text: string;
+  provider: string;
+  model: string;
+  generation: { mode: "llm" | "rule_fallback"; reason: string; provider: string; model: string };
+}
+
+export async function transcribeCitizenAudio(file: File): Promise<CitizenTranscriptionResult> {
+  const form = new FormData(); form.append("file", file);
+  let response: Response;
+  try { response = await fetch("/api/v1/citizen/transcribe", { method: "POST", body: form }); }
+  catch { throw new Error("语音上传连接中断，请重试或改用文字输入。"); }
+  const payload = await response.json() as ApiResponse<CitizenTranscriptionResult> | { detail?: string };
+  if (!response.ok) throw new Error((payload as { detail?: string }).detail || `HTTP ${response.status}`);
+  return (payload as ApiResponse<CitizenTranscriptionResult>).data;
+}
+
+export async function submitCitizenToOperator(text: string, sessionId: string | null): Promise<{ submission_id: string; status: string }> {
+  return publicRequest<{ submission_id: string; status: string }>("/api/v1/citizen/submissions", { method: "POST", body: JSON.stringify({ text, session_id: sessionId }) });
+}
+
+export async function listCitizenSubmissions(): Promise<CitizenSubmission[]> {
+  return request<CitizenSubmission[]>("/api/v1/citizen/submissions");
+}
+
+export async function claimCitizenSubmission(id: string): Promise<CitizenSubmission> {
+  return request<CitizenSubmission>(`/api/v1/citizen/submissions/${id}/claim`, { method: "POST" });
+}
+
 export async function transcribeAudio(file: File): Promise<TranscriptionResult> {
   const form = new FormData();
   form.append("file", file);
   const headers: Record<string, string> = {};
   const token = getToken();
   if (token) headers["Authorization"] = `Bearer ${token}`;
-  const resp = await fetch("/api/v1/intake/transcribe", { method: "POST", headers, body: form });
-  const json = (await resp.json()) as ApiResponse<TranscriptionResult> | { detail?: string };
+  let resp: Response;
+  try {
+    resp = await fetch("/api/v1/intake/transcribe", { method: "POST", headers, body: form });
+  } catch {
+    throw new Error("录音上传或转写连接中断。长录音在本机 CPU 上可能需要数分钟，请保持系统运行后重试；也可先在下方人工补录。");
+  }
+  let json: ApiResponse<TranscriptionResult> | { detail?: string };
+  try {
+    json = (await resp.json()) as ApiResponse<TranscriptionResult> | { detail?: string };
+  } catch {
+    throw new Error(`语音转写服务响应异常（HTTP ${resp.status}），请重试或查看启动日志。`);
+  }
   if (!resp.ok) throw new Error((json as { detail?: string }).detail || `HTTP ${resp.status}`);
   if (!("code" in json) || json.code !== 0) throw new Error("语音转写失败");
   return json.data;
@@ -441,6 +567,10 @@ export async function listHandoffs(status: "pending" | "processing" | "completed
 
 export async function claimHandoff(caseId: string): Promise<StandardWorkOrder> {
   return request<StandardWorkOrder>(`/api/v1/intake/handoffs/${caseId}/claim`, { method: "POST" });
+}
+
+export async function recommendHandoff(caseId: string): Promise<HandoffRecommendation> {
+  return request<HandoffRecommendation>(`/api/v1/intake/handoffs/${caseId}/recommend`, { method: "POST" });
 }
 
 export async function completeHandoff(

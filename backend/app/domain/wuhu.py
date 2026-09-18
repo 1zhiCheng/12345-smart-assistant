@@ -24,18 +24,18 @@ CATEGORY_TO_DEPT = {item["category"]: item["_id"] for item in DEPARTMENTS}
 DEPARTMENT_NAMES = {item["_id"]: item["name"] for item in DEPARTMENTS}
 
 DEPARTMENT_KEYWORDS: dict[str, list[str]] = {
-    "dept_city_management": ["占道", "违建", "市容", "环卫", "垃圾", "油烟", "城管"],
-    "dept_housing_construction": ["物业", "住房", "建筑", "施工", "房屋安全", "燃气", "排水"],
-    "dept_public_security": ["户口", "身份证", "护照", "治安", "交警", "诈骗", "公安"],
-    "dept_public_services": ["低保", "社会救助", "养老服务", "残疾", "民政", "流浪救助"],
-    "dept_transportation": ["公交", "出租车", "网约车", "道路运输", "顺风车", "交通运输"],
-    "dept_economy_trade": ["价格", "收费", "电价", "水价", "天然气价", "补贴", "消费券", "发改"],
-    "dept_education_science_culture_sports": ["招生", "入学", "校外培训", "教育", "旅游", "文化", "体育场馆"],
-    "dept_labor_social_security": ["工资", "欠薪", "劳动", "社保", "医保", "就业", "工伤", "人社"],
-    "dept_agriculture_forestry_water": ["宅基地", "农村", "农业", "林业", "供水", "节水", "水务", "不动产"],
-    "dept_ecology_environment": ["噪声", "污染", "废气", "污水", "环保", "生态环境"],
-    "dept_market_regulation": ["12315", "商品质量", "价格欺诈", "消费维权", "食品安全", "市场监管"],
-    "dept_health": ["医院", "就医", "卫生", "疫苗", "生育", "计划生育", "健康"],
+    "dept_city_management": ["占道", "违建", "市容", "环卫", "垃圾", "油烟", "城管", "渣土", "乱倒", "盲道", "路灯", "市政设施"],
+    "dept_housing_construction": ["物业", "住房", "建筑", "施工", "房屋安全", "燃气", "排水", "漏水", "渗水", "地下车库", "路面沉降"],
+    "dept_public_security": ["户口", "身份证", "护照", "治安", "交警", "诈骗", "公安", "消防通道", "红绿灯", "信号灯", "银行卡"],
+    "dept_public_services": ["低保", "社会救助", "养老服务", "残疾", "民政", "流浪救助", "停水", "停电", "跳闸", "供电", "燃气充值"],
+    "dept_transportation": ["公交", "公交线路", "班次", "出租车", "拒载", "网约车", "道路运输", "顺风车", "交通运输", "公路护栏"],
+    "dept_economy_trade": ["价格", "收费", "电价", "水价", "天然气价", "补贴", "消费券", "发改", "技术改造", "技改", "电子发票", "发票"],
+    "dept_education_science_culture_sports": ["招生", "入学", "幼升小", "报名平台", "校外培训", "培训退费", "教育", "旅游", "文化", "图书馆", "开馆", "体育场馆"],
+    "dept_labor_social_security": ["工资", "加班费", "欠薪", "劳动", "社保", "参保", "养老保险", "医保", "就业", "工伤", "人社"],
+    "dept_agriculture_forestry_water": ["宅基地", "农村", "农业", "林业", "灌溉", "沟渠", "水库", "防汛", "水位", "供水", "节水", "水务", "不动产"],
+    "dept_ecology_environment": ["噪声", "污染", "废气", "污水", "异味", "排放", "黑色水体", "扬尘", "环保", "生态环境"],
+    "dept_market_regulation": ["12315", "商品质量", "价格欺诈", "消费维权", "食品安全", "过期食品", "明码标价", "售后", "退换货", "市场监管"],
+    "dept_health": ["医院", "就医", "卫生", "疫苗", "接种", "医美", "注射", "诊疗", "医疗机构执业许可证", "生育", "计划生育", "健康"],
 }
 
 LEGACY_DEPARTMENT_IDS = {

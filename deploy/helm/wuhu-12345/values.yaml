@@ -1,0 +1,152 @@
+# 芜湖12345智慧助手 Helm Chart 默认值
+
+image:
+  repository: wuhu-12345-agent
+  tag: "v1.0"
+  pullPolicy: IfNotPresent
+
+# 密钥（生产建议使用外部 Secret / SealedSecret，勿提交真实值）
+secrets:
+  deepseekApiKey: ""
+  relayApiKey: ""
+  authSecret: "change-me-strong-random-secret"
+  internalApiToken: "change-me-strong-random-token"
+  mongoUser: "wuhu12345_admin"
+  mongoPassword: "change-me-strong-mongo-password"
+  redisPassword: "change-me-strong-redis-password"
+  bootstrapAdminUsername: ""
+  bootstrapAdminPassword: ""
+  bootstrapAdminName: "系统管理员"
+  mongodbUri: "mongodb://wuhu12345_admin:change-me-strong-mongo-password@mongodb:27017/wuhu_12345?authSource=admin"
+  redisAddr: "redis://:change-me-strong-redis-password@redis:6379"
+
+# 全局服务
+backend:
+  enabled: true
+  replicas: 2
+  maxReplicas: 10
+  resources:
+    requests: { cpu: "250m", memory: "256Mi" }
+    limits: { cpu: "2000m", memory: "2Gi" }
+
+piAgent:
+  enabled: false
+  replicas: 2
+  image:
+    repository: wuhu-12345-agent
+    tag: "pi-v1.0"
+  resources:
+    requests: { cpu: "250m", memory: "256Mi" }
+    limits: { cpu: "1000m", memory: "1Gi" }
+
+loopEngine:
+  enabled: true
+  interval: 300
+  loopPhase: "human_on_loop"
+
+uploads:
+  accessMode: ReadWriteMany
+  size: 10Gi
+
+# 模型 / 向量配置
+model:
+  deepseekModel: "deepseek-v4-flash"
+  deepseekBaseUrl: "https://api.deepseek.com"
+  relayBaseUrl: ""
+  embeddingProvider: "local"
+  embeddingModel: "BAAI/bge-small-zh-v1.5"
+  embeddingDim: 512
+  rerankerEnabled: false
+  rerankerModel: "BAAI/bge-reranker-v2-m3"
+  vectorBackend: "mongo"
+
+# 部门 Agent（模板化：每项渲染一个独立 Deployment + HPA）
+departments:
+  - id: dept_city_management
+    name: 芜湖市城市管理局
+    minReplicas: 2
+    maxReplicas: 20
+    resources:
+      requests: { cpu: "500m", memory: "512Mi" }
+      limits: { cpu: "2000m", memory: "2Gi" }
+  - id: dept_housing_construction
+    name: 芜湖市住房和城乡建设局
+    minReplicas: 2
+    maxReplicas: 20
+    resources:
+      requests: { cpu: "500m", memory: "512Mi" }
+      limits: { cpu: "2000m", memory: "2Gi" }
+  - id: dept_public_security
+    name: 芜湖市公安局
+    minReplicas: 2
+    maxReplicas: 20
+    resources:
+      requests: { cpu: "500m", memory: "512Mi" }
+      limits: { cpu: "2000m", memory: "2Gi" }
+  - id: dept_public_services
+    name: 芜湖市民政局
+    minReplicas: 1
+    maxReplicas: 10
+    resources:
+      requests: { cpu: "250m", memory: "256Mi" }
+      limits: { cpu: "1000m", memory: "1Gi" }
+  - id: dept_transportation
+    name: 芜湖市交通运输局
+    minReplicas: 2
+    maxReplicas: 20
+    resources:
+      requests: { cpu: "500m", memory: "512Mi" }
+      limits: { cpu: "2000m", memory: "2Gi" }
+  - id: dept_economy_trade
+    name: 芜湖市发展和改革委员会
+    minReplicas: 1
+    maxReplicas: 10
+    resources:
+      requests: { cpu: "250m", memory: "256Mi" }
+      limits: { cpu: "1000m", memory: "1Gi" }
+  - id: dept_education_science_culture_sports
+    name: 芜湖市教育局
+    minReplicas: 1
+    maxReplicas: 10
+    resources:
+      requests: { cpu: "250m", memory: "256Mi" }
+      limits: { cpu: "1000m", memory: "1Gi" }
+  - id: dept_labor_social_security
+    name: 芜湖市人力资源和社会保障局
+    minReplicas: 2
+    maxReplicas: 20
+    resources:
+      requests: { cpu: "500m", memory: "512Mi" }
+      limits: { cpu: "2000m", memory: "2Gi" }
+  - id: dept_agriculture_forestry_water
+    name: 芜湖市农业农村局
+    minReplicas: 1
+    maxReplicas: 10
+    resources:
+      requests: { cpu: "250m", memory: "256Mi" }
+      limits: { cpu: "1000m", memory: "1Gi" }
+  - id: dept_ecology_environment
+    name: 芜湖市生态环境局
+    minReplicas: 2
+    maxReplicas: 20
+    resources:
+      requests: { cpu: "500m", memory: "512Mi" }
+      limits: { cpu: "2000m", memory: "2Gi" }
+  - id: dept_market_regulation
+    name: 芜湖市市场监督管理局
+    minReplicas: 2
+    maxReplicas: 20
+    resources:
+      requests: { cpu: "500m", memory: "512Mi" }
+      limits: { cpu: "2000m", memory: "2Gi" }
+  - id: dept_health
+    name: 芜湖市卫生健康委员会
+    minReplicas: 1
+    maxReplicas: 10
+    resources:
+      requests: { cpu: "250m", memory: "256Mi" }
+      limits: { cpu: "1000m", memory: "1Gi" }
+
+ingress:
+  enabled: false
+  host: wuhu12345.example.com

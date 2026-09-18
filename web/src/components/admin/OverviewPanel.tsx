@@ -14,6 +14,7 @@ export default function OverviewPanel({
   const depts = data.departments || [];
   const threshold = data.thresholds?.accuracy ?? 0.8;
   const minSamples = data.thresholds?.min_samples ?? 5;
+  const runtime = data.runtime;
 
   return (
     <div>
@@ -57,6 +58,41 @@ export default function OverviewPanel({
           </div>
         </div>
       </div>
+
+      {runtime && <>
+        <h2 className={styles.title}>运行与检索状态</h2>
+        <div className={styles.card} style={{ marginBottom: 16 }}>
+          <div className={styles.rowBetween} style={{ gap: 12, flexWrap: "wrap" }}>
+            <div>
+              <h3 style={{ margin: 0 }}>{runtime.mode === "production_like" ? "生产同构运行" : "桌面演示运行"}</h3>
+              <div className={styles.muted} style={{ marginTop: 6 }}>
+                存储：{runtime.storage_mode} · 向量库：{runtime.vector_backend} · 已加载官方切片：{runtime.official_chunk_count}
+              </div>
+            </div>
+            <span className={styles.badge + " " + (runtime.uses_real_vectors ? styles.badgeGreen : styles.badgeAmber)}>
+              {runtime.uses_real_vectors ? "真实语义向量已启用" : "安全降级向量"}
+            </span>
+          </div>
+          <div className={styles.grid2} style={{ marginTop: 14 }}>
+            <div>
+              <b>Embedding</b>
+              <div className={styles.muted}>{runtime.embedding_provider} · {runtime.embedding_model}</div>
+            </div>
+            <div>
+              <b>已装载向量</b>
+              <div className={styles.muted}>{runtime.vector_count ?? "读取中/不可用"}</div>
+            </div>
+            {runtime.desktop_vector_cache.enabled && <div>
+              <b>桌面 BGE 缓存</b>
+              <div className={styles.muted}>{runtime.desktop_vector_cache.ready ? "已就绪；重启无需重复全量向量化" : "首次启动将构建缓存"}</div>
+            </div>}
+            <div>
+              <b>异步 Worker</b>
+              <div className={styles.muted}>{runtime.async_worker_required ? "生产同构模式下为就绪必需项" : "桌面模式采用本地安全执行"}</div>
+            </div>
+          </div>
+        </div>
+      </>}
 
       <h2 className={styles.title}>Loop 渐进退出（Human Fade-out）</h2>
       <div className={styles.row} style={{ marginBottom: 12 }}>

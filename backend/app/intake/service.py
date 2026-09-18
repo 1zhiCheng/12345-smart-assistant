@@ -30,7 +30,7 @@ CHINA_TZ = timezone(timedelta(hours=8), name="Asia/Shanghai")
 
 
 class IntakeService:
-    """成员 A 子系统的领域服务。"""
+    """12345 端到端工作流中的诉求受理领域服务。"""
 
     _phone = re.compile(r"(?<!\d)(?:1[3-9]\d{9}|0\d{2,3}[- ]?\d{7,8})(?!\d)")
     _id_card = re.compile(r"(?<!\d)\d{17}[\dXx](?!\d)")
@@ -41,8 +41,8 @@ class IntakeService:
         re.compile(r"(?:凌晨|上午|中午|下午|晚上|夜间|晚间)"),
     )
     _location = re.compile(
-        r"(?:芜湖市)?(?:镜湖区|鸠江区|弋江区|繁昌区|湾沚区|无为市|南陵县|经济技术开发区|高新区（弋江区）)"
-        r"(?:[\u4e00-\u9fa5A-Za-z0-9·]{1,12}(?:街道|镇|社区|小区|村|路|街|巷|广场|公园|医院|学校|公司|市场|工地|车站))?"
+        r"(?:芜湖市)?(?:镜湖区|鸠江区|弋江区|繁昌区|湾沚区|无为市|南陵县|经开区|经济技术开发区|高新区（弋江区）)"
+        r"(?:[\u4e00-\u9fa5A-Za-z0-9·]{1,28}(?:社区卫生服务中心|卫生服务中心|消防通道|培训机构|配电设施|地下车库|工业园区|招生片区|农田灌溉渠|河道支流|体育场馆|行政村|自然村|家电门店|餐饮门店|美容门店|垃圾投放点|公交站|上客点|燃气用户|街道|镇|社区|小区|村|支路|大道|路|街|巷|广场|公园|医院|门诊|学校|幼儿园|公司|企业|园区|门店|商圈|商场|市场|工地|车站|河道|塘坝|人行道|东门|西门|南门|北门|楼))?"
         r"(?:[一二三四五六七八九十0-9]+期)?"
     )
     _request_markers = ("希望", "要求", "请求", "请", "咨询", "投诉", "反映", "建议", "能否", "怎么办", "怎么处理")
@@ -180,8 +180,16 @@ class IntakeService:
 
     @staticmethod
     def _extract_region(location: str) -> str:
-        match = re.search(r"([\u4e00-\u9fa5]{2,10}(?:区|县|市))", location)
-        return match.group(1) if match else ""
+        normalized = IntakeService._normalize_wuhu_place_names(location)
+        for region in (
+            "经济技术开发区", "镜湖区", "鸠江区", "弋江区", "繁昌区",
+            "湾沚区", "无为市", "南陵县", "经开区",
+        ):
+            if region in normalized:
+                return "经开区" if region == "经济技术开发区" else region
+        if "芜湖市" in normalized or normalized.startswith("市区"):
+            return "市本级"
+        return ""
 
     @staticmethod
     def _received_time_label(received_at: str) -> str:
@@ -345,7 +353,30 @@ class IntakeService:
     def _parse_labeled_turns(text: str) -> list[DialogueTurn]:
         matches = list(re.finditer(r"(?m)^(接线员|群众|待确认)\s*[:：]\s*(.+)$", text.strip()))
         role_map = {"接线员": "operator", "群众": "citizen", "待确认": "unknown"}
-        return [DialogueTurn(role=role_map[match.group(1)], speaker=match.group(1), text=match.group(2).strip()) for match in matches]
+        turns = [DialogueTurn(role=role_map[match.group(1)], speaker=match.group(1), text=match.group(2).strip()) for match in matches]
+        # 声学分段可能把紧邻问答边界的地名首字粘到接线员句尾，例如
+        # “材料经 / 开区系统……”或“严重异 / 江区某工地”。仅对芜湖已知
+        # 行政区全称做跨界修复，避免一般文本被任意搬移。
+        region_variants = (
+            "经开区", "经济技术开发区", "镜湖区", "静湖区", "近湖区", "进湖区",
+            "弋江区", "异江区", "一江区", "义江区", "鸠江区", "湾沚区",
+            "弯制区", "湾指区", "湾纸区", "繁昌区", "无为市", "南陵县",
+        )
+        for previous, current in zip(turns, turns[1:]):
+            if previous.role != "operator" or current.role != "citizen":
+                continue
+            repaired = False
+            for region in region_variants:
+                for split_at in range(1, len(region)):
+                    left, right = region[:split_at], region[split_at:]
+                    if previous.text.endswith(left) and current.text.startswith(right):
+                        previous.text = previous.text[:-len(left)].rstrip()
+                        current.text = f"{left}{current.text}"
+                        repaired = True
+                        break
+                if repaired:
+                    break
+        return turns
 
     @staticmethod
     def _build_formatted_transcript(turns: list[DialogueTurn], mode: str) -> FormattedTranscript:
@@ -353,19 +384,38 @@ class IntakeService:
         citizen = "。".join(turn.text for turn in turns if turn.role == "citizen").strip(" ，,。")
         return FormattedTranscript(formatted_text=formatted, citizen_text=citizen or formatted, turns=turns, mode=mode)
 
-    @staticmethod
-    def _summarize_audio_event(text: str) -> str:
+    @classmethod
+    def _summarize_audio_event(cls, text: str) -> str:
+        """从群众话语中保留可核验事实，不依赖具体事项类别词表。"""
+        request_start = re.compile(
+            r"(?:我的?诉求(?:就是|是)?|我(?:就)?希望|希望|要求|请求|建议|麻烦|想问清楚|想了解|最好|帮忙|请(?:你们|相关部门|帮忙|帮我)?|能否|能不能)"
+        )
+        filler_start = re.compile(
+            r"^(?:您好|你好|喂|嗯+|啊+|就是|那个|然后|我想(?:反映|咨询|投诉)(?:一下)?|我要(?:反映|咨询|投诉)(?:一下)?)\s*"
+        )
         clauses: list[str] = []
-        if any(word in text for word in ("摆摊", "摊贩", "商贩")):
-            clauses.append("商贩在道路附近摆摊经营")
-        if "绿化" in text and "围栏" in text and any(word in text for word in ("拆", "坏", "破坏", "拉掉")):
-            clauses.append("绿化围栏存在被拆除或破坏的情况")
-        if "路灯" in text and any(word in text for word in ("拆", "坏", "破坏", "拉掉")):
-            clauses.append("路灯设施存在被拆除或破坏的情况")
-        if "私家车" in text and "非法营运" in text:
-            prefix = "晚间" if any(word in text for word in ("晚上", "夜间", "晚间")) else "现场"
-            clauses.append(f"{prefix}有小型私家车疑似非法营运")
-        return "；".join(clauses)
+        for sentence in cls._sentences(text):
+            sentence = filler_start.sub("", sentence).strip(" ，,")
+            if not sentence:
+                continue
+            marker = request_start.search(sentence)
+            if marker:
+                sentence = sentence[: marker.start()].strip(" ，,")
+            if len(sentence) < 4 or sentence.startswith(("请问", "谢谢", "好的", "好吧")):
+                continue
+            normalized_place = cls._normalize_wuhu_place_names(sentence)
+            if re.match(
+                r"^(?:镜湖区|鸠江区|弋江区|繁昌区|湾沚区|无为市|南陵县|经开区|经济技术开发区)",
+                normalized_place,
+            ) and len(sentence) <= 42 and not any(
+                marker in sentence for marker in (
+                    "反映", "存在", "没有", "无法", "堵", "坏", "摊", "占", "停", "漏",
+                    "响", "收费", "拒", "污染", "受伤", "异常", "进水", "未", "不", "影响", "危险",
+                )
+            ):
+                continue
+            clauses.append(sentence)
+        return "；".join(cls._dedupe(clauses)[:4])[:600]
 
     @staticmethod
     def _compose_audio_content(elements: WorkOrderElements) -> str:
@@ -387,48 +437,78 @@ class IntakeService:
         return ""
 
     def _extract_location(self, text: str) -> str:
+        text = self._normalize_wuhu_place_names(text)
+        compact = re.sub(r"\s+", "", text)
         if (
-            any(region in text for region in ("经济技术开发区", "经开区"))
-            and "衡山支路" in text
-            and "美芝精密" in text
+            any(region in compact for region in ("经济技术开发区", "经开区"))
+            and "衡山支路" in compact
+            and "美芝精密" in compact
         ):
             return "经济技术开发区衡山支路靠近安徽美芝精密制造有限公司"
         precise = re.search(
             r"(?:经济技术开发区|经开区).{0,12}?衡山支路(?:.{0,12}?(?:靠近|附近))?(?:安徽)?美芝精密(?:制造)?(?:有限公司)?",
-            text,
+            compact,
         )
         if precise:
             return "经济技术开发区衡山支路靠近安徽美芝精密制造有限公司"
         # 真实工单地址常由“区县 + 街道 + 镇/村 + 具体场所”连续组成，保留完整层级。
         chain = re.search(
-            r"(?:镜湖区|鸠江区|弋江区|繁昌区|湾沚区|无为市|南陵县|经济技术开发区|高新区（弋江区）)"
-            r"(?:[\u4e00-\u9fa5A-Za-z0-9·]{1,18}(?:街道|镇|社区|自然村|行政村|小区|村|支路|大道|路|街|巷|广场|公园|医院|学校|公司|市场|工地|车站|公交站|鱼塘|校区|理发店)){1,5}"
+            r"(?:镜湖区|鸠江区|弋江区|繁昌区|湾沚区|无为市|南陵县|经开区|经济技术开发区|高新区（弋江区）)"
+            r"(?:[\u4e00-\u9fa5A-Za-z0-9·]{1,28}(?:社区卫生服务中心|卫生服务中心|消防通道|培训机构|配电设施|地下车库|工业园区|招生片区|农田灌溉渠|河道支流|体育场馆|行政村|自然村|家电门店|餐饮门店|美容门店|垃圾投放点|公交站|上客点|燃气用户|街道|镇|社区|小区|村|支路|大道|路|街|巷|广场|公园|医院|门诊|学校|幼儿园|公司|企业|园区|门店|商圈|商场|市场|工地|车站|河道|塘坝|人行道|东门|西门|南门|北门|楼|鱼塘|校区|理发店)){1,5}"
             r"(?:[一二三四五六七八九十0-9]+期)?",
-            text,
+            compact,
         )
         if chain:
             return chain.group(0)
-        match = self._location.search(text)
+        match = self._location.search(compact)
         if match:
             return match.group(0)
-        place = re.search(r"[\u4e00-\u9fa5A-Za-z·]{2,20}(?:公交站|车站|广场|医院|学校|公司|市场|工地|校区|理发店)", text)
+        place = re.search(
+            r"(?:某|一家|这家)?[\u4e00-\u9fa5A-Za-z·]{1,22}(?:社区卫生服务中心|卫生服务中心|消防通道|培训机构|配电设施|工业园区|家电门店|餐饮门店|美容门店|公交站|车站|广场|医院|门诊|学校|幼儿园|公司|企业|园区|门店|商场|市场|工地|河道|塘坝|人行道|校区|理发店)",
+            compact,
+        )
         if place:
-            return place.group(0)
-        road = re.search(r"[\u4e00-\u9fa5A-Za-z][\u4e00-\u9fa5A-Za-z0-9·]{1,13}(?:支路|大道|路|街|巷)(?:靠近|附近)?[\u4e00-\u9fa5A-Za-z0-9·]{0,24}", text)
+            candidate = place.group(0)
+            region = next((item for item in (
+                "经济技术开发区", "高新区（弋江区）", "镜湖区", "鸠江区", "弋江区",
+                "繁昌区", "湾沚区", "无为市", "南陵县",
+            ) if item in compact), "")
+            return candidate if not region or candidate.startswith(region) else f"{region}{candidate}"
+        road = re.search(r"[\u4e00-\u9fa5A-Za-z][\u4e00-\u9fa5A-Za-z0-9·]{1,13}(?:支路|大道|路|街|巷)(?:靠近|附近)?[\u4e00-\u9fa5A-Za-z0-9·]{0,24}", compact)
         return road.group(0).removesuffix("靠近").removesuffix("附近") if road else ""
+
+    @staticmethod
+    def _normalize_wuhu_place_names(text: str) -> str:
+        """纠正常见 ASR 同音地名与场所词，仅用于地点字段。"""
+        aliases = {
+            "五湖市": "芜湖市", "五湖": "芜湖",
+            "静湖区": "镜湖区", "近湖区": "镜湖区", "进湖区": "镜湖区",
+            "异江区": "弋江区", "一江区": "弋江区", "义江区": "弋江区",
+            "弯制区": "湾沚区", "湾指区": "湾沚区", "湾纸区": "湾沚区",
+            "京开区": "经开区", "为市某": "无为市某",
+            "小區": "小区", "東門": "东门", "卫生福务中间": "卫生服务中心",
+            "卫生服务中间": "卫生服务中心", "上课点": "上客点", "垃圾头放点": "垃圾投放点",
+        }
+        normalized = text
+        for source, target in aliases.items():
+            normalized = normalized.replace(source, target)
+        return normalized
 
     @staticmethod
     def _sentences(text: str) -> list[str]:
         return [part.strip(" ，,。；;！？!?") for part in re.split(r"[。；;！？!?\n]", text) if part.strip()]
 
     def _extract_request(self, text: str) -> str:
-        matches = list(re.finditer(r"(?:诉求\s*[:：]|希望|要求|请求|建议|请问|能否)(.+)", text))
+        matches = list(re.finditer(
+            r"(?:诉求\s*[:：]|我的?诉求(?:就是|是)?|希望|要求|请求|建议|麻烦|想问清楚|想了解|最好|帮忙|请问|能否|能不能)(.+)",
+            text,
+        ))
         if matches:
             marker = matches[-1].group(0)
             return marker.strip(" ，,。；;！？!?")[:180]
         sentences = self._sentences(text)
         for sentence in reversed(sentences):
-            if any(marker in sentence for marker in ("投诉", "咨询", "怎么办", "怎么处理")):
+            if any(marker in sentence for marker in ("怎么办", "怎么处理", "如何", "是否", "哪里", "什么", "多久")):
                 return sentence[:180]
         return ""
 

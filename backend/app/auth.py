@@ -17,6 +17,7 @@ from datetime import datetime, timezone
 from typing import Any, Optional
 
 from app.config import Settings
+from app.domain.wuhu import DEPARTMENTS
 from app.storage.store import DataStore
 from app.utils.logging import get_logger
 
@@ -25,8 +26,16 @@ logger = get_logger(__name__)
 # 种子账号（演示用；生产应由管理员创建并妥善保管）
 DEFAULT_USERS = [
     {"username": "operator", "password": "operator123", "name": "12345热线营业员", "role": "operator", "dept_id": ""},
-    {"username": "cgj_admin", "password": "admin123", "name": "城市管理局部门管理员", "role": "department_admin", "dept_id": "dept_city_management"},
     {"username": "admin", "password": "admin123", "name": "系统管理员", "role": "system_admin", "dept_id": ""},
+] + [
+    {
+        "username": f"{str(dept['_id']).removeprefix('dept_')}_admin",
+        "password": "admin123",
+        "name": f"{dept['name']}部门管理员",
+        "role": "department_admin",
+        "dept_id": dept["_id"],
+    }
+    for dept in DEPARTMENTS
 ]
 
 
@@ -59,19 +68,48 @@ class AuthService:
 
     # ---------- 用户 ----------
     async def seed_users(self) -> None:
-        """按配置创建演示账号。
+        """按配置创建本地演示账号，并可创建一次性生产引导管理员。
 
-        - `SEED_DEMO_USERS=false` 时跳过（生产必须关闭，并删除已创建的演示账号）。
+        - `SEED_DEMO_USERS=false` 时只跳过固定口令演示账号。
         - 演示账号使用固定口令（admin123），仅用于本地演示，切勿用于生产。
+        - `BOOTSTRAP_ADMIN_*` 可在无演示账号时创建首个系统管理员，口令至少 12 位。
         """
-        if not self.settings.seed_demo_users:
-            logger.warning("SEED_DEMO_USERS=false：跳过演示账号创建（请确认生产环境无残留演示账号）")
+        if self.settings.seed_demo_users:
+            for u in DEFAULT_USERS:
+                if await self.store.get("users", u["username"]) is None:
+                    await self.store.upsert_user(self._to_user(u))
+                    logger.info("已创建种子账号: %s (%s)", u["username"], u["role"])
+            # 同步将每个部门管理员写回部门表，保证“账号—部门—工单队列”三者可追溯。
+            for u in DEFAULT_USERS:
+                if u["role"] != "department_admin":
+                    continue
+                dept = await self.store.get("departments", u["dept_id"])
+                if dept is None:
+                    continue
+                admins = list(dept.get("admin_users") or [])
+                if u["username"] not in admins:
+                    admins.append(u["username"])
+                    dept["admin_users"] = admins
+                    await self.store.upsert_department(dept)
+            logger.warning("已创建比赛演示账号（operator/operator123、各部门 *_admin/admin123、admin/admin123）。生产环境请关闭演示账号。")
+        else:
+            logger.info("SEED_DEMO_USERS=false：未创建固定口令演示账号")
+
+        username = self.settings.bootstrap_admin_username.strip().lower()
+        password = self.settings.bootstrap_admin_password
+        if not username and not password:
             return
-        for u in DEFAULT_USERS:
-            if await self.store.get("users", u["username"]) is None:
-                await self.store.upsert_user(self._to_user(u))
-                logger.info("已创建种子账号: %s (%s)", u["username"], u["role"])
-        logger.warning("已创建比赛演示账号（operator/operator123, cgj_admin/admin123, admin/admin123）。生产环境请关闭演示账号。")
+        if not username or len(password) < 12:
+            raise RuntimeError("生产引导管理员配置不完整：用户名不能为空且密码至少12位")
+        if await self.store.get("users", username) is None:
+            await self.store.upsert_user(self._to_user({
+                "username": username,
+                "password": password,
+                "name": self.settings.bootstrap_admin_name.strip() or "系统管理员",
+                "role": "system_admin",
+                "dept_id": "",
+            }))
+            logger.info("已创建生产引导系统管理员: %s", username)
 
     @staticmethod
     def _to_user(u: dict[str, Any]) -> dict[str, Any]:

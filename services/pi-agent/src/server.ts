@@ -11,7 +11,7 @@ import { timingSafeEqual } from "node:crypto";
 
 const AGENT_TYPES = new Set<AgentType>(["intent", "rewrite", "answer", "verify", "reflect"]);
 const TOOL_NAMES = new Set([
-  "retrieve_documents", "lookup_calendar", "list_departments", "get_glossary",
+  "retrieve_documents", "lookup_service_calendar", "list_departments", "get_glossary",
   "submit_feedback", "list_pending_feedback", "save_skill", "save_hook", "save_rule",
 ]);
 
@@ -26,7 +26,7 @@ function internalAuthorized(config: Config, header: string | string[] | undefine
 export function buildApp(config: Config, runtime: Runtime): FastifyInstance {
   const app = Fastify({ logger: false });
 
-  app.get("/health", async () => ({ status: "ok", service: "wenshu-pi-agent" }));
+  app.get("/health", async () => ({ status: "ok", service: "wuhu-12345-pi-agent" }));
 
   app.post("/v1/agent/run", async (req, reply) => {
     if (!internalAuthorized(config, req.headers["x-internal-token"])) {

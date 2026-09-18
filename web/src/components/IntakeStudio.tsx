@@ -3,10 +3,13 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   analyzeAppeal,
+  claimCitizenSubmission,
   clarifyWorkOrder,
   confirmWorkOrder,
+  listCitizenSubmissions,
   splitWorkOrder,
   transcribeAudio,
+  type CitizenSubmission,
   type StandardWorkOrder,
   type User,
   type WorkOrderElements,
@@ -38,9 +41,23 @@ export default function IntakeStudio({ user, onLogout }: Props) {
   const [clarificationAnswers, setClarificationAnswers] = useState<Partial<Record<ClarificationKey, string>>>({});
   const [selectedMatterIds, setSelectedMatterIds] = useState<string[]>([]);
   const [splitDrafts, setSplitDrafts] = useState<StandardWorkOrder[]>([]);
+  const [citizenSubmissions, setCitizenSubmissions] = useState<CitizenSubmission[]>([]);
   const audioUrl = useMemo(() => audioFile ? URL.createObjectURL(audioFile) : "", [audioFile]);
 
   useEffect(() => () => { if (audioUrl) URL.revokeObjectURL(audioUrl); }, [audioUrl]);
+  useEffect(() => { listCitizenSubmissions().then(setCitizenSubmissions).catch(() => { /* 不阻断热线受理 */ }); }, []);
+
+  async function loadCitizenSubmission(item: CitizenSubmission) {
+    setLoading(true); setError("");
+    try {
+      const claimed = await claimCitizenSubmission(item.submission_id);
+      setText(claimed.text); setSourceType("text"); setAudioName(null); setAudioFile(null);
+      setRawTranscript(""); setWorkorder(null); setConfirmed(false);
+      setCitizenSubmissions(current => current.map(row => row.submission_id === claimed.submission_id ? claimed : row));
+      setError("已载入市民转人工事项，请核实内容后分析并生成正式工单。");
+    } catch (err) { setError(err instanceof Error ? err.message : "领取市民事项失败"); }
+    finally { setLoading(false); }
+  }
 
   async function analyze() {
     setLoading(true); setError(""); setConfirmed(false);
@@ -136,6 +153,7 @@ export default function IntakeStudio({ user, onLogout }: Props) {
     <main className={styles.main}>
       <section className={styles.card}>
         <h2>诉求受理</h2><p>支持群众来电转写或文本诉求，结果必须由工作人员审核。</p>
+        {citizenSubmissions.some(item => item.status === "pending_operator_review") && <div style={{margin:"0 0 13px",padding:10,border:"1px solid #b9d6cf",borderRadius:10,background:"#f3faf8"}}><b style={{display:"block",fontSize:10,color:"#176552",marginBottom:6}}>市民自助转人工待审核 · {citizenSubmissions.filter(item => item.status === "pending_operator_review").length}</b>{citizenSubmissions.filter(item => item.status === "pending_operator_review").slice(0,3).map(item => <div key={item.submission_id} style={{display:"flex",gap:7,alignItems:"center",padding:"6px 0",borderTop:"1px solid #dceae6",fontSize:9}}><span style={{flex:1,lineHeight:1.45}}>{item.text}</span><button className={styles.secondary} disabled={loading} onClick={() => void loadCitizenSubmission(item)}>载入分析</button></div>)}</div>}
         <div className={styles.tabs}>
           <button className={sourceType === "text" ? styles.selected : ""} onClick={() => setSourceType("text")}>文本输入</button>
           <button className={sourceType === "audio" ? styles.selected : ""} onClick={() => setSourceType("audio")}>录音输入</button>
@@ -170,7 +188,7 @@ export default function IntakeStudio({ user, onLogout }: Props) {
           {workorder.clarification_questions.map(item => <div className={styles.question} key={item}>建议追问：{item}</div>)}
           {(workorder.missing_fields.length > 0 || workorder.ambiguities.length > 0) && <div style={{marginTop:12,padding:12,border:"1px solid #ead7aa",borderRadius:11,background:"#fffbf2"}}><b style={{display:"block",fontSize:11,color:"#76551c",marginBottom:7}}>追问补充并重新生成</b>{workorder.missing_fields.map(field => <label key={field} style={{display:"block",marginTop:7}}><span style={{display:"block",fontSize:9,color:"#6f6250",marginBottom:4}}>{FIELD_NAMES[field] || field}</span>{field === "event" || field === "request" ? <textarea className={styles.input} value={clarificationAnswers[field as ClarificationKey] || ""} onChange={e => setClarificationAnswers({...clarificationAnswers,[field]:e.target.value})} /> : <input className={styles.input} value={clarificationAnswers[field as ClarificationKey] || ""} onChange={e => setClarificationAnswers({...clarificationAnswers,[field]:e.target.value})} />}</label>)}{workorder.ambiguities.length > 0 && <label style={{display:"block",marginTop:7}}><span style={{display:"block",fontSize:9,color:"#6f6250",marginBottom:4}}>其他核实信息</span><textarea className={styles.input} value={clarificationAnswers.additional_details || ""} onChange={e => setClarificationAnswers({...clarificationAnswers,additional_details:e.target.value})} /></label>}<button className={styles.primary} style={{marginTop:10}} disabled={loading || !Object.values(clarificationAnswers).some(value => value?.trim())} onClick={submitClarification}>{loading ? "正在重新生成…" : "提交补充信息"}</button></div>}
           <div className={styles.confirm}><button className={styles.secondary} onClick={() => setWorkorder(null)}>重新分析</button><button className={styles.primary} disabled={loading} onClick={confirm}>人工确认工单</button></div>
-          {confirmed && <div className={styles.success}>工单已确认并进入成员 B 待分派队列（状态：待领取）。后续分类、承办部门和回复结果会回写到同一工单。</div>}
+          {confirmed && <div className={styles.success}>工单已确认并转交部门办理台（待部门领取）。承办部门管理员将在“工单处置”中领取工单，检索本部门官方文档，生成政策依据与回复草稿后人工审核办结。</div>}
         </>}
       </section>
     </main>

@@ -5,6 +5,7 @@ from typing import Optional
 from dataclasses import dataclass
 
 from app.auth import AuthService
+from app.compliance.reply_gate import ReplyComplianceGate
 from app.config import Settings, get_settings
 from app.harness.agents.answer_agent import AnswerAgent
 from app.harness.agents.dept_router import DeptRouter
@@ -95,6 +96,7 @@ class Container:
     dept_router: DeptRouter
     auth: AuthService
     review_engine: ReviewEngine
+    reply_compliance_gate: ReplyComplianceGate
     login_limiter: MemoryRateLimiter
     job_queue: JobQueue
 
@@ -105,14 +107,26 @@ def build_container(settings: Optional[Settings] = None) -> Container:
     mongo = MongoDB(settings)
     store = build_store(mongo)
     session_store = build_session_store(settings)
-    job_queue = JobQueue(store, session_store, settings.async_stream_name)
+    job_queue = JobQueue(
+        store,
+        session_store,
+        settings.async_stream_name,
+        max_attempts=settings.async_job_max_attempts,
+        reclaim_idle_ms=settings.async_job_reclaim_idle_ms,
+    )
 
     llm = DeepSeekClient(settings)
     relay = RelayClient(settings)
     embeddings = EmbeddingClient(settings, relay)
     pi_runtime = PiAgentRuntimeClient(settings)
 
-    vector_store = build_vector_store(settings.vector_backend, store)
+    vector_store = build_vector_store(
+        settings.vector_backend,
+        store,
+        embedding_provider=settings.embedding_provider,
+        embedding_model=settings.embedding_model,
+        cache_ttl_seconds=settings.vector_cache_ttl_seconds,
+    )
     bm25 = SharedBM25Index(store) if settings.vector_backend == "mongo" else BM25Index()
     reranker = build_reranker(settings.reranker_enabled, settings.reranker_model, relay=relay)
     hybrid = HybridRetriever(
@@ -149,7 +163,7 @@ def build_container(settings: Optional[Settings] = None) -> Container:
     )
 
     intent_agent = IntentAgent(llm, store, pi_runtime, settings.pi_runtime_timeout_intent)
-    dept_router = DeptRouter(llm, store)
+    dept_router = DeptRouter(llm, store, embeddings)
     query_rewriter = QueryRewriter(llm, store, pi_runtime, settings.pi_runtime_timeout_rewrite)
     retrieval_agent = RetrievalAgent(hybrid, embeddings, store)
     answer_agent = AnswerAgent(llm, store, pi_runtime, settings.pi_runtime_timeout_answer)
@@ -178,6 +192,7 @@ def build_container(settings: Optional[Settings] = None) -> Container:
         rule_engine=rule_engine,
         feedback_collector=feedback_collector,
     )
+    reply_compliance_gate = ReplyComplianceGate()
     strategy_evaluator = StrategyEvaluator(
         retrieval_agent, answer_agent, verifier_agent, rule_engine, skill_executor
     )
@@ -258,6 +273,7 @@ def build_container(settings: Optional[Settings] = None) -> Container:
         dept_router=dept_router,
         auth=auth,
         review_engine=review_engine,
+        reply_compliance_gate=reply_compliance_gate,
         login_limiter=login_limiter,
         job_queue=job_queue,
     )

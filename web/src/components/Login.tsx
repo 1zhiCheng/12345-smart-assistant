@@ -7,11 +7,11 @@ import styles from "./Login.module.css";
 
 const DEMOS = [
   { type: "营业员", user: "operator", pass: "operator123", desc: "诉求录入、要素确认与工单生成", icon: "chat" as const },
-  { type: "部门管理员", user: "cgj_admin", pass: "admin123", desc: "本部门知识、转派审核与回复管理", icon: "building" as const },
+  { type: "城市管理局管理员", user: "city_management_admin", pass: "admin123", desc: "本部门知识、转派审核与回复管理", icon: "building" as const },
   { type: "系统管理员", user: "admin", pass: "admin123", desc: "全局账号、知识库与策略治理", icon: "shield" as const },
 ];
 
-export default function Login({ onLogin }: { onLogin: (user: User) => void }) {
+export default function Login({ onLogin, onCitizenPortal }: { onLogin: (user: User) => void; onCitizenPortal: () => void }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -23,7 +23,20 @@ export default function Login({ onLogin }: { onLogin: (user: User) => void }) {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (busy) return;
-    if (mode === "register" && password !== confirmPassword) { setError("两次输入的密码不一致"); return; }
+    if (mode === "register") {
+      const normalizedUsername = username.trim();
+      const normalizedName = name.trim();
+      if (!/^[A-Za-z0-9_]{3,32}$/.test(normalizedUsername)) {
+        setError("账号须为 3-32 位字母、数字或下划线"); return;
+      }
+      if (password.length < 8 || password.length > 128) {
+        setError("密码长度须为 8-128 位"); return;
+      }
+      if (normalizedName.length < 2 || normalizedName.length > 30) {
+        setError("姓名长度须为 2-30 个字符"); return;
+      }
+      if (password !== confirmPassword) { setError("两次输入的密码不一致"); return; }
+    }
     setError(""); setBusy(true);
     try {
       const res = mode === "login"
@@ -49,7 +62,7 @@ export default function Login({ onLogin }: { onLogin: (user: User) => void }) {
       <main className={styles.stage}>
       <section className={styles.story}>
         <div className={styles.eyebrow}><span /> WUHU 12345 SERVICE COPILOT</div>
-        <h1>听懂群众诉求<br />生成可信工单。</h1>
+        <h1>听懂群众诉求<br />生成可信工单</h1>
         <p className={styles.lead}>连接诉求受理、工单生成、事项分类与部门转派，让每一步都有依据、可审核、可追溯。</p>
         <div className={styles.arch}>
           {[
@@ -74,7 +87,7 @@ export default function Login({ onLogin }: { onLogin: (user: User) => void }) {
           </div>
           {mode === "register" && <label className={styles.field}><span>姓名</span><div className={styles.inputWrap}><Icon name="agent" size={17}/><input value={name} onChange={e => setName(e.target.value)} placeholder="请输入营业员姓名" autoFocus /></div></label>}
           <label className={styles.field}><span>账号</span><div className={styles.inputWrap}><Icon name="agent" size={17}/><input value={username} onChange={e => setUsername(e.target.value)} placeholder="3-32位字母、数字或下划线" autoFocus={mode === "login"} /></div></label>
-          <label className={styles.field}><span>密码</span><div className={styles.inputWrap}><Icon name="shield" size={17}/><input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="请输入密码" /></div></label>
+          <label className={styles.field}><span>密码</span><div className={styles.inputWrap}><Icon name="shield" size={17}/><input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={mode === "register" ? "8-128 位密码" : "请输入密码"} /></div></label>
           {mode === "register" && <label className={styles.field}><span>确认密码</span><div className={styles.inputWrap}><Icon name="shield" size={17}/><input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="请再次输入密码" /></div></label>}
           {error && <div className={styles.error}>{error}</div>}
           <button className={styles.submit} type="submit" disabled={busy}>{busy ? <><span className={styles.spinner}/>{mode === "login" ? "正在验证" : "正在注册"}</> : <>{mode === "login" ? "安全登录" : "注册并进入"} <Icon name="arrow" size={17}/></>}</button>
@@ -86,6 +99,7 @@ export default function Login({ onLogin }: { onLogin: (user: User) => void }) {
             <span className={styles.demoIcon}><Icon name={d.icon} size={17}/></span><span><b>{d.type}</b><small>{d.desc}</small></span><code>{d.user}</code>
           </button>)}</div></>}
           <div className={styles.security}><Icon name="shield" size={14}/> 本地演示环境 · Token 带有效期 · 操作按角色隔离</div>
+          {mode === "login" && <button type="button" className={styles.modeSwitch} onClick={onCitizenPortal}>市民自助咨询入口</button>}
         </form>
       </section>
       </main>
